@@ -33,6 +33,7 @@ public protocol CollectionDataManualReloadDelegate: AnyObject {
 
 public protocol CollectionSectionDataManualReloadDelegate: CollectionDataManualReloadDelegate {
 
+    // Note: reloadSections & preciseAnimations have the same behavior for section animations
     func preferredSectionAnimationStyle(for sectionDelta: IndexDelta) -> AnimationStyle
 }
 

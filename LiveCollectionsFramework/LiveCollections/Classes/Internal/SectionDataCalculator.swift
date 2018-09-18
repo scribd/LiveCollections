@@ -202,10 +202,8 @@ private extension SectionDataCalculator {
                     view.reloadData()
                     sectionUpdateCompletion?()
 
-                case .reloadSections:
-                    view.reloadAllSections(updateData: sectionUpdateData, completion: sectionUpdateCompletion)
-
-                case .preciseAnimations:
+                case .reloadSections,
+                     .preciseAnimations:
                     let viewDelegate: DeltaUpdatableViewDelegate? = {
                         guard let reloadDelegate = reloadDelegate else { return nil }
                         return AnyDeltaUpdatableViewDelegate(reloadDelegate)
@@ -248,13 +246,9 @@ private extension SectionDataCalculator {
                 }
                 
                 DispatchQueue.main.async {
-                    guard currentCount > 0 else {
-                        updateData()
-                        view.reloadData()
-                        calculationCompletion()
-                        return
-                    }
-                    view.reloadAllSections(updateData: updateData, completion: calculationCompletion)
+                    updateData()
+                    view.reloadData()
+                    calculationCompletion()
                 }
                 return
             }

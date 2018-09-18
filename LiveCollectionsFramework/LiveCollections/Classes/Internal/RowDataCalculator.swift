@@ -221,6 +221,11 @@ private extension RowDataCalculator {
             return
         }
         
+        let rowAnimationStlye: AnimationStyle = {
+            guard let reloadDelegate = reloadDelegate else { return .preciseAnimations }
+            return reloadDelegate.preferredRowAnimationStyle(for: delta)
+        }()
+        
         DispatchQueue.main.async { [weak weakViewProvider = viewProvider] in
             guard let targetView = weakViewProvider?.view else {
                 updateData()
@@ -231,12 +236,28 @@ private extension RowDataCalculator {
             if targetView !== view {
                 targetView.reloadData()
             }
-            
-            targetView.performAnimations(updateData: updateData,
-                                         delta: delta,
-                                         section: section,
-                                         delegate: viewDelegate,
-                                         completion: calculationCompletion)
+
+            switch rowAnimationStlye {
+            case .reloadData:
+                updateData()
+                targetView.reloadData()
+                calculationCompletion()
+                
+            case .reloadSections:
+                let sectionUpdate = SectionUpdate(section: section,
+                                                  delta: delta,
+                                                  update: updateData,
+                                                  delegate: viewDelegate,
+                                                  completion: calculationCompletion)
+                targetView.reloadSections(for: [sectionUpdate])
+                
+            case .preciseAnimations:
+                targetView.performAnimations(updateData: updateData,
+                                             delta: delta,
+                                             section: section,
+                                             delegate: viewDelegate,
+                                             completion: calculationCompletion)
+            }
         }
     }
     

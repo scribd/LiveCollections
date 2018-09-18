@@ -142,7 +142,18 @@ extension UITableView: SectionDeltaUpdatableView {
         }
     }
     
+    // NOTE: You can only call this method safely if you are only performing reloads
+    //       i.e. no insertions or deletions
     public func reloadAllSections(updateData: (() -> Void), completion: (() -> Void)?) {
+        
+        // UITableViews will crash if you attempt to reload from the empty state
+        guard numberOfSections > 0 else {
+            updateData()
+            reloadData()
+            completion?()
+            return
+        }
+        
         if #available(iOS 11.0, *) {
             performBatchUpdates({ [weak self] in
                 updateData()
@@ -272,7 +283,18 @@ extension UICollectionView: SectionDeltaUpdatableView {
         })
     }
     
+    // NOTE: You can only call this method safely if you are only performing reloads
+    //       i.e. no insertions or deletions
     public func reloadAllSections(updateData: (() -> Void), completion: (() -> Void)?) {
+        
+        // UICollectionViews will crash if you attempt to reload from the empty state
+        guard numberOfSections > 0 else {
+            updateData()
+            reloadData()
+            completion?()
+            return
+        }
+
         performBatchUpdates({ [weak self] in
             updateData()
             guard let strongSelf = self else { return }

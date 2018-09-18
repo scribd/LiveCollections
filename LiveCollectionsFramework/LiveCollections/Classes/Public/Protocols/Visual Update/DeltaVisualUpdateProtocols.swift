@@ -39,6 +39,10 @@ public protocol DeltaUpdatableView: AnyObject {
 public protocol SectionDeltaUpdatableView: AnyObject {
     
     func reloadData()
+    
+    /**
+     It is only safe to call this method if you only have reloads (no insertions or deletions)
+     */
     func reloadAllSections(updateData: (() -> Void), completion: (() -> Void)?)
 
     /**
