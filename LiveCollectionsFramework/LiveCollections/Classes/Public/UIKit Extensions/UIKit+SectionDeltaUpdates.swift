@@ -10,7 +10,7 @@ import UIKit
 
 extension UITableView: SectionDeltaUpdatableView {
     
-    public func performAnimations(updateData: (() -> Void), sectionDelta: IndexDelta, delegate: CollectionDataManualReloadDelegate?, completion: (() -> Void)?) {
+    public func performAnimations(sectionDelta: IndexDelta, delegate: CollectionDataManualReloadDelegate?, updateData: (() -> Void), completion: (() -> Void)?) {
         
         guard sectionDelta.hasChanges, dataSource != nil else {
             updateData()
@@ -59,7 +59,7 @@ extension UITableView: SectionDeltaUpdatableView {
         }
     }
     
-    public func performAnimations(updateData: (() -> Void), sectionRowDelta rowIndexPathDelta: IndexPathDelta, delegate: CollectionDataManualReloadDelegate?, completion: (() -> Void)?) {
+    public func performAnimations(sectionRowDelta rowIndexPathDelta: IndexPathDelta, delegate: CollectionDataManualReloadDelegate?, updateData: (() -> Void), completion: (() -> Void)?) {
         
         guard rowIndexPathDelta.hasChanges, dataSource != nil else {
             updateData()
@@ -194,7 +194,7 @@ extension UITableView: SectionDeltaUpdatableView {
 
 extension UICollectionView: SectionDeltaUpdatableView {
     
-    public func performAnimations(updateData: (() -> Void), sectionDelta: IndexDelta, delegate: CollectionDataManualReloadDelegate?, completion: (() -> Void)?) {
+    public func performAnimations(sectionDelta: IndexDelta, delegate: CollectionDataManualReloadDelegate?, updateData: (() -> Void), completion: (() -> Void)?) {
 
         guard sectionDelta.hasChanges, dataSource != nil else {
             updateData()
@@ -234,7 +234,7 @@ extension UICollectionView: SectionDeltaUpdatableView {
         })
     }
     
-    public func performAnimations(updateData: (() -> Void), sectionRowDelta rowIndexPathDelta: IndexPathDelta, delegate: CollectionDataManualReloadDelegate?, completion: (() -> Void)?) {
+    public func performAnimations(sectionRowDelta rowIndexPathDelta: IndexPathDelta, delegate: CollectionDataManualReloadDelegate?, updateData: (() -> Void), completion: (() -> Void)?) {
         
         guard rowIndexPathDelta.hasChanges, dataSource != nil else {
             completion?()

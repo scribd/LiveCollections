@@ -15,14 +15,14 @@ import Foundation
  to a generic function, or store them in a type erasing box. Otherwise, you can just use the
  `CollectionData` class directly.
  */
-public protocol CollectionDataStateInterface {
+public protocol CollectionDataStateInterface: AnyObject {
     associatedtype DataType
 
     var count: Int { get }
     subscript(index: Int) -> DataType { get }
 }
 
-public protocol CollectionDataFixedSectionInterface {
+public protocol CollectionDataFixedSectionInterface: AnyObject {
     var section: Int { get set }
 }
 
@@ -56,7 +56,7 @@ public protocol CollectionDataActionsInterface: CollectionDataStateInterface, Co
      - parameter updatedData: The updated state array of your data.  The change delta will be calculated form the current data set.
      - parameter completion: A completion block triggered at the end of the animation.
      */
-    mutating func update(_ updatedData: [RawType], completion: (() -> Void)?)
+    func update(_ updatedData: [RawType], completion: (() -> Void)?)
     
     /**
      Append data to the end of your ordered set. Only insertions will be calculated for you, and all other set operations will be
@@ -64,5 +64,5 @@ public protocol CollectionDataActionsInterface: CollectionDataStateInterface, Co
      - parameter appendedItems: The array of items to append to your ordered data set. The change delta will only include these items.
      - parameter completion: A completion block triggered at the end of the animation.
      */
-    mutating func append(_ appendedItems: [RawType], completion: (() -> Void)?)
+    func append(_ appendedItems: [RawType], completion: (() -> Void)?)
 }

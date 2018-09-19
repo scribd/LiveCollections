@@ -189,8 +189,8 @@ private extension RowDataCalculator {
                 
                 let sectionUpdate = SectionUpdate(section: section,
                                                  delta: .empty,
-                                                 update: updateData,
                                                  delegate: viewDelegate,
+                                                 update: updateData,
                                                  completion: calculationCompletion)
 
                 DispatchQueue.main.async { [weak weakViewProvider = viewProvider] in
@@ -246,16 +246,16 @@ private extension RowDataCalculator {
             case .reloadSections:
                 let sectionUpdate = SectionUpdate(section: section,
                                                   delta: delta,
-                                                  update: updateData,
                                                   delegate: viewDelegate,
+                                                  update: updateData,
                                                   completion: calculationCompletion)
                 targetView.reloadSections(for: [sectionUpdate])
                 
             case .preciseAnimations:
-                targetView.performAnimations(updateData: updateData,
+                targetView.performAnimations(section: section,
                                              delta: delta,
-                                             section: section,
                                              delegate: viewDelegate,
+                                             updateData: updateData,
                                              completion: calculationCompletion)
             }
         }
@@ -308,10 +308,10 @@ private extension RowDataCalculator {
                 targetView.reloadData()
             }
             
-            targetView.performAnimations(updateData: updateData,
+            targetView.performAnimations(section: section,
                                          delta: delta,
-                                         section: section,
                                          delegate: viewDelegate,
+                                         updateData: updateData,
                                          completion: calculationCompletion)
         }
     }

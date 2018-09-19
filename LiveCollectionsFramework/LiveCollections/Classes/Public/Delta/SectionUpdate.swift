@@ -11,8 +11,8 @@ import Foundation
 public struct SectionUpdate {
     let section: Int
     let delta: IndexDelta
-    let update: () -> Void
     let delegate: DeltaUpdatableViewDelegate?
+    let update: () -> Void
     let completion: (() -> Void)?
 }
 
@@ -24,8 +24,8 @@ extension SectionUpdate {
         
         return SectionUpdate(section: section,
                              delta: .empty,
-                             update: update,
                              delegate: nil,
+                             update: update,
                              completion: completion)
     }
 }

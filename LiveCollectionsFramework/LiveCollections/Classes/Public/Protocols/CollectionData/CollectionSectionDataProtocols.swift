@@ -15,7 +15,7 @@ import Foundation
  to a generic function, or store them in a type erasing box. Otherwise, you can just use the
  `CollectionSectionData` class directly.
  */
-public protocol CollectionSectionDataStateInterface {
+public protocol CollectionSectionDataStateInterface: AnyObject {
     associatedtype RawType
     associatedtype DataType: UniquelyIdentifiable
     associatedtype SectionType: UniquelyIdentifiableSection
@@ -39,7 +39,7 @@ protocol CollectionSectionDataActionsInterface: CollectionSectionDataStateInterf
      - parameter updatedData: The updated state array of your data.  The change delta will be calculated form the current data set.
      - parameter completion: A completion block triggered at the end of the animation.
      */
-    mutating func update(_ updatedData: [SectionType], completion: (() -> Void)?)
+    func update(_ updatedData: [SectionType], completion: (() -> Void)?)
     
     /**
      Call this when you want to append data to the end of your ordered set. Only insertions will be calculated for you, and all other set
@@ -48,5 +48,5 @@ protocol CollectionSectionDataActionsInterface: CollectionSectionDataStateInterf
      - parameter appendedItems: The array of items to append to your ordered data set. The change delta will only include these items.
      - parameter completion: A completion block triggered at the end of the animation.
      */
-    mutating func append(_ appendedItems: [SectionType], completion: (() -> Void)?)
+    func append(_ appendedItems: [SectionType], completion: (() -> Void)?)
 }

@@ -51,12 +51,12 @@ extension DiscreteSectionsView: DeltaUpdatableView {
         sectionUpdates.forEach { animator.reload($0) }
     }
     
-    public func performAnimations(updateData: @escaping () -> Void, delta: IndexDelta) {
-        performAnimations(updateData: updateData, delta: delta, section: 0, delegate: nil, completion: nil)
+    public func performAnimations(delta: IndexDelta, updateData: @escaping () -> Void) {
+        performAnimations(section: 0, delta: delta, delegate: nil, updateData: updateData, completion: nil)
     }
     
-    public func performAnimations(updateData: @escaping () -> Void, delta: IndexDelta, section: Int, delegate: DeltaUpdatableViewDelegate?, completion: (() -> Void)?) {
-        let sectionUpdate = SectionUpdate(section: section, delta: delta, update: updateData, delegate: delegate, completion: completion)
+    public func performAnimations(section: Int, delta: IndexDelta, delegate: DeltaUpdatableViewDelegate?, updateData: @escaping () -> Void, completion: (() -> Void)?) {
+        let sectionUpdate = SectionUpdate(section: section, delta: delta, delegate: delegate, update: updateData, completion: completion)
         performAnimations(for: [sectionUpdate])
     }
     
