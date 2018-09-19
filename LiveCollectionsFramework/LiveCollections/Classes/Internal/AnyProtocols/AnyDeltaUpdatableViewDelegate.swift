@@ -39,5 +39,8 @@ extension AnyDeltaUpdatableViewDelegate: DeltaUpdatableViewDelegate {
     func willHandleReload(at indexPath: IndexPath) -> Bool { return _getItemWillHandleReload(indexPath) }
     func reloadItems(at indexPaths: [IndexPath], completion: @escaping (IndexPath) -> Void) { _performReloadItems(indexPaths, completion) }
     func preferredRowAnimationStyle(for rowDelta: IndexDelta) -> AnimationStyle { return _getPreferredRowAnimationStyle(rowDelta) }
-    var view: DeltaUpdatableView? { return _getView() }
+    var view: DeltaUpdatableView? {
+        get { return _getView() }
+        set { }
+    }
 }

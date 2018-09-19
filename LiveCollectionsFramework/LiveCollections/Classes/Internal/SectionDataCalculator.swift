@@ -208,9 +208,9 @@ private extension SectionDataCalculator {
                         guard let reloadDelegate = reloadDelegate else { return nil }
                         return AnyDeltaUpdatableViewDelegate(reloadDelegate)
                     }()
-                    view.performAnimations(updateData: sectionUpdateData,
-                                           sectionDelta: sectionDelta,
+                    view.performAnimations(sectionDelta: sectionDelta,
                                            delegate: viewDelegate,
+                                           updateData: sectionUpdateData,
                                            completion: sectionUpdateCompletion)
                 }
             }
@@ -296,9 +296,9 @@ private extension SectionDataCalculator {
                         guard let reloadDelegate = reloadDelegate else { return nil }
                         return AnyDeltaUpdatableViewDelegate(reloadDelegate)
                     }()
-                    strongView.performAnimations(updateData: updateData,
-                                                 sectionRowDelta: rowIndexPathDeltas,
+                    strongView.performAnimations(sectionRowDelta: rowIndexPathDeltas,
                                                  delegate: viewDelegate,
+                                                 updateData: updateData,
                                                  completion: calculationCompletion)
                 }
             }
@@ -344,9 +344,9 @@ private extension SectionDataCalculator {
             sectionProvider.rows = updatedRows
         }
         
-        view.performAnimations(updateData: updateData,
-                               sectionDelta: sectionDelta,
+        view.performAnimations(sectionDelta: sectionDelta,
                                delegate: nil,
+                               updateData: updateData,
                                completion: calculationCompletion)
     }
 }

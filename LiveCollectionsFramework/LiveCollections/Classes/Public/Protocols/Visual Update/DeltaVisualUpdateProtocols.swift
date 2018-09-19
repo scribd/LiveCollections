@@ -9,7 +9,7 @@
 import Foundation
 
 public protocol CollectionViewProvider: AnyObject {
-    var view: DeltaUpdatableView? { get }
+    var view: DeltaUpdatableView? { get set }
 }
 
 public protocol DeltaUpdatableViewDelegate: CollectionDataManualReloadDelegate, CollectionViewProvider { }
@@ -31,8 +31,8 @@ public protocol DeltaUpdatableView: AnyObject {
      you may end up causing a crash as the UITableView or UICollectionView have very specific timing needs for when the data must update.
      - parameter delta: The row delta (deletions, insertions, reloads, and moves)
      */
-    func performAnimations(updateData: @escaping () -> Void, delta: IndexDelta)
-    func performAnimations(updateData: @escaping () -> Void, delta: IndexDelta, section: Int, delegate: DeltaUpdatableViewDelegate?, completion: (() -> Void)?)
+    func performAnimations(delta: IndexDelta, updateData: @escaping () -> Void)
+    func performAnimations(section: Int, delta: IndexDelta, delegate: DeltaUpdatableViewDelegate?, updateData: @escaping () -> Void, completion: (() -> Void)?)
     func performAnimations(for sectionUpdates: [SectionUpdate])
 }
 
@@ -48,11 +48,11 @@ public protocol SectionDeltaUpdatableView: AnyObject {
     /**
      Similar to `DeltaUpdatableView`, but this is the delta for the sections themselves.
      */
-    func performAnimations(updateData: (() -> Void), sectionDelta: IndexDelta, delegate: CollectionDataManualReloadDelegate?, completion: (() -> Void)?)
+    func performAnimations(sectionDelta: IndexDelta, delegate: CollectionDataManualReloadDelegate?, updateData: (() -> Void), completion: (() -> Void)?)
 
     /**
      After the section animations have been performed, you can then call this function which will animate the items, possibly between sections.
      - note: IndexPathDelta is used instead of IndexDelta. Every position is defined by both section and row.
      */
-    func performAnimations(updateData: (() -> Void), sectionRowDelta rowIndexPathDelta: IndexPathDelta, delegate: CollectionDataManualReloadDelegate?, completion: (() -> Void)?)
+    func performAnimations(sectionRowDelta rowIndexPathDelta: IndexPathDelta, delegate: CollectionDataManualReloadDelegate?, updateData: (() -> Void), completion: (() -> Void)?)
 }

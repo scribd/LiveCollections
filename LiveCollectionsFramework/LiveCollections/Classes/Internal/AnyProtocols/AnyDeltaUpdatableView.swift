@@ -15,8 +15,8 @@ final class AnyDeltaUpdatableView {
 
     private let _performReloadData: () -> Void
     private let _performReloadSections: ([SectionUpdate]) -> Void
-    private let _performAnimations: (@escaping () -> Void, IndexDelta) -> Void
-    private let _performAnimationsWithCompletion: (@escaping () -> Void, IndexDelta, Int, DeltaUpdatableViewDelegate?, (() -> Void)?) -> Void
+    private let _performAnimations: (IndexDelta, @escaping () -> Void) -> Void
+    private let _performAnimationsWithCompletion: (Int, IndexDelta, DeltaUpdatableViewDelegate?, @escaping () -> Void, (() -> Void)?) -> Void
     private let _performAnimationsForSectionUpdates: ([SectionUpdate]) -> Void
 
     init<V: DeltaUpdatableView>(_ view: V) {
@@ -30,12 +30,12 @@ final class AnyDeltaUpdatableView {
             weakView?.reloadSections(for: sectionUpdates)
         }
         
-        _performAnimations = { [weak weakView = view] update, delta in
-            weakView?.performAnimations(updateData: update, delta: delta)
+        _performAnimations = { [weak weakView = view] delta, update in
+            weakView?.performAnimations(delta: delta, updateData: update)
         }
         
-        _performAnimationsWithCompletion = { [weak weakView = view] update, delta, section, delegate, completion in
-            weakView?.performAnimations(updateData: update, delta: delta, section: section, delegate: delegate, completion: completion)
+        _performAnimationsWithCompletion = { [weak weakView = view] section, delta, delegate, update, completion in
+            weakView?.performAnimations(section: section, delta: delta, delegate: delegate, updateData: update, completion: completion)
         }
         
         _performAnimationsForSectionUpdates = { [weak weakView = view] sectionUpdates in
@@ -48,9 +48,9 @@ extension AnyDeltaUpdatableView: DeltaUpdatableView {
 
     func reloadData() { _performReloadData() }
     func reloadSections(for sectionUpdates: [SectionUpdate]) { _performReloadSections(sectionUpdates) }
-    func performAnimations(updateData: @escaping () -> Void, delta: IndexDelta) { _performAnimations(updateData, delta) }
-    func performAnimations(updateData: @escaping () -> Void, delta: IndexDelta, section: Int, delegate: DeltaUpdatableViewDelegate?, completion: (() -> Void)?) {
-        _performAnimationsWithCompletion(updateData, delta, section, delegate, completion)
+    func performAnimations(delta: IndexDelta, updateData: @escaping () -> Void) { _performAnimations(delta, updateData) }
+    func performAnimations(section: Int, delta: IndexDelta, delegate: DeltaUpdatableViewDelegate?, updateData: @escaping () -> Void, completion: (() -> Void)?) {
+        _performAnimationsWithCompletion(section, delta, delegate, updateData, completion)
     }
     func performAnimations(for sectionUpdates: [SectionUpdate]) { _performAnimationsForSectionUpdates(sectionUpdates) }
 }

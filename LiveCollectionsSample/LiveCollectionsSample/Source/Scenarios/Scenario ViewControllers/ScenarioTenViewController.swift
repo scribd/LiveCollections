@@ -110,7 +110,7 @@ extension ScenarioTenViewController: DataCoordinatorDelegate {
         }
 
         // when the time is right, call...
-        collectionView.performAnimations(updateData: updateData, delta: delta, section: collectionData.section)
+        collectionView.performAnimations(section: collectionData.section, delta: delta, updateData: updateData)
 
         /**
          NOTE 1:
@@ -119,7 +119,6 @@ extension ScenarioTenViewController: DataCoordinatorDelegate {
          view directly. If you update quickly enough, the next animation will start from the mid-point of the
          previous animation. Feature or bug? You decide.
          */
-
         
         /**
          NOTE 2:

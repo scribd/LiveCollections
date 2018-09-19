@@ -70,7 +70,7 @@ final class ScenarioProvider: ScenarioProviderInterface {
         case .collectionViewsInTableView:
             let dataProviders: [RandomMovieDataProvider] = {
                 let providerCount = isIpad() ? 12 : 10
-                return (0..<providerCount).map { _ in RandomMovieDataProvider(initialDataCount: 6, minCount: 2, maxCount: 24, movieLoader: movieLoader) }
+                return (0..<providerCount).map { _ in RandomMovieDataProvider(initialDataCount: 10, minCount: 2, maxCount: 24, movieLoader: movieLoader) }
             }()
             
             let dataCoordinator = CarouselDataCoordinator(dataProviders: dataProviders)
