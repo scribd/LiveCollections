@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		F42115E7214986F2003B57A6 /* AnyDeltaUpdatableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F42115E6214986F2003B57A6 /* AnyDeltaUpdatableView.swift */; };
+		F45256582152D76700F3B2DD /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = F45256572152D76600F3B2DD /* LICENSE */; };
 		F454C235212A545D0018DC6E /* AnyUniquelyIdentifiableDataFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = F454C234212A545D0018DC6E /* AnyUniquelyIdentifiableDataFactory.swift */; };
 		F47AE7292140F4DA00FE7360 /* PerformanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47AE7282140F4DA00FE7360 /* PerformanceTests.swift */; };
 		F47AE72B2140F98100FE7360 /* RowDataCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47AE72A2140F98100FE7360 /* RowDataCalculator.swift */; };
@@ -52,6 +53,7 @@
 
 /* Begin PBXFileReference section */
 		F42115E6214986F2003B57A6 /* AnyDeltaUpdatableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyDeltaUpdatableView.swift; sourceTree = "<group>"; };
+		F45256572152D76600F3B2DD /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		F454C234212A545D0018DC6E /* AnyUniquelyIdentifiableDataFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyUniquelyIdentifiableDataFactory.swift; sourceTree = "<group>"; };
 		F47AE7282140F4DA00FE7360 /* PerformanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformanceTests.swift; sourceTree = "<group>"; };
 		F47AE72A2140F98100FE7360 /* RowDataCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RowDataCalculator.swift; sourceTree = "<group>"; };
@@ -157,8 +159,9 @@
 		F4D772E120FBC4BE002F1C43 /* LiveCollections */ = {
 			isa = PBXGroup;
 			children = (
-				F4D772E220FBC4BE002F1C43 /* LiveCollections.h */,
+				F45256572152D76600F3B2DD /* LICENSE */,
 				F4D772E320FBC4BE002F1C43 /* Info.plist */,
+				F4D772E220FBC4BE002F1C43 /* LiveCollections.h */,
 				F4D772F920FBC4E7002F1C43 /* Classes */,
 			);
 			path = LiveCollections;
@@ -373,6 +376,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F45256582152D76700F3B2DD /* LICENSE in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
