@@ -95,7 +95,15 @@ public final class CollectionData<DataType: UniquelyIdentifiable>: CollectionDat
     public subscript(index: Int) -> DataType {
         return rows[index]
     }
+    
+    public func forEach(_ iteration: (DataType) -> Void) {
+        rows.forEach(iteration)
+    }
 
+    public var snapshot: [DataType] {
+        return rows
+    }
+    
     // MARK: CollectionDataFixedSectionInterface
     
     private var _section: Int

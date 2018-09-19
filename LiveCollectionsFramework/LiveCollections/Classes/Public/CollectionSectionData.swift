@@ -93,6 +93,18 @@ public final class CollectionSectionData<SectionType: UniquelyIdentifiableSectio
         return self[indexPath.section, indexPath.row]
     }
 
+    public func forEach(_ iteration: (SectionType) -> Void) {
+        sections.forEach(iteration)
+    }
+
+    public func forEachItem(_ iteration: (DataType) -> Void) {
+        rows.forEach(iteration)
+    }
+
+    public var snapshot: [SectionType] {
+        return sections
+    }
+    
     // MARK: CollectionSectionDataActionsInterface
     
     public func update(_ updatedData: [SectionType], completion: (() -> Void)? = nil) {
