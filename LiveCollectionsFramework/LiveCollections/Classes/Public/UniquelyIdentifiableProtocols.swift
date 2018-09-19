@@ -26,7 +26,7 @@ import Foundation
    equatability, or if you'd like eqauatability to include other metadata, you should consider creating a wrapper struct and using
    a data factory.
  */
-public protocol UniquelyIdentifiable: Hashable {
+public protocol UniquelyIdentifiable: Equatable {
     associatedtype RawType
     associatedtype UniqueIDType: Hashable
     var rawValue: RawType { get }
