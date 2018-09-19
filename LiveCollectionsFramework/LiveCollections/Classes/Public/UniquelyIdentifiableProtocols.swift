@@ -26,15 +26,15 @@ import Foundation
    equatability, or if you'd like eqauatability to include other metadata, you should consider creating a wrapper struct and using
    a data factory.
  */
-public protocol UniquelyIdentifiable: Hashable {
+public protocol UniquelyIdentifiable: Equatable {
     associatedtype RawType
     associatedtype UniqueIDType: Hashable
-    var rawValue: RawType { get }
+    var rawData: RawType { get }
     var uniqueID: UniqueIDType { get }
 }
 
 public extension UniquelyIdentifiable where RawType == Self {
-    var rawValue: Self { return self }
+    var rawData: Self { return self }
 }
 
 public extension UniquelyIdentifiable where Self: Hashable, UniqueIDType == Self {
@@ -60,7 +60,7 @@ public protocol UniquelyIdentifiableSection: UniquelyIdentifiable {
 /**
  extension Carousel: UniquelyIdentifiable {
 
-    typelias RawValue = Carousel
+    typelias rawData = Carousel
  
     static func == (lhs: Carousel, rhs: Carousel) -> Bool {
         return lhs.myIdentifier == rhs.myIdentifier &&

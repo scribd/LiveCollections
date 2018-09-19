@@ -15,7 +15,7 @@ struct DistributedMovie: Hashable {
 }
 
 extension DistributedMovie: UniquelyIdentifiable {
-    var rawValue: Movie { return movie }
+    var rawData: Movie { return movie }
     var uniqueID: UInt { return movie.uniqueID }
 }
 
