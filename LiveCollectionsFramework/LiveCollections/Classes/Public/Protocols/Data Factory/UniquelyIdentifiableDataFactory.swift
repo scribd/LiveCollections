@@ -26,13 +26,29 @@ public protocol UniquelyIdentifiableDataFactory {
     associatedtype RawType
     associatedtype UniquelyIdentifiableType: UniquelyIdentifiable
 
+    var buildQueue: DispatchQueue? { get } // optional queue if your data is thread sensitive
     func buildUniquelyIdentifiableDatum(_ rawType: RawType) -> UniquelyIdentifiableType
 }
 
 public extension UniquelyIdentifiableDataFactory {
+    var buildQueue: DispatchQueue? { return nil }
+}
+
+extension UniquelyIdentifiableDataFactory {
+    
+    func buildThreadSafeUniquelyIdentifiableDatum(_ rawType: RawType) -> UniquelyIdentifiableType {
+        guard let buildQueue = buildQueue,
+            buildQueue !== DispatchQueue.main || Thread.isMainThread == false else {
+            return buildUniquelyIdentifiableDatum(rawType)
+        }
+        
+        return buildQueue.sync {
+            return buildUniquelyIdentifiableDatum(rawType)
+        }
+    }
     
     func buildUniquelyIdentifiableData(_ rawType: [RawType]) -> [UniquelyIdentifiableType] {
-        return rawType.map { buildUniquelyIdentifiableDatum($0) }
+        return rawType.map { buildThreadSafeUniquelyIdentifiableDatum($0) }
     }
 }
 

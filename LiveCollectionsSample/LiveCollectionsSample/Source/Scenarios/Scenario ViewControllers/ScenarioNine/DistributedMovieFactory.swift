@@ -22,9 +22,11 @@ extension DistributedMovie: UniquelyIdentifiable {
 struct DistributedMovieFactory: UniquelyIdentifiableDataFactory {
 
     private let inTheatersState: InTheatersStateInterface
+    let buildQueue: DispatchQueue?
     
     init(inTheatersState: InTheatersStateInterface) {
         self.inTheatersState = inTheatersState
+        self.buildQueue = DispatchQueue(label: "Test", attributes: .concurrent)
     }
     
     func buildUniquelyIdentifiableDatum(_ movie: Movie) -> DistributedMovie {
