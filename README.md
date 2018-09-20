@@ -12,11 +12,12 @@ Full detail for the use case of each scenario <a href="https://medium.com/p/59ea
 
 <hr>
 
-<img width="204" height="81" src="https://www.themoviedb.org/assets/1/v4/logos/408x161-powered-by-rectangle-green-bb4301c10ddc749b4e79463811a68afebeae66ef43d17bcfd8ff0e60ded7ce99.png">
+<h2>Importing From Carthage</h2>
 
-Special thanks to <b>The Movie Database</b>. All of the images and data in the sample application were retrieved from their open source API. It's an excellent tool that helped save a lot of time and hassle. Using their data, the examples demonstrate how you can take existing data and extend it to use LiveCollections.
-
-<i>This product uses the TMDb API but is not endorsed or certified by TMDb.</i>
+<br>
+github "scribd/LiveCollections" "beta_0.9.9"
+<br>
+<br>
 
 <hr>
 
@@ -41,7 +42,7 @@ The crux of being able to use <b>CollectionData</b> as your data source and get 
 public protocol UniquelyIdentifiable: Equatable {
     associatedtype RawType
     associatedtype UniqueIDType: Hashable
-    var rawValue: RawType { get }
+    var rawData: RawType { get }
     var uniqueID: UniqueIDType { get }
 }
 ```
@@ -405,12 +406,15 @@ A data factory you build must conform to the protocol <b>UniquelyIdentifiableDat
 
 What using a data factory means is that your update method on <b>CollectionData</b> takes in [RawType], but returns a value of [UniquelyIdentifiableType] (your new data class) when requesting values via `subscript`. This also saves your data source from needing to know about any custom types you are building to customize your view.
 
+The `buildQueue` property will default to nil via an extension, and is only needed if your data needs to be build on a specific thread. Otherwise ignore it.
+
 ```swift
 public protocol UniquelyIdentifiableDataFactory {
 
     associatedtype RawType
     associatedtype UniquelyIdentifiableType: UniquelyIdentifiable
 
+    var buildQueue: DispatchQueue? { get } // optional queue if your data is thread sensitive
     func buildUniquelyIdentifiableDatum(_ rawType: RawType) -> UniquelyIdentifiableType
 }
 ```
@@ -426,7 +430,7 @@ struct DistributedMovie: Hashable {
 }
 
 extension DistributedMovie: UniquelyIdentifiable {
-    var rawValue: Movie { return movie }
+    var rawData: Movie { return movie }
     var uniqueID: UInt { return movie.uniqueID }
 }
 
@@ -513,3 +517,11 @@ Note: This is unavailable for <b>CollectionSectionData</b> as the animations occ
 I hope this covers nearly all of the use cases out there, but if you find a gap in what this framework offers, we'd love to hear your suggestions and feedback.
 
 Happy animating!
+
+<hr>
+
+<img width="204" height="81" src="https://www.themoviedb.org/assets/1/v4/logos/408x161-powered-by-rectangle-green-bb4301c10ddc749b4e79463811a68afebeae66ef43d17bcfd8ff0e60ded7ce99.png">
+
+Special thanks to <b>The Movie Database</b>. All of the images and data in the sample application were retrieved from their open source API. It's an excellent tool that helped save a lot of time and hassle. Using their data, the examples demonstrate how you can take existing data and extend it to use LiveCollections.
+
+<i>This product uses the TMDb API but is not endorsed or certified by TMDb.</i>
