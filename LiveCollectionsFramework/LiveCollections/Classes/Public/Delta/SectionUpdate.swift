@@ -9,23 +9,22 @@
 import Foundation
 
 public struct SectionUpdate {
-    let section: Int
-    let delta: IndexDelta
-    let delegate: DeltaUpdatableViewDelegate?
-    let update: () -> Void
-    let completion: (() -> Void)?
-}
-
-extension SectionUpdate {
+    public let section: Int
+    public let delta: IndexDelta
+    public let delegate: DeltaUpdatableViewDelegate?
+    public let update: () -> Void
+    public let completion: (() -> Void)?
     
-    public static func reload(section: Int,
-                              update: @escaping () -> Void,
-                              completion: (() -> Void)?) -> SectionUpdate {
+    public init(section: Int,
+                delta: IndexDelta,
+                delegate: DeltaUpdatableViewDelegate? = nil,
+                update: @escaping () -> Void,
+                completion: (() -> Void)? = nil) {
         
-        return SectionUpdate(section: section,
-                             delta: .empty,
-                             delegate: nil,
-                             update: update,
-                             completion: completion)
+        self.section = section
+        self.delta = delta
+        self.delegate = delegate
+        self.update = update
+        self.completion = completion
     }
 }

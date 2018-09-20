@@ -11,8 +11,13 @@ import Foundation
 // MARK: IndexPair
 
 public struct IndexPair: Hashable {
-    let source: Int
-    let target: Int
+    public let source: Int
+    public let target: Int
+    
+    public init(source: Int, target: Int) {
+        self.source = source
+        self.target = target
+    }
 }
 
 // MARK: CustomDebugStringConvertible
@@ -64,9 +69,9 @@ public struct IndexDelta: Equatable {
     }
 }
 
-extension IndexDelta {
+public extension IndexDelta {
     
-    static var empty: IndexDelta {
+    public static var empty: IndexDelta {
         return IndexDelta(deletions: [], insertions: [], reloads: [], moves: [])
     }
 }
@@ -76,6 +81,11 @@ extension IndexDelta {
 public struct IndexPathPair: Hashable {
     public let source: IndexPath
     public let target: IndexPath
+    
+    public init(source: IndexPath, target: IndexPath) {
+        self.source = source
+        self.target = target
+    }
 }
 
 // MARK: - IndexPathDelta

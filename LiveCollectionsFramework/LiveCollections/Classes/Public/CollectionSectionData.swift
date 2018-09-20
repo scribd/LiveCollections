@@ -93,6 +93,10 @@ public final class CollectionSectionData<SectionType: UniquelyIdentifiableSectio
         return self[indexPath.section, indexPath.row]
     }
 
+    public var snapshot: [SectionType] {
+        return sections
+    }
+    
     // MARK: CollectionSectionDataActionsInterface
     
     public func update(_ updatedData: [SectionType], completion: (() -> Void)? = nil) {

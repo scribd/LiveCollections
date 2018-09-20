@@ -29,7 +29,7 @@ public protocol UniquelyIdentifiableDataFactory {
     func buildUniquelyIdentifiableDatum(_ rawType: RawType) -> UniquelyIdentifiableType
 }
 
-extension UniquelyIdentifiableDataFactory {
+public extension UniquelyIdentifiableDataFactory {
     
     func buildUniquelyIdentifiableData(_ rawType: [RawType]) -> [UniquelyIdentifiableType] {
         return rawType.map { buildUniquelyIdentifiableDatum($0) }

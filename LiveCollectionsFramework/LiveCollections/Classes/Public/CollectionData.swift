@@ -96,6 +96,10 @@ public final class CollectionData<DataType: UniquelyIdentifiable>: CollectionDat
         return rows[index]
     }
 
+    public var snapshot: [DataType] {
+        return rows
+    }
+    
     // MARK: CollectionDataFixedSectionInterface
     
     private var _section: Int
@@ -184,7 +188,7 @@ public final class CollectionData<DataType: UniquelyIdentifiable>: CollectionDat
     }
 }
 
-extension CollectionData where DataType == DataType.RawType {
+public extension CollectionData where DataType == DataType.RawType {
     
     public convenience init(_ rawData: [DataType.RawType] = [], section: Int = 0) {
         let identityFactory = IdentityDataFactory<DataType>()
