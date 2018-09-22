@@ -101,7 +101,7 @@ extension ScenarioTenViewController: UICollectionViewDelegate {
 extension ScenarioTenViewController: DataCoordinatorDelegate {
     
     func dataDidUpdate(_ data: [Movie], section: Int) {
-        let delta = collectionData.calculateDelta(data)
+        let delta = collectionData.calculateDeltaSync(data)
 
         // perform any analysis or analytics on the delta
 

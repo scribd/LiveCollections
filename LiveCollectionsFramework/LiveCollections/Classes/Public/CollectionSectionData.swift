@@ -21,7 +21,7 @@ import Foundation
  `UniquelyIdentifiableSection`.
  */
 
-public final class CollectionSectionData<SectionType: UniquelyIdentifiableSection>: CollectionSectionDataActionsInterface, SectionDataProvider {
+public final class CollectionSectionData<SectionType: UniquelyIdentifiableSection>: CollectionSectionDataActionsInterface, SectionDataProvider, SectionCalculatingDataProvider {
     
     public typealias DataType = SectionType.DataType
     
@@ -37,6 +37,17 @@ public final class CollectionSectionData<SectionType: UniquelyIdentifiableSectio
     var sections: [SectionType] {
         get { return dataQueue.sync { _sections } }
         set { dataQueue.async(flags: .barrier) { self._sections = newValue } }
+    }
+
+    private var _calculatingSections: [SectionType]?
+    internal(set) public var calculatingSections: [SectionType]? {
+        get { return dataQueue.sync { _calculatingSections } }
+        set {
+            dataQueue.async(flags: .barrier) {
+                guard self._calculatingSections == nil || newValue == nil else { return }
+                self._calculatingSections = newValue
+            }
+        }
     }
     
     // row data
@@ -77,6 +88,11 @@ public final class CollectionSectionData<SectionType: UniquelyIdentifiableSectio
         return sections.isEmpty
     }
     
+    public var isCalculating: Bool {
+        guard let calculatingSections = calculatingSections else { return false }
+        return calculatingSections.isEmpty == false
+    }
+    
     public func rowCount(forSection section: Int) -> Int {
         return sections[section].items.count
     }
@@ -100,6 +116,16 @@ public final class CollectionSectionData<SectionType: UniquelyIdentifiableSectio
     // MARK: CollectionSectionDataActionsInterface
     
     public func update(_ updatedData: [SectionType], completion: (() -> Void)? = nil) {
+        let shouldAppend: Bool = {
+            guard let calculatingSections = calculatingSections else { return isEmpty }
+            return calculatingSections.isEmpty
+        }()
+        
+        guard shouldAppend == false else {
+            append(updatedData, completion: completion)
+            return
+        }
+
         calculationQueue.async {
             self.dataCalculator.updateAndAnimate(updatedData,
                                                  sectionProvider: self,

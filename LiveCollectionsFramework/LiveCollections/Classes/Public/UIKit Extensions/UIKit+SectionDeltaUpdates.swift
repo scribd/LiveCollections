@@ -35,7 +35,7 @@ extension UITableView: SectionDeltaUpdatableView {
             sectionDelta.moves.forEach { indexPair in
                 self.moveSection(indexPair.source, toSection: indexPair.target)
             }
-            self.insertSections(sectionInsertedIndexSet as IndexSet, with: .top)
+            self.insertSections(sectionInsertedIndexSet as IndexSet, with: .fade)
         }
         
         if #available(iOS 11.0, *) {

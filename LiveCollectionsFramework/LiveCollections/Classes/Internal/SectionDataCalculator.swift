@@ -40,7 +40,7 @@ final class SectionDataCalculator<SectionType: UniquelyIdentifiableSection> {
                                                              view: SectionDeltaUpdatableView,
                                                              reloadDelegate: CollectionSectionDataManualReloadDelegate?,
                                                              deletionDelegate: DeletionDelegate?,
-                                                             completion: (() -> Void)?) where DeletionDelegate: CollectionDataDeletionNotificationDelegate, DeletionDelegate.DataType == DataType, SectionProvider: SectionDataProvider, SectionProvider.SectionType == SectionType, SectionProvider.DataType == DataType {
+                                                             completion: (() -> Void)?) where DeletionDelegate: CollectionDataDeletionNotificationDelegate, DeletionDelegate.DataType == DataType, SectionProvider: SectionDataProvider, SectionProvider: SectionCalculatingDataProvider, SectionProvider.SectionType == SectionType, SectionProvider.DataType == DataType, SectionProvider.CalculatingSectionType == SectionType {
         
         _processCalculation { [weak self] in
             self?._updateAndAnimate(updatedSections,
@@ -55,7 +55,7 @@ final class SectionDataCalculator<SectionType: UniquelyIdentifiableSection> {
     func appendAndAnimate<SectionProvider>(_ appendedItems: [SectionType],
                                            sectionProvider: SectionProvider,
                                            view: SectionDeltaUpdatableView,
-                                           completion: (() -> Void)?) where SectionProvider: SectionDataProvider, SectionProvider.SectionType == SectionType, SectionProvider.DataType == DataType {
+                                           completion: (() -> Void)?) where SectionProvider: SectionDataProvider, SectionProvider: SectionCalculatingDataProvider, SectionProvider.SectionType == SectionType, SectionProvider.DataType == DataType, SectionProvider.CalculatingSectionType == SectionType {
         
         _processCalculation { [weak self] in
             self?._appendAndAnimate(appendedItems,
@@ -107,8 +107,10 @@ private extension SectionDataCalculator {
                                                               view: SectionDeltaUpdatableView,
                                                               reloadDelegate: CollectionSectionDataManualReloadDelegate?,
                                                               deletionDelegate: DeletionDelegate?,
-                                                              completion: (() -> Void)?) where DeletionDelegate: CollectionDataDeletionNotificationDelegate, DeletionDelegate.DataType == DataType, SectionProvider: SectionDataProvider, SectionProvider.SectionType == SectionType, SectionProvider.DataType == DataType {
+                                                              completion: (() -> Void)?) where DeletionDelegate: CollectionDataDeletionNotificationDelegate, DeletionDelegate.DataType == DataType, SectionProvider: SectionDataProvider, SectionProvider: SectionCalculatingDataProvider, SectionProvider.SectionType == SectionType, SectionProvider.DataType == DataType, SectionProvider.CalculatingSectionType == SectionType {
         
+        sectionProvider.calculatingSections = updatedSections
+
         let currentCount = sectionProvider.rows.count
         let updatedCount = updatedSections.reduce(0) { $0 + $1.items.count }
         
@@ -243,6 +245,7 @@ private extension SectionDataCalculator {
                     strongProvider.sections = sanitizedUpdatedSections
                     let rows = strongSelf.orderedRows(for: sanitizedUpdatedSections)
                     strongProvider.rows = rows
+                    strongProvider.calculatingSections = nil
                 }
                 
                 DispatchQueue.main.async {
@@ -254,6 +257,7 @@ private extension SectionDataCalculator {
             }
             
             guard sectionDelta.hasChanges || rowDelta.hasChanges else {
+                sectionProvider.calculatingSections = nil
                 calculationCompletion()
                 return // don't need to update with no changes
             }
@@ -268,6 +272,7 @@ private extension SectionDataCalculator {
             let updateData = {
                 sectionProvider.sections = sections
                 sectionProvider.rows = rows
+                sectionProvider.calculatingSections = nil
             }
             
             let rowAnimationStlye: AnimationStyle = {
@@ -308,7 +313,9 @@ private extension SectionDataCalculator {
     func _appendAndAnimate<SectionProvider>(_ appendedItems: [SectionType],
                                             sectionProvider: SectionProvider,
                                             view: SectionDeltaUpdatableView,
-                                            completion: (() -> Void)?) where SectionProvider: SectionDataProvider, SectionProvider.SectionType == SectionType, SectionProvider.DataType == DataType {
+                                            completion: (() -> Void)?) where SectionProvider: SectionDataProvider, SectionProvider: SectionCalculatingDataProvider, SectionProvider.SectionType == SectionType, SectionProvider.DataType == DataType, SectionProvider.CalculatingSectionType == SectionType {
+        
+        sectionProvider.calculatingSections = appendedItems
         
         let calculationCompletion: () -> Void = { [weak self] in
             completion?()
@@ -316,38 +323,35 @@ private extension SectionDataCalculator {
         }
 
         guard appendedItems.isEmpty == false else {
+            sectionProvider.calculatingSections = nil
             calculationCompletion()
             return // don't need to update without any changes
         }
         
-        let originalRows = sectionProvider.rows
-        let originalCount = originalRows.count
+        let startingIndex = sectionProvider.sections.count
         
-        var sections = sectionProvider.sections
-        sections.append(contentsOf: appendedItems)
-        
-        let updatedRows = orderedRows(for: sections)
-        let updatedCount = updatedRows.count
-        
-        var insertedIndices = [Int]()
-        for index in originalCount..<updatedCount {
-            insertedIndices.append(index)
+        appendedItems.enumerated().forEach { index, item in
+            let isFinalItem = index == (appendedItems.count - 1)
+            
+            let completion: (() -> Void)? = isFinalItem ? calculationCompletion : nil
+            let updateAppend = { [weak weakSectionProvider = sectionProvider] in
+                guard let strongSectionProvider = weakSectionProvider else { return }
+                
+                strongSectionProvider.sections = strongSectionProvider.sections + [item]
+                let updatedRows = self.orderedRows(for: [item])
+                strongSectionProvider.rows = strongSectionProvider.rows + updatedRows
+                strongSectionProvider.calculatingSections = nil
+            }
+            
+            DispatchQueue.main.async {
+                let insertedIndex = startingIndex + index
+                let sectionDelta = IndexDelta(insertions: [insertedIndex])
+                view.performAnimations(sectionDelta: sectionDelta,
+                                       delegate: nil,
+                                       updateData: updateAppend,
+                                       completion: completion)
+            }
         }
-        
-        let sectionDelta = IndexDelta(deletions: [],
-                                      insertions: insertedIndices,
-                                      reloads: [],
-                                      moves: [])
-        
-        let updateData = {
-            sectionProvider.sections = sections
-            sectionProvider.rows = updatedRows
-        }
-        
-        view.performAnimations(sectionDelta: sectionDelta,
-                               delegate: nil,
-                               updateData: updateData,
-                               completion: calculationCompletion)
     }
 }
 

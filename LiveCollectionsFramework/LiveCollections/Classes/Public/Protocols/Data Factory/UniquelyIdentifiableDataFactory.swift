@@ -36,19 +36,15 @@ public extension UniquelyIdentifiableDataFactory {
 
 extension UniquelyIdentifiableDataFactory {
     
-    func buildThreadSafeUniquelyIdentifiableDatum(_ rawType: RawType) -> UniquelyIdentifiableType {
+    func buildUniquelyIdentifiableData(_ rawType: [RawType]) -> [UniquelyIdentifiableType] {
         guard let buildQueue = buildQueue,
             buildQueue !== DispatchQueue.main || Thread.isMainThread == false else {
-            return buildUniquelyIdentifiableDatum(rawType)
+                return rawType.map { buildUniquelyIdentifiableDatum($0) }
         }
         
         return buildQueue.sync {
-            return buildUniquelyIdentifiableDatum(rawType)
+            rawType.map { buildUniquelyIdentifiableDatum($0) }
         }
-    }
-    
-    func buildUniquelyIdentifiableData(_ rawType: [RawType]) -> [UniquelyIdentifiableType] {
-        return rawType.map { buildThreadSafeUniquelyIdentifiableDatum($0) }
     }
 }
 

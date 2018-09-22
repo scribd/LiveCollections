@@ -30,7 +30,7 @@ import Foundation
  available to be used with this class.
 */
 
-public final class CollectionData<DataType: UniquelyIdentifiable>: CollectionDataActionsInterface, RowDataProvider, CollectionViewProvider {
+public final class CollectionData<DataType: UniquelyIdentifiable>: CollectionDataActionsInterface, RowDataProvider, RowCalculatingDataProvider, CollectionViewProvider {
     
     // UITableView, UICollectionView, or a custom view
     // Assign to animate view as soon as data is updated, otherwise you must manually call `calculateDelta`
@@ -57,6 +57,17 @@ public final class CollectionData<DataType: UniquelyIdentifiable>: CollectionDat
         set { dataQueue.async(flags: .barrier) { self._rows = newValue } }
     }
 
+    private var _calculatingRows: [DataType.RawType]?
+    internal(set) public var calculatingRows: [DataType.RawType]? {
+        get { return dataQueue.sync { _calculatingRows } }
+        set {
+            dataQueue.async(flags: .barrier) {
+                guard self._calculatingRows == nil || newValue == nil else { return } // prevent overriding data incorrectly
+                self._calculatingRows = newValue
+            }
+        }
+    }
+    
     // calculator
     private let dataCalculator = RowDataCalculator<DataType>()
 
@@ -92,6 +103,11 @@ public final class CollectionData<DataType: UniquelyIdentifiable>: CollectionDat
         return rows.isEmpty
     }
 
+    public var isCalculating: Bool {
+        guard let calculatingRows = calculatingRows else { return false }
+        return calculatingRows.isEmpty == false
+    }
+    
     public subscript(index: Int) -> DataType {
         return rows[index]
     }
@@ -110,10 +126,17 @@ public final class CollectionData<DataType: UniquelyIdentifiable>: CollectionDat
     
     // MARK: CollectionDataActionsInterface
     
-    public func calculateDelta(_ rawData: [DataType.RawType]) -> IndexDelta {
+    public func calculateDeltaSync(_ rawData: [DataType.RawType]) -> IndexDelta {
         return calculationQueue.sync {
             let uniquelyIdentifiableData = dataFactory.buildUniquelyIdentifiableData(rawData)
             return dataCalculator.calculateDelta(uniquelyIdentifiableData, rowProvider: self)
+        }
+    }
+
+    public func calculateDeltaAsync(_ rawData: [DataType.RawType], completion: @escaping (IndexDelta) -> Void) {
+        calculationQueue.async {
+            let uniquelyIdentifiableData = self.dataFactory.buildUniquelyIdentifiableData(rawData)
+            completion(self.dataCalculator.calculateDelta(uniquelyIdentifiableData, rowProvider: self))
         }
     }
     
@@ -125,33 +148,28 @@ public final class CollectionData<DataType: UniquelyIdentifiable>: CollectionDat
     }
     
     public func update(_ rawData: [DataType.RawType], completion: (() -> Void)? = nil) {
-        calculationQueue.async {
-            if let view = self._validView() {
-                self.updateAndAnimate(rawData, view: view, completion: completion)
-            } else {
-                self.rows = self.dataFactory.buildUniquelyIdentifiableData(rawData)
-                completion?()
-            }
+
+        if view == nil {
+            updateDataOnly(rawData, completion: completion)
+        } else {
+            updateAndAnimate(rawData, completion: completion)
         }
     }
     
     public func append(_ rawData: [DataType.RawType], completion: (() -> Void)? = nil) {
-        calculationQueue.async {
-            if let view = self._validView() {
-                self.appendAndAnimate(rawData, view: view, completion: completion)
-            } else {
-                self.rows = self.rows + self.dataFactory.buildUniquelyIdentifiableData(rawData)
-                completion?()
-            }
+        if view == nil {
+            appendDataOnly(rawData, completion: completion)
+        } else {
+            appendAndAnimate(rawData, completion: completion)
         }
     }
-
+    
     // MARK: Private
     
     private func _validView() -> DeltaUpdatableView? {
         guard let view = self.view else { return nil }
         guard let validationDelegate = validationDelegate else { return view }
-
+        
         let validationFromDelegate: () -> DeltaUpdatableView? = {
             let isValid = validationDelegate.isDataSourceValid(for: view)
             return isValid ? view : nil
@@ -160,31 +178,70 @@ public final class CollectionData<DataType: UniquelyIdentifiable>: CollectionDat
         guard Thread.isMainThread == false else { return validationFromDelegate() }
         return DispatchQueue.main.sync { return validationFromDelegate() }
     }
-
+    
     private var viewProvider: CollectionViewProvider {
         if let selfProvidableView = view as? CollectionViewProvider { return selfProvidableView }
         return self
     }
-    
-    private func updateAndAnimate(_ rawData: [DataType.RawType], view: DeltaUpdatableView, completion: (() -> Void)?) {
-        let uniquelyIdentifiableData = dataFactory.buildUniquelyIdentifiableData(rawData)
-        dataCalculator.updateAndAnimate(uniquelyIdentifiableData,
-                                        rowProvider: self,
-                                        section: section,
-                                        viewProvider: viewProvider,
-                                        reloadDelegate: reloadDelegate,
-                                        deletionDelegate: deletionNotificationDelegate,
-                                        completion: completion)
+
+    private func updateDataOnly(_ rawData: [DataType.RawType], completion: (() -> Void)?) {
+        self.rows = self.dataFactory.buildUniquelyIdentifiableData(rawData)
+        completion?()
     }
     
-    private func appendAndAnimate(_ rawData: [DataType.RawType], view: DeltaUpdatableView, completion: (() -> Void)?) {
-        if let validationDelegate = validationDelegate, validationDelegate.isDataSourceValid(for: view) == false { return }
-        let uniquelyIdentifiableData = dataFactory.buildUniquelyIdentifiableData(rawData)
-        dataCalculator.appendAndAnimate(uniquelyIdentifiableData,
-                                        rowProvider: self,
-                                        section: section,
-                                        viewProvider: viewProvider,
-                                        completion: completion)
+    private func updateAndAnimate(_ rawData: [DataType.RawType], completion: (() -> Void)?) {
+        let shouldAppend: Bool = {
+            guard let calculatingRows = calculatingRows else { return isEmpty }
+            return calculatingRows.isEmpty
+        }()
+        
+        guard shouldAppend == false else {
+            appendAndAnimate(rawData, completion: completion)
+            return
+        }
+
+        calculatingRows = rawData
+        calculationQueue.async {
+            guard self._validView() != nil else {
+                self.calculatingRows = nil
+                self.updateDataOnly(rawData, completion: completion)
+                return
+            }
+
+            let uniquelyIdentifiableData = self.dataFactory.buildUniquelyIdentifiableData(rawData)
+            self.dataCalculator.updateAndAnimate(uniquelyIdentifiableData,
+                                                 rawData: rawData,
+                                                 rowProvider: self,
+                                                 section: self.section,
+                                                 viewProvider: self.viewProvider,
+                                                 reloadDelegate: self.reloadDelegate,
+                                                 deletionDelegate: self.deletionNotificationDelegate,
+                                                 completion: completion)
+        }
+    }
+
+    private func appendDataOnly(_ rawData: [DataType.RawType], completion: (() -> Void)?) {
+        self.rows = self.rows + self.dataFactory.buildUniquelyIdentifiableData(rawData)
+        completion?()
+    }
+
+    private func appendAndAnimate(_ rawData: [DataType.RawType], completion: (() -> Void)?) {
+        calculatingRows = rawData
+        calculationQueue.async {
+            guard self._validView() != nil else {
+                self.calculatingRows = nil
+                self.appendDataOnly(rawData, completion: completion)
+                return
+            }
+            
+            let uniquelyIdentifiableData = self.dataFactory.buildUniquelyIdentifiableData(rawData)
+            self.dataCalculator.appendAndAnimate(uniquelyIdentifiableData,
+                                                 rawData: rawData,
+                                                 rowProvider: self,
+                                                 section: self.section,
+                                                 viewProvider: self.viewProvider,
+                                                 completion: completion)
+        }
     }
 }
 

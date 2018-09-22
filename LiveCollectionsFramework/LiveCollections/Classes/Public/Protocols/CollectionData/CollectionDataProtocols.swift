@@ -30,19 +30,22 @@ public protocol CollectionDataActionsInterface: CollectionDataStateInterface, Co
     associatedtype RawType
 
     /**
-     Syncronously calculate the delta between the updatedData and the existing Data. All deletions, insertions, reloads, and moves
-     will be calculated for you. This should only be called when you have not assigned a view to the CollectionData object. (Or
-     in rare scenarios where you want to analyze the delta in advance).
+     Syncronously or asynchronously calculate the delta between the updatedData and the existing Data. All deletions, insertions,
+     reloads, and moves will be calculated for you. This should only be called when you have not assigned a view to the
+     CollectionData object. (Or in rare scenarios where you want to analyze the delta in advance).
      - note: This does *not* update the data, but only calculates a delta. You must still call the `update` method as part of a
              manual animation call.
      - parameter updatedData: The updated state array of your data.  The change delta will be calculated form the current data set.
+     - parameter completion: A completion block to receive the asyncronously calculated delta
      - returns: An IndexDelta that tells you what animations will take place.
      */
-    func calculateDelta(_ updatedData: [RawType]) -> IndexDelta
-    
+    func calculateDeltaSync(_ updatedData: [RawType]) -> IndexDelta
+    func calculateDeltaAsync(_ updatedData: [RawType], completion: @escaping (IndexDelta) -> Void)
+
     /**
      Syncronously calculate the append delta between the updatedData and the existing Data. This returns an insertion only delta
      and the calculation cost is negligible. This should only be called when you have not assigned a view to the CollectionData object.
+     This action has O(1) computational cost, so there is no need for an asyncronous counterpart.
      - note: This does *not* update the data, but only calculates a delta. You must still call the `append` method as part of a
      manual animation call.
      - parameter updatedData: The updated state array of your data.  The change delta will be calculated form the current data set.

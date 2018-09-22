@@ -31,6 +31,7 @@ extension UITableView: DeltaUpdatableView {
         
         let hasChanges = tableViewUpdates.reduce(false) { $0 || $1.indexPathsToAnimate.hasChanges }
         guard hasChanges, dataSource != nil else {
+            tableViewUpdates.forEach { $0.sectionUpdate.update() }
             tableViewUpdates.forEach { $0.sectionUpdate.completion?() }
             return
         }
@@ -44,7 +45,7 @@ extension UITableView: DeltaUpdatableView {
                 delta.movedIndexPathPairs.forEach { indexPathPair in
                     strongSelf.moveRow(at: indexPathPair.source as IndexPath, to: indexPathPair.target as IndexPath)
                 }
-                strongSelf.insertRows(at: delta.insertedIndexPaths, with: .top)
+                strongSelf.insertRows(at: delta.insertedIndexPaths, with: .fade)
             }
         }
         
@@ -163,6 +164,7 @@ extension UICollectionView: DeltaUpdatableView {
 
         let hasChanges = collectionViewUpdates.reduce(false) { $0 || $1.indexPathsToAnimate.hasChanges }
         guard hasChanges, dataSource != nil else {
+            collectionViewUpdates.forEach { $0.sectionUpdate.update() }
             collectionViewUpdates.forEach { $0.sectionUpdate.completion?() }
             return
         }

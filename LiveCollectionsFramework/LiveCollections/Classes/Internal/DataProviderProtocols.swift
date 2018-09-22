@@ -19,7 +19,17 @@ protocol RowDataProvider: AnyObject {
     var dataCountAnimationThreshold: Int { get }
 }
 
+protocol RowCalculatingDataProvider: AnyObject {
+    associatedtype CalculatingRawType
+    var calculatingRows: [CalculatingRawType]? { get set }
+}
+
 protocol SectionDataProvider: RowDataProvider {
     associatedtype SectionType: UniquelyIdentifiableSection
     var sections: [SectionType] { get set }
+}
+
+protocol SectionCalculatingDataProvider: AnyObject {
+    associatedtype CalculatingSectionType
+    var calculatingSections: [CalculatingSectionType]? { get set }
 }
