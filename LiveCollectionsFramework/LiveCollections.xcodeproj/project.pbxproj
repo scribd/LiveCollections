@@ -11,10 +11,10 @@
 		F45256582152D76700F3B2DD /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = F45256572152D76600F3B2DD /* LICENSE */; };
 		F454C235212A545D0018DC6E /* AnyUniquelyIdentifiableDataFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = F454C234212A545D0018DC6E /* AnyUniquelyIdentifiableDataFactory.swift */; };
 		F47AE7292140F4DA00FE7360 /* PerformanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47AE7282140F4DA00FE7360 /* PerformanceTests.swift */; };
-		F47AE72B2140F98100FE7360 /* RowDataCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47AE72A2140F98100FE7360 /* RowDataCalculator.swift */; };
+		F47AE72B2140F98100FE7360 /* ItemDataCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47AE72A2140F98100FE7360 /* ItemDataCalculator.swift */; };
 		F47AE72D214103A300FE7360 /* DeltaCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47AE72C214103A300FE7360 /* DeltaCalculator.swift */; };
-		F47AE73321419A8700FE7360 /* AdvancedRowDeltaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47AE73221419A8700FE7360 /* AdvancedRowDeltaTests.swift */; };
-		F4847DFB2137C8A200859EFF /* BasicRowDeltaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4847DFA2137C8A200859EFF /* BasicRowDeltaTests.swift */; };
+		F47AE73321419A8700FE7360 /* AdvancedItemDeltaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47AE73221419A8700FE7360 /* AdvancedItemDeltaTests.swift */; };
+		F4847DFB2137C8A200859EFF /* BasicItemDeltaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4847DFA2137C8A200859EFF /* BasicItemDeltaTests.swift */; };
 		F4847DFD2137CA0C00859EFF /* BaseTypes+UniquelyIdentifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4847DFC2137CA0C00859EFF /* BaseTypes+UniquelyIdentifiable.swift */; };
 		F4AF3BC32145B2C500917DF5 /* AnyCollectionDataDeletionNotificationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4AF3BC22145B2C500917DF5 /* AnyCollectionDataDeletionNotificationDelegate.swift */; };
 		F4B9013F2133A2A400E3B51C /* AnyDeltaUpdatableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4B9013E2133A2A400E3B51C /* AnyDeltaUpdatableViewDelegate.swift */; };
@@ -56,10 +56,10 @@
 		F45256572152D76600F3B2DD /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		F454C234212A545D0018DC6E /* AnyUniquelyIdentifiableDataFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyUniquelyIdentifiableDataFactory.swift; sourceTree = "<group>"; };
 		F47AE7282140F4DA00FE7360 /* PerformanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformanceTests.swift; sourceTree = "<group>"; };
-		F47AE72A2140F98100FE7360 /* RowDataCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RowDataCalculator.swift; sourceTree = "<group>"; };
+		F47AE72A2140F98100FE7360 /* ItemDataCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDataCalculator.swift; sourceTree = "<group>"; };
 		F47AE72C214103A300FE7360 /* DeltaCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeltaCalculator.swift; sourceTree = "<group>"; };
-		F47AE73221419A8700FE7360 /* AdvancedRowDeltaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedRowDeltaTests.swift; sourceTree = "<group>"; };
-		F4847DFA2137C8A200859EFF /* BasicRowDeltaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicRowDeltaTests.swift; sourceTree = "<group>"; };
+		F47AE73221419A8700FE7360 /* AdvancedItemDeltaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedItemDeltaTests.swift; sourceTree = "<group>"; };
+		F4847DFA2137C8A200859EFF /* BasicItemDeltaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicItemDeltaTests.swift; sourceTree = "<group>"; };
 		F4847DFC2137CA0C00859EFF /* BaseTypes+UniquelyIdentifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BaseTypes+UniquelyIdentifiable.swift"; sourceTree = "<group>"; };
 		F4AF3BC22145B2C500917DF5 /* AnyCollectionDataDeletionNotificationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyCollectionDataDeletionNotificationDelegate.swift; sourceTree = "<group>"; };
 		F4B9013E2133A2A400E3B51C /* AnyDeltaUpdatableViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyDeltaUpdatableViewDelegate.swift; sourceTree = "<group>"; };
@@ -108,15 +108,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		F4847DF92137C89400859EFF /* RowDeltaTests */ = {
+		F4847DF92137C89400859EFF /* ItemDeltaTests */ = {
 			isa = PBXGroup;
 			children = (
 				F4847DFC2137CA0C00859EFF /* BaseTypes+UniquelyIdentifiable.swift */,
-				F4847DFA2137C8A200859EFF /* BasicRowDeltaTests.swift */,
-				F47AE73221419A8700FE7360 /* AdvancedRowDeltaTests.swift */,
+				F4847DFA2137C8A200859EFF /* BasicItemDeltaTests.swift */,
+				F47AE73221419A8700FE7360 /* AdvancedItemDeltaTests.swift */,
 				F47AE7282140F4DA00FE7360 /* PerformanceTests.swift */,
 			);
-			path = RowDeltaTests;
+			path = ItemDeltaTests;
 			sourceTree = "<group>";
 		};
 		F4AF3BC42146DB0700917DF5 /* AnyProtocols */ = {
@@ -170,7 +170,7 @@
 		F4D772EC20FBC4BF002F1C43 /* LiveCollectionsTests */ = {
 			isa = PBXGroup;
 			children = (
-				F4847DF92137C89400859EFF /* RowDeltaTests */,
+				F4847DF92137C89400859EFF /* ItemDeltaTests */,
 				F4D772ED20FBC4BF002F1C43 /* LiveCollectionsTests.swift */,
 				F4D772EF20FBC4BF002F1C43 /* Info.plist */,
 			);
@@ -190,7 +190,7 @@
 			isa = PBXGroup;
 			children = (
 				F4D772FB20FBC4E7002F1C43 /* DataProviderProtocols.swift */,
-				F47AE72A2140F98100FE7360 /* RowDataCalculator.swift */,
+				F47AE72A2140F98100FE7360 /* ItemDataCalculator.swift */,
 				F4D7730020FBC4E7002F1C43 /* SectionDataCalculator.swift */,
 				F47AE72C214103A300FE7360 /* DeltaCalculator.swift */,
 				F4AF3BC42146DB0700917DF5 /* AnyProtocols */,
@@ -405,7 +405,7 @@
 				F4B9013F2133A2A400E3B51C /* AnyDeltaUpdatableViewDelegate.swift in Sources */,
 				F4F59E6A214C34AA00B4AB19 /* CollectionDataReusableViewVerificationDelegate.swift in Sources */,
 				F4AF3BC32145B2C500917DF5 /* AnyCollectionDataDeletionNotificationDelegate.swift in Sources */,
-				F47AE72B2140F98100FE7360 /* RowDataCalculator.swift in Sources */,
+				F47AE72B2140F98100FE7360 /* ItemDataCalculator.swift in Sources */,
 				F42115E7214986F2003B57A6 /* AnyDeltaUpdatableView.swift in Sources */,
 				F4D7731E20FBC4E7002F1C43 /* CollectionData.swift in Sources */,
 				F454C235212A545D0018DC6E /* AnyUniquelyIdentifiableDataFactory.swift in Sources */,
@@ -425,8 +425,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F4847DFB2137C8A200859EFF /* BasicRowDeltaTests.swift in Sources */,
-				F47AE73321419A8700FE7360 /* AdvancedRowDeltaTests.swift in Sources */,
+				F4847DFB2137C8A200859EFF /* BasicItemDeltaTests.swift in Sources */,
+				F47AE73321419A8700FE7360 /* AdvancedItemDeltaTests.swift in Sources */,
 				F4D772EE20FBC4BF002F1C43 /* LiveCollectionsTests.swift in Sources */,
 				F47AE7292140F4DA00FE7360 /* PerformanceTests.swift in Sources */,
 				F4847DFD2137CA0C00859EFF /* BaseTypes+UniquelyIdentifiable.swift in Sources */,
