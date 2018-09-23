@@ -141,6 +141,7 @@ public final class CollectionSectionData<SectionType: UniquelyIdentifiableSectio
             self.dataCalculator.appendAndAnimate(appendedItems,
                                                  sectionProvider: self,
                                                  view: self.view,
+                                                 reloadDelegate: self.reloadDelegate,
                                                  completion: completion)
         }
     }

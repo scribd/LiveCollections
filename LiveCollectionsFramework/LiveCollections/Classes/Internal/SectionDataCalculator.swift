@@ -55,12 +55,14 @@ final class SectionDataCalculator<SectionType: UniquelyIdentifiableSection> {
     func appendAndAnimate<SectionProvider>(_ appendedItems: [SectionType],
                                            sectionProvider: SectionProvider,
                                            view: SectionDeltaUpdatableView,
+                                           reloadDelegate: CollectionSectionDataManualReloadDelegate?,
                                            completion: (() -> Void)?) where SectionProvider: SectionDataProvider, SectionProvider: SectionCalculatingDataProvider, SectionProvider.SectionType == SectionType, SectionProvider.DataType == DataType, SectionProvider.CalculatingSectionType == SectionType {
         
         _processCalculation { [weak self] in
             self?._appendAndAnimate(appendedItems,
                                     sectionProvider: sectionProvider,
                                     view: view,
+                                    reloadDelegate: reloadDelegate,
                                     completion: completion)
         }
     }
@@ -313,23 +315,85 @@ private extension SectionDataCalculator {
     func _appendAndAnimate<SectionProvider>(_ appendedItems: [SectionType],
                                             sectionProvider: SectionProvider,
                                             view: SectionDeltaUpdatableView,
+                                            reloadDelegate: CollectionSectionDataManualReloadDelegate?,
                                             completion: (() -> Void)?) where SectionProvider: SectionDataProvider, SectionProvider: SectionCalculatingDataProvider, SectionProvider.SectionType == SectionType, SectionProvider.DataType == DataType, SectionProvider.CalculatingSectionType == SectionType {
         
         sectionProvider.calculatingSections = appendedItems
         
         let calculationCompletion: () -> Void = { [weak self] in
+            sectionProvider.calculatingSections = nil
             completion?()
             self?._performNextCalculation()
         }
-
+        
         guard appendedItems.isEmpty == false else {
             sectionProvider.calculatingSections = nil
             calculationCompletion()
             return // don't need to update without any changes
         }
+
+        let updatedSections = sectionProvider.sections + appendedItems
+        let updatedRows = orderedRows(for: updatedSections)
         
+        let updateData = { [weak weakSectionProvider = sectionProvider] in
+            guard let strongRowProvider = weakSectionProvider else { return }
+            strongRowProvider.sections = updatedSections
+            strongRowProvider.rows = updatedRows
+            strongRowProvider.calculatingSections = nil
+        }
+
+        let startingCount = sectionProvider.sections.count
+        let insertedIndices = [Int](startingCount..<(startingCount + appendedItems.count))
+        let sectionDelta = IndexDelta(insertions: insertedIndices)
+        
+        let sectionAnimationStlye: AnimationStyle = {
+            guard let reloadDelegate = reloadDelegate else { return .preciseAnimations }
+            return reloadDelegate.preferredSectionAnimationStyle(for: sectionDelta)
+        }()
+        
+        DispatchQueue.main.async { [weak weakSectionProvider = sectionProvider, weak weakView = view] in
+            guard let strongSectionProvider = weakSectionProvider,
+                let strongView = weakView else {
+                updateData()
+                calculationCompletion()
+                return
+            }
+            
+            switch sectionAnimationStlye {
+            case .reloadData:
+                updateData()
+                strongView.reloadData()
+                calculationCompletion()
+
+            case .reloadSections,
+                 .preciseAnimations:
+                if startingCount == 0 {
+                    self._appendIndividuallyAndAnimate(appendedItems,
+                                                       sectionProvider: strongSectionProvider,
+                                                       view: strongView,
+                                                       calculationCompletion: calculationCompletion)
+                } else {
+                    let viewDelegate: DeltaUpdatableViewDelegate? = {
+                        guard let reloadDelegate = reloadDelegate else { return nil }
+                        return AnyDeltaUpdatableViewDelegate(reloadDelegate)
+                    }()
+                    view.performAnimations(sectionDelta: sectionDelta,
+                                           delegate: viewDelegate,
+                                           updateData: updateData,
+                                           completion: calculationCompletion)
+
+                }
+            }
+        }
+    }
+    
+    func _appendIndividuallyAndAnimate<SectionProvider>(_ appendedItems: [SectionType],
+                                                        sectionProvider: SectionProvider,
+                                                        view: SectionDeltaUpdatableView,
+                                                        calculationCompletion: (() -> Void)?) where SectionProvider: SectionDataProvider, SectionProvider: SectionCalculatingDataProvider, SectionProvider.SectionType == SectionType, SectionProvider.DataType == DataType {
+
         let startingIndex = sectionProvider.sections.count
-        
+
         appendedItems.enumerated().forEach { index, item in
             let isFinalItem = index == (appendedItems.count - 1)
             
@@ -343,14 +407,12 @@ private extension SectionDataCalculator {
                 strongSectionProvider.calculatingSections = nil
             }
             
-            DispatchQueue.main.async {
-                let insertedIndex = startingIndex + index
-                let sectionDelta = IndexDelta(insertions: [insertedIndex])
-                view.performAnimations(sectionDelta: sectionDelta,
-                                       delegate: nil,
-                                       updateData: updateAppend,
-                                       completion: completion)
-            }
+            let insertedIndex = startingIndex + index
+            let sectionDelta = IndexDelta(insertions: [insertedIndex])
+            view.performAnimations(sectionDelta: sectionDelta,
+                                   delegate: nil,
+                                   updateData: updateAppend,
+                                   completion: completion)
         }
     }
 }

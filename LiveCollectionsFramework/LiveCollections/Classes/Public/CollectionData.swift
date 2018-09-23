@@ -240,6 +240,7 @@ public final class CollectionData<DataType: UniquelyIdentifiable>: CollectionDat
                                                  rowProvider: self,
                                                  section: self.section,
                                                  viewProvider: self.viewProvider,
+                                                 reloadDelegate: self.reloadDelegate,
                                                  completion: completion)
         }
     }
