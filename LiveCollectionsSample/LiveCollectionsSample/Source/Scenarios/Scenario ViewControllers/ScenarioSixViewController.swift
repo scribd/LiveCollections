@@ -64,7 +64,7 @@ extension ScenarioSixViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return collectionData.rowCount(forSection: section)
+        return collectionData.itemCount(forSection: section)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

@@ -1,5 +1,5 @@
 //
-//  BasicRowDeltaTests.swift
+//  BasicItemDeltaTests.swift
 //  LiveCollectionsTests
 //
 //  Created by Stephane Magne on 8/29/18.
@@ -9,7 +9,7 @@
 import XCTest
 @testable import LiveCollections
 
-final class BasicRowDeltaTests: XCTestCase {
+final class BasicItemDeltaTests: XCTestCase {
 
     private var startingData: [String]!
     private var updatedData: [String]!
@@ -40,7 +40,7 @@ final class BasicRowDeltaTests: XCTestCase {
         startingData = ["A", "B", "C", "D", "E"]
         updatedData = ["B", "C", "D", "E"]
         
-        let (deletedItems, deletedIndices) = deltaCalculator.deletedRows()
+        let (deletedItems, deletedIndices) = deltaCalculator.deletedItems()
 
         XCTAssertEqual(deletedItems, ["A"])
         XCTAssertEqual(deletedIndices, [0])
@@ -51,7 +51,7 @@ final class BasicRowDeltaTests: XCTestCase {
         startingData = ["A", "B", "C", "D", "E"]
         updatedData = ["A", "C", "D", "E"]
         
-        let (deletedItems, deletedIndices) = deltaCalculator.deletedRows()
+        let (deletedItems, deletedIndices) = deltaCalculator.deletedItems()
         
         XCTAssertEqual(deletedItems, ["B"])
         XCTAssertEqual(deletedIndices, [1])
@@ -62,7 +62,7 @@ final class BasicRowDeltaTests: XCTestCase {
         startingData = ["A", "B", "C", "D", "E"]
         updatedData = ["A", "B", "C", "E"]
         
-        let (deletedItems, deletedIndices) = deltaCalculator.deletedRows()
+        let (deletedItems, deletedIndices) = deltaCalculator.deletedItems()
         
         XCTAssertEqual(deletedItems, ["D"])
         XCTAssertEqual(deletedIndices, [3])
@@ -73,7 +73,7 @@ final class BasicRowDeltaTests: XCTestCase {
         startingData = ["A", "B", "C", "D", "E"]
         updatedData = ["B", "D"]
         
-        let (deletedItems, deletedIndices) = deltaCalculator.deletedRows()
+        let (deletedItems, deletedIndices) = deltaCalculator.deletedItems()
         
         XCTAssertEqual(deletedItems, ["A", "C", "E"])
         XCTAssertEqual(deletedIndices, [0, 2, 4])
@@ -84,7 +84,7 @@ final class BasicRowDeltaTests: XCTestCase {
         startingData = ["A", "B", "C", "D", "E"]
         updatedData = []
         
-        let (deletedItems, deletedIndices) = deltaCalculator.deletedRows()
+        let (deletedItems, deletedIndices) = deltaCalculator.deletedItems()
         
         XCTAssertEqual(deletedItems, ["A", "B", "C", "D", "E"])
         XCTAssertEqual(deletedIndices, [0, 1, 2, 3, 4])
@@ -95,7 +95,7 @@ final class BasicRowDeltaTests: XCTestCase {
         startingData = ["3", "2", "0", "4", "1"]
         updatedData = ["3", "0", "2", "1", "4"]
         
-        let (deletedItems, deletedIndices) = deltaCalculator.deletedRows()
+        let (deletedItems, deletedIndices) = deltaCalculator.deletedItems()
         
         XCTAssertTrue(deletedItems.isEmpty)
         XCTAssertTrue(deletedIndices.isEmpty)
@@ -108,7 +108,7 @@ final class BasicRowDeltaTests: XCTestCase {
         startingData = ["B", "C", "D", "E"]
         updatedData = ["A", "B", "C", "D", "E"]
         
-        let (insertedItems, insertedIndices) = deltaCalculator.insertedRows()
+        let (insertedItems, insertedIndices) = deltaCalculator.insertedItems()
         
         XCTAssertEqual(insertedItems, ["A"])
         XCTAssertEqual(insertedIndices, [0])
@@ -119,7 +119,7 @@ final class BasicRowDeltaTests: XCTestCase {
         startingData = ["B", "C", "D", "E"]
         updatedData = ["B", "C", "F", "D", "E"]
         
-        let (insertedItems, insertedIndices) = deltaCalculator.insertedRows()
+        let (insertedItems, insertedIndices) = deltaCalculator.insertedItems()
         
         XCTAssertEqual(insertedItems, ["F"])
         XCTAssertEqual(insertedIndices, [2])
@@ -130,7 +130,7 @@ final class BasicRowDeltaTests: XCTestCase {
         startingData = ["B", "C", "D", "E"]
         updatedData = ["B", "C", "D", "E", "G"]
         
-        let (insertedItems, insertedIndices) = deltaCalculator.insertedRows()
+        let (insertedItems, insertedIndices) = deltaCalculator.insertedItems()
         
         XCTAssertEqual(insertedItems, ["G"])
         XCTAssertEqual(insertedIndices, [4])
@@ -141,7 +141,7 @@ final class BasicRowDeltaTests: XCTestCase {
         startingData = ["B", "C", "D", "E"]
         updatedData = ["A", "B", "F", "C", "D", "E", "G", "H"]
         
-        let (insertedItems, insertedIndices) = deltaCalculator.insertedRows()
+        let (insertedItems, insertedIndices) = deltaCalculator.insertedItems()
         
         XCTAssertEqual(insertedItems, ["A", "F", "G", "H"])
         XCTAssertEqual(insertedIndices, [0, 2, 6, 7])
@@ -154,7 +154,7 @@ final class BasicRowDeltaTests: XCTestCase {
         startingData = ["A", "B", "C", "D", "E"]
         updatedData = ["B", "C", "A", "D", "E"]
         
-        let (_, movedIndexPairs) = deltaCalculator.reloadedAndMovedRows(deletedIndices: [], insertedIndices: [])
+        let (_, movedIndexPairs) = deltaCalculator.reloadedAndMovedItems(deletedIndices: [], insertedIndices: [])
         
         XCTAssertEqual(movedIndexPairs, [IndexPair(source: 0, target: 2),
                                          IndexPair(source: 1, target: 0),
@@ -166,7 +166,7 @@ final class BasicRowDeltaTests: XCTestCase {
         startingData = ["A", "B", "C", "D", "E"]
         updatedData = ["B", "D", "C", "A", "E"]
         
-        let (_, movedIndexPairs) = deltaCalculator.reloadedAndMovedRows(deletedIndices: [], insertedIndices: [])
+        let (_, movedIndexPairs) = deltaCalculator.reloadedAndMovedItems(deletedIndices: [], insertedIndices: [])
 
         XCTAssertEqual(movedIndexPairs, [IndexPair(source: 0, target: 3),
                                          IndexPair(source: 1, target: 0),
@@ -178,7 +178,7 @@ final class BasicRowDeltaTests: XCTestCase {
         startingData = ["A", "B", "C", "D", "E"]
         updatedData = ["A", "E", "C", "D", "B"]
         
-        let (_, movedIndexPairs) = deltaCalculator.reloadedAndMovedRows(deletedIndices: [], insertedIndices: [])
+        let (_, movedIndexPairs) = deltaCalculator.reloadedAndMovedItems(deletedIndices: [], insertedIndices: [])
 
         XCTAssertEqual(movedIndexPairs, [IndexPair(source: 1, target: 4),
                                          IndexPair(source: 4, target: 1)])

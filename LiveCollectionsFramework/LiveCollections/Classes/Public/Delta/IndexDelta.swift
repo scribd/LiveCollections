@@ -124,6 +124,6 @@ public struct IndexPathDelta: Equatable {
 public extension IndexPath {
     
     var debugDescription: String {
-        return "{\(section).\(row)}"
+        return "{\(section).\(item)}"
     }
 }

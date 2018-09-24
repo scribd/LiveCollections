@@ -26,37 +26,37 @@ final class DeltaCalculator<Element: UniquelyIdentifiable> {
         self.includeIdenticalMoves = includeIdenticalMoves
     }
     
-    func calculateRowDelta() -> (delta: IndexDelta, deletedItems: [Element]) {
+    func calculateItemDelta() -> (delta: IndexDelta, deletedItems: [Element]) {
         
-        let (deletedItems, deletedRowIndices) = deletedRows()
-        let (_, insertedRowIndices) = insertedRows()
-        let (reloadedIndexRowPairs, movedIndexRowPairs) = reloadedAndMovedRows(deletedIndices: deletedRowIndices, insertedIndices: insertedRowIndices)
+        let (deletedItems, deletedItemIndices) = self.deletedItems()
+        let (_, insertedItemIndices) = insertedItems()
+        let (reloadedIndexItemPairs, movedIndexItemPairs) = reloadedAndMovedItems(deletedIndices: deletedItemIndices, insertedIndices: insertedItemIndices)
         
-        let delta = IndexDelta(deletions: deletedRowIndices,
-                               insertions: insertedRowIndices,
-                               reloads: reloadedIndexRowPairs,
-                               moves: movedIndexRowPairs)
+        let delta = IndexDelta(deletions: deletedItemIndices,
+                               insertions: insertedItemIndices,
+                               reloads: reloadedIndexItemPairs,
+                               moves: movedIndexItemPairs)
         
         return (delta: delta, deletedItems: deletedItems)
     }
     
     func calculateSectionDelta() -> (delta: IndexDelta, deletedItems: [Element]) {
         
-        let (deletedItems, deletedRowIndices) = deletedRows()
-        let (_, insertedRowIndices) = insertedRows()
-        let (_, movedIndexRowPairs) = reloadedAndMovedRows(deletedIndices: deletedRowIndices, insertedIndices: insertedRowIndices)
+        let (deletedItems, deletedItemIndices) = self.deletedItems()
+        let (_, insertedItemIndices) = insertedItems()
+        let (_, movedIndexItemPairs) = reloadedAndMovedItems(deletedIndices: deletedItemIndices, insertedIndices: insertedItemIndices)
         
-        let delta = IndexDelta(deletions: deletedRowIndices,
-                               insertions: insertedRowIndices,
+        let delta = IndexDelta(deletions: deletedItemIndices,
+                               insertions: insertedItemIndices,
                                reloads: [],
-                               moves: movedIndexRowPairs)
+                               moves: movedIndexItemPairs)
         
         return (delta: delta, deletedItems: deletedItems)
     }
     
     // MARK: Deletions
     
-    func deletedRows() -> (items: [Element], indices: [Int]) {
+    func deletedItems() -> (items: [Element], indices: [Int]) {
         
         let deletedItems: [Element] = startingData.filter { updatedIndices[$0.uniqueID] == nil }
         let deletedIndices = originalIndices.indices(forItemsIn: deletedItems)
@@ -65,7 +65,7 @@ final class DeltaCalculator<Element: UniquelyIdentifiable> {
     
     // MARK: Insertions
     
-    func insertedRows() -> (items: [Element], indices: [Int]) {
+    func insertedItems() -> (items: [Element], indices: [Int]) {
         
         let insertedItems: [Element] = updatedData.filter { originalIndices[$0.uniqueID] == nil }
         let insertedIndices = updatedIndices.indices(forItemsIn: insertedItems)
@@ -82,7 +82,7 @@ final class DeltaCalculator<Element: UniquelyIdentifiable> {
      - insertedIndices: previously calculated positions of inserted items
      - returns: an array of the index pairs of all moved items
      */
-    func reloadedAndMovedRows(deletedIndices: [Int],
+    func reloadedAndMovedItems(deletedIndices: [Int],
                                       insertedIndices: [Int]) -> (reloaded: [IndexPair], moved: [IndexPair]) {
         
         var movedIndexPairs = [IndexPair]()

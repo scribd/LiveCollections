@@ -22,10 +22,10 @@ public protocol CollectionSectionDataStateInterface: AnyObject {
     
     // helpers
     var sectionCount: Int { get }
-    func rowCount(forSection section: Int) -> Int
+    func itemCount(forSection section: Int) -> Int
     
     subscript(index: Int) -> SectionType { get }
-    subscript(section: Int, row: Int) -> RawType { get }
+    subscript(section: Int, item: Int) -> RawType { get }
     subscript(indexPath: IndexPath) -> RawType { get }
 }
 

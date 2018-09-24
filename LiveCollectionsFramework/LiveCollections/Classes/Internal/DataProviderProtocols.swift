@@ -1,5 +1,5 @@
 //
-//  RowDataProvider.swift
+//  ItemDataProvider.swift
 //  LiveCollections
 //
 //  Created by Stephane Magne on 7/9/18.
@@ -8,9 +8,9 @@
 
 import Foundation
 
-protocol RowDataProvider: AnyObject {
+protocol ItemDataProvider: AnyObject {
     associatedtype DataType: UniquelyIdentifiable
-    var rows: [DataType] { get set }
+    var items: [DataType] { get set }
     
     // As data sets get large, calculation time becomes expensive, so
     // if either the current data or the updated data exceeds this count,
@@ -19,12 +19,12 @@ protocol RowDataProvider: AnyObject {
     var dataCountAnimationThreshold: Int { get }
 }
 
-protocol RowCalculatingDataProvider: AnyObject {
+protocol ItemCalculatingDataProvider: AnyObject {
     associatedtype CalculatingRawType
-    var calculatingRows: [CalculatingRawType]? { get set }
+    var calculatingItems: [CalculatingRawType]? { get set }
 }
 
-protocol SectionDataProvider: RowDataProvider {
+protocol SectionDataProvider: ItemDataProvider {
     associatedtype SectionType: UniquelyIdentifiableSection
     var sections: [SectionType] { get set }
 }

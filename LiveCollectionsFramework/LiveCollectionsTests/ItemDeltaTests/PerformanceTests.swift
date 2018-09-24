@@ -22,7 +22,7 @@ final class PerformanceTests: XCTestCase {
         collectionData = nil
     }
 
-    func test_10_rows_with_10_rows() {
+    func test_10_items_with_10_items() {
         startingData = DataBuilder.build(10, numberToDelete: 0)
         updatedData = DataBuilder.build(10, numberToDelete: 0)
         collectionData = CollectionData<Int>(startingData)
@@ -32,7 +32,7 @@ final class PerformanceTests: XCTestCase {
         }
     }
 
-    func test_100_rows_with_100_rows() {
+    func test_100_items_with_100_items() {
         startingData = DataBuilder.build(100, numberToDelete: 0)
         updatedData = DataBuilder.build(100, numberToDelete: 0)
         collectionData = CollectionData<Int>(startingData)
@@ -42,7 +42,7 @@ final class PerformanceTests: XCTestCase {
         }
     }
 
-    func test_1000_rows_with_1000_rows() {
+    func test_1000_items_with_1000_items() {
         startingData = DataBuilder.build(1000, numberToDelete: 0)
         updatedData = DataBuilder.build(1000, numberToDelete: 0)
         collectionData = CollectionData<Int>(startingData)
@@ -52,7 +52,7 @@ final class PerformanceTests: XCTestCase {
         }
     }
 
-    func test_10000_rows_with_10000_rows() {
+    func test_10000_items_with_10000_items() {
         startingData = DataBuilder.build(10000, numberToDelete: 0)
         updatedData = DataBuilder.build(10000, numberToDelete: 0)
         collectionData = CollectionData<Int>(startingData)
@@ -62,7 +62,7 @@ final class PerformanceTests: XCTestCase {
         }
     }
 
-    func test_100000_rows_with_100000_rows() {
+    func test_100000_items_with_100000_items() {
         startingData = DataBuilder.build(100000, numberToDelete: 0)
         updatedData = DataBuilder.build(100000, numberToDelete: 0)
         collectionData = CollectionData<Int>(startingData)
@@ -72,7 +72,7 @@ final class PerformanceTests: XCTestCase {
         }
     }
     
-    func test_600_rows_with_1400_rows() {
+    func test_600_items_with_1400_items() {
         startingData = DataBuilder.build(1000, numberToDelete: 400)
         updatedData = DataBuilder.build(1400, numberToDelete: 0)
         collectionData = CollectionData<Int>(startingData)
@@ -82,7 +82,7 @@ final class PerformanceTests: XCTestCase {
         }
     }
 
-    func test_1400_rows_with_600_rows() {
+    func test_1400_items_with_600_items() {
         startingData = DataBuilder.build(1400, numberToDelete: 0)
         updatedData = DataBuilder.build(1000, numberToDelete: 400)
         collectionData = CollectionData<Int>(startingData)
@@ -92,7 +92,7 @@ final class PerformanceTests: XCTestCase {
         }
     }
 
-    func test_6000_rows_with_14000_rows() {
+    func test_6000_items_with_14000_items() {
         startingData = DataBuilder.build(10000, numberToDelete: 4000)
         updatedData = DataBuilder.build(14000, numberToDelete: 0)
         collectionData = CollectionData<Int>(startingData)

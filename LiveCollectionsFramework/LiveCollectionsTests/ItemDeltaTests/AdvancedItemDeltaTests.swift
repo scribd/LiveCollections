@@ -1,5 +1,5 @@
 //
-//  AdvancedRowDeltaTests.swift
+//  AdvancedItemDeltaTests.swift
 //  LiveCollectionsTests
 //
 //  Created by Stephane Magne on 9/6/18.
@@ -9,7 +9,7 @@
 import XCTest
 @testable import LiveCollections
 
-final class AdvancedRowDeltaTests: XCTestCase {
+final class AdvancedItemDeltaTests: XCTestCase {
     
     private var startingData: [Int]!
     private var updatedData: [Int]!
@@ -40,10 +40,10 @@ final class AdvancedRowDeltaTests: XCTestCase {
         startingData = [383, 30, 296, 74, 68, 396, 158]
         updatedData = [383, 30, 74, 68, 396, 158]
         
-        let (_, insertedIndices) = deltaCalculator.insertedRows()
-        let (_, deletedIndices) = deltaCalculator.deletedRows()
+        let (_, insertedIndices) = deltaCalculator.insertedItems()
+        let (_, deletedIndices) = deltaCalculator.deletedItems()
         
-        let (_, movedIndexPairs) = deltaCalculator.reloadedAndMovedRows(deletedIndices: deletedIndices, insertedIndices: insertedIndices)
+        let (_, movedIndexPairs) = deltaCalculator.reloadedAndMovedItems(deletedIndices: deletedIndices, insertedIndices: insertedIndices)
         
         XCTAssertTrue(movedIndexPairs.isEmpty)
     }
@@ -53,10 +53,10 @@ final class AdvancedRowDeltaTests: XCTestCase {
         startingData = [383, 30, 296, 74, 68, 396, 158]
         updatedData = [30, 74, 68, 158]
         
-        let (_, insertedIndices) = deltaCalculator.insertedRows()
-        let (_, deletedIndices) = deltaCalculator.deletedRows()
+        let (_, insertedIndices) = deltaCalculator.insertedItems()
+        let (_, deletedIndices) = deltaCalculator.deletedItems()
         
-        let (_, movedIndexPairs) = deltaCalculator.reloadedAndMovedRows(deletedIndices: deletedIndices, insertedIndices: insertedIndices)
+        let (_, movedIndexPairs) = deltaCalculator.reloadedAndMovedItems(deletedIndices: deletedIndices, insertedIndices: insertedIndices)
 
         XCTAssertTrue(movedIndexPairs.isEmpty)
     }
@@ -67,10 +67,10 @@ final class AdvancedRowDeltaTests: XCTestCase {
         
         updatedData = [383, 30, 296, 74, 68, 396, 158, 58, 28, 933, 389, 377, 180, 401, 272, 289, 822, 938, 824, 704, 591, 274, 164, 189, 407, 913, 914, 163, 823, 708, 192, 21, 19, 928, 491, 35, 86, 932, 55, 85, 275, 395, 22, 835, 178, 69, 829]
 
-        let (_, insertedIndices) = deltaCalculator.insertedRows()
-        let (_, deletedIndices) = deltaCalculator.deletedRows()
+        let (_, insertedIndices) = deltaCalculator.insertedItems()
+        let (_, deletedIndices) = deltaCalculator.deletedItems()
         
-        let (_, movedIndexPairs) = deltaCalculator.reloadedAndMovedRows(deletedIndices: deletedIndices, insertedIndices: insertedIndices)
+        let (_, movedIndexPairs) = deltaCalculator.reloadedAndMovedItems(deletedIndices: deletedIndices, insertedIndices: insertedIndices)
 
         XCTAssertTrue(movedIndexPairs.isEmpty)
     }

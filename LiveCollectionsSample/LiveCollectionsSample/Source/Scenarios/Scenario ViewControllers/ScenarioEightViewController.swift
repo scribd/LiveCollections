@@ -73,7 +73,7 @@ final class ScenarioEightViewController: UIViewController {
 
 extension ScenarioEightViewController: CollectionSectionDataManualReloadDelegate {
 
-    func preferredRowAnimationStyle(for rowDelta: IndexDelta) -> AnimationStyle {
+    func preferredItemAnimationStyle(for itemDelta: IndexDelta) -> AnimationStyle {
         // option to suppress deltas that result in undesired animations
         return .preciseAnimations
     }
@@ -93,11 +93,11 @@ extension ScenarioEightViewController: CollectionSectionDataManualReloadDelegate
             let carouselRow = collectionData[indexPath]
             let dataSource = _carouselDataSource(for: carouselRow.identifier)
             
-            let rowCompletion = {
+            let itemCompletion = {
                 completion(indexPath)
             }
             
-            dataSource.update(with: carouselRow.movies, completion: rowCompletion)
+            dataSource.update(with: carouselRow.movies, completion: itemCompletion)
         }
     }
 }
@@ -116,7 +116,7 @@ extension ScenarioEightViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return collectionData.rowCount(forSection: section)
+        return collectionData.itemCount(forSection: section)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

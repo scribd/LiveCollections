@@ -16,7 +16,7 @@ import Foundation
  to update the collection view and not perform any table view animations. Instead trigger your collection
  view update in the `reloadItems` call.
  
- Additionally, `preferredRowAnimationStyle` and `preferredSectionAnimationStyle` give you hooks to
+ Additionally, `preferredItemAnimationStyle` and `preferredSectionAnimationStyle` give you hooks to
  change the resulting animation for a given delta. In most cases, simply return `.preciseAnimations`
  and let CollectionData do its thing, but if you see cases that don't look great in your animation,
  you can handle that here. In most problem scenarios, returning `.reloadSections` will still display
@@ -28,7 +28,7 @@ public protocol CollectionDataManualReloadDelegate: AnyObject {
     func willHandleReload(at indexPath: IndexPath) -> Bool
     func reloadItems(at indexPaths: [IndexPath], completion: @escaping (IndexPath) -> Void)
 
-    func preferredRowAnimationStyle(for rowDelta: IndexDelta) -> AnimationStyle
+    func preferredItemAnimationStyle(for itemDelta: IndexDelta) -> AnimationStyle
 }
 
 public protocol CollectionSectionDataManualReloadDelegate: CollectionDataManualReloadDelegate {

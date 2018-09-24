@@ -67,9 +67,9 @@ final class SectionDataCalculator<SectionType: UniquelyIdentifiableSection> {
         }
     }
     
-    func orderedRows(for sections: [SectionType]) -> [DataType] {
-        let allRows = sections.flatMap { $0.items }
-        return [DataType](allRows)
+    func orderedItems(for sections: [SectionType]) -> [DataType] {
+        let allItems = sections.flatMap { $0.items }
+        return [DataType](allItems)
     }
 }
 
@@ -113,7 +113,7 @@ private extension SectionDataCalculator {
         
         sectionProvider.calculatingSections = updatedSections
 
-        let currentCount = sectionProvider.rows.count
+        let currentCount = sectionProvider.items.count
         let updatedCount = updatedSections.reduce(0) { $0 + $1.items.count }
         
         let shortCircuitAnimation = currentCount > sectionProvider.dataCountAnimationThreshold ||
@@ -128,10 +128,10 @@ private extension SectionDataCalculator {
         let sectionDeltaCalculator = DeltaCalculator<SectionType>(startingData: sections, updatedData: sanitizedUpdatedSections)
         let (sectionDelta, deletedSections) = sectionDeltaCalculator.calculateSectionDelta()
         
-        // determine deleted row items (from the deleted sections)
+        // determine deleted items (from the deleted sections)
         let deletedSectionItems = deletedSections.flatMap { $0.items }
         
-        // determine inserted row items (from the inserted sections)
+        // determine inserted items (from the inserted sections)
         var insertedItems: [DataType] = []
         for insertedSection in sectionDelta.insertions {
             insertedItems += sanitizedUpdatedSections[insertedSection].items
@@ -145,45 +145,45 @@ private extension SectionDataCalculator {
         
         // compare original data with moves and deletions applied
         // against new data with insertions *removed*
-        // this lets us determine all of the row actions that occurred with the (remaining) existing data
+        // this lets us determine all of the item actions that occurred with the (remaining) existing data
         
         sections = dataWithMovesAndDeletions(byApplying: sectionDelta, on: sections, matching: sanitizedUpdatedSections)
         sectionProvider.sections = sections
         
-        var rows = orderedRows(for: sections)
-        sectionProvider.rows = rows
+        var items = orderedItems(for: sections)
+        sectionProvider.items = items
         
         let intermediateSections = sections
         
         let targetSections = dataWithInsertionsRemoved(byApplying: sectionDelta, on: sanitizedUpdatedSections)
-        let targetUpdatedRowData = targetSections.flatMap { $0.items }
-        let targetUpdatedRows = [DataType](targetUpdatedRowData)
+        let targetUpdatedItemData = targetSections.flatMap { $0.items }
+        let targetUpdatedItems = [DataType](targetUpdatedItemData)
         
-        let rowDelta: IndexDelta
+        let itemDelta: IndexDelta
         let deletedItems: [DataType]
 
         if shortCircuitAnimation {
-            rowDelta = .empty
+            itemDelta = .empty
             if reloadDelegate == nil {
                 deletedItems = []
             } else {
-                let rowDeltaCalculator = DeltaCalculator<DataType>(startingData: rows, updatedData: targetUpdatedRows, includeIdenticalMoves: true)
-                (deletedItems, _) = rowDeltaCalculator.deletedRows()
+                let itemDeltaCalculator = DeltaCalculator<DataType>(startingData: items, updatedData: targetUpdatedItems, includeIdenticalMoves: true)
+                (deletedItems, _) = itemDeltaCalculator.deletedItems()
             }
         } else {
-            let rowDeltaCalculator = DeltaCalculator<DataType>(startingData: rows, updatedData: targetUpdatedRows, includeIdenticalMoves: true)
-            (rowDelta, deletedItems) = rowDeltaCalculator.calculateRowDelta()
+            let itemDeltaCalculator = DeltaCalculator<DataType>(startingData: items, updatedData: targetUpdatedItems, includeIdenticalMoves: true)
+            (itemDelta, deletedItems) = itemDeltaCalculator.calculateItemDelta()
         }
 
         // ***********************************
         // RELATIVE DATA INTERMEDIATE STAGE 2
         // ***********************************
         
-        // Now that we've calculated the row deltas, add just the section insertions to the original data set
+        // Now that we've calculated the item deltas, add just the section insertions to the original data set
         // (remember that we've already applied the deletions and moves) and trigger the section animations
         
         sections = dataWithInsertionsAdded(byApplying: sectionDelta, on: sections, from: sanitizedUpdatedSections)
-        rows = orderedRows(for: sections)
+        items = orderedItems(for: sections)
         
         typealias SectionUpdateCompletion = () -> Void
         
@@ -197,7 +197,7 @@ private extension SectionDataCalculator {
 
                 let sectionUpdateData = {
                     sectionProvider.sections = sections
-                    sectionProvider.rows = rows
+                    sectionProvider.items = items
                 }
                 
                 switch sectionAnimationStlye {
@@ -225,8 +225,8 @@ private extension SectionDataCalculator {
             // FINAL ANIMATIONS
             // *******************
             
-            // finally we convert the row deltas that we calculated in MIS1 into index paths.  This will include making
-            // adjustments for the (then) missing inserted sections.  Once those adjustments are made, trigger the row animations
+            // finally we convert the item deltas that we calculated in MIS1 into index paths.  This will include making
+            // adjustments for the (then) missing inserted sections.  Once those adjustments are made, trigger the item animations
             
             let calculationCompletion: () -> Void = { [weak self, weak weakDeletionDelegate = deletionDelegate] in
                 completion?()
@@ -245,8 +245,8 @@ private extension SectionDataCalculator {
                 let updateData = { [weak self, weak weakProvider = sectionProvider] in
                     guard let strongSelf = self, let strongProvider = weakProvider else { return }
                     strongProvider.sections = sanitizedUpdatedSections
-                    let rows = strongSelf.orderedRows(for: sanitizedUpdatedSections)
-                    strongProvider.rows = rows
+                    let items = strongSelf.orderedItems(for: sanitizedUpdatedSections)
+                    strongProvider.items = items
                     strongProvider.calculatingSections = nil
                 }
                 
@@ -258,28 +258,28 @@ private extension SectionDataCalculator {
                 return
             }
             
-            guard sectionDelta.hasChanges || rowDelta.hasChanges else {
+            guard sectionDelta.hasChanges || itemDelta.hasChanges else {
                 sectionProvider.calculatingSections = nil
                 calculationCompletion()
                 return // don't need to update with no changes
             }
             
-            // convert row indexs to NSIndexPaths
-            let rowIndexPathDeltas = self.convertRowIndexesToIndexPaths(rowDelta, sectionDelta: sectionDelta, originalSections: originalSections, intermediateSections: intermediateSections, targetSections: targetSections)
+            // convert item indices to NSIndexPaths
+            let itemIndexPathDeltas = self.convertItemIndicesToIndexPaths(itemDelta, sectionDelta: sectionDelta, originalSections: originalSections, intermediateSections: intermediateSections, targetSections: targetSections)
             
             // finally we set our data with what was passed into the update() function
             sections = sanitizedUpdatedSections
-            rows = self.orderedRows(for: sections)
+            items = self.orderedItems(for: sections)
             
             let updateData = {
                 sectionProvider.sections = sections
-                sectionProvider.rows = rows
+                sectionProvider.items = items
                 sectionProvider.calculatingSections = nil
             }
             
-            let rowAnimationStlye: AnimationStyle = {
+            let itemAnimationStlye: AnimationStyle = {
                 guard let reloadDelegate = reloadDelegate else { return .preciseAnimations }
-                return reloadDelegate.preferredRowAnimationStyle(for: rowDelta)
+                return reloadDelegate.preferredItemAnimationStyle(for: itemDelta)
             }()
             
             DispatchQueue.main.async { [weak weakView = view] in
@@ -289,7 +289,7 @@ private extension SectionDataCalculator {
                     return
                 }
                 
-                switch rowAnimationStlye {
+                switch itemAnimationStlye {
                 case .reloadData:
                     updateData()
                     strongView.reloadData()
@@ -303,7 +303,7 @@ private extension SectionDataCalculator {
                         guard let reloadDelegate = reloadDelegate else { return nil }
                         return AnyDeltaUpdatableViewDelegate(reloadDelegate)
                     }()
-                    strongView.performAnimations(sectionRowDelta: rowIndexPathDeltas,
+                    strongView.performAnimations(sectionItemDelta: itemIndexPathDeltas,
                                                  delegate: viewDelegate,
                                                  updateData: updateData,
                                                  completion: calculationCompletion)
@@ -333,13 +333,13 @@ private extension SectionDataCalculator {
         }
 
         let updatedSections = sectionProvider.sections + appendedItems
-        let updatedRows = orderedRows(for: updatedSections)
+        let updatedItems = orderedItems(for: updatedSections)
         
         let updateData = { [weak weakSectionProvider = sectionProvider] in
-            guard let strongRowProvider = weakSectionProvider else { return }
-            strongRowProvider.sections = updatedSections
-            strongRowProvider.rows = updatedRows
-            strongRowProvider.calculatingSections = nil
+            guard let strongSectionProvider = weakSectionProvider else { return }
+            strongSectionProvider.sections = updatedSections
+            strongSectionProvider.items = updatedItems
+            strongSectionProvider.calculatingSections = nil
         }
 
         let startingCount = sectionProvider.sections.count
@@ -402,8 +402,8 @@ private extension SectionDataCalculator {
                 guard let strongSectionProvider = weakSectionProvider else { return }
                 
                 strongSectionProvider.sections = strongSectionProvider.sections + [item]
-                let updatedRows = self.orderedRows(for: [item])
-                strongSectionProvider.rows = strongSectionProvider.rows + updatedRows
+                let updatedItems = self.orderedItems(for: [item])
+                strongSectionProvider.items = strongSectionProvider.items + updatedItems
                 strongSectionProvider.calculatingSections = nil
             }
             
@@ -481,21 +481,21 @@ private extension SectionDataCalculator {
         return startingOffsets
     }
     
-    func convertToRowIndexes(_ sections: [Int], for sectionItems: [SectionType]) -> [Int] {
+    func convertToItemIndices(_ sections: [Int], for sectionItems: [SectionType]) -> [Int] {
         let startingIndexes = indexOffsets(for: sectionItems)
-        var rowIndexes: [Int] = []
+        var itemIndices: [Int] = []
         
         for section in sections {
             let startingIndex = startingIndexes[section]
             
             let sectionItem = sectionItems[section]
             for i in 0..<sectionItem.items.count {
-                let rowIndex = i + startingIndex
-                rowIndexes.append(rowIndex)
+                let itemIndex = i + startingIndex
+                itemIndices.append(itemIndex)
             }
         }
         
-        return rowIndexes.sorted()
+        return itemIndices.sorted()
     }
 }
 
@@ -503,24 +503,24 @@ private extension SectionDataCalculator {
 
 private extension SectionDataCalculator {
     
-    func convertRowIndexesToIndexPaths(_ indexDelta: IndexDelta, sectionDelta: IndexDelta, originalSections: [SectionType], intermediateSections: [SectionType], targetSections: [SectionType]) -> IndexPathDelta {
+    func convertItemIndicesToIndexPaths(_ indexDelta: IndexDelta, sectionDelta: IndexDelta, originalSections: [SectionType], intermediateSections: [SectionType], targetSections: [SectionType]) -> IndexPathDelta {
         
         let originalStartingOffsets = indexOffsets(for: originalSections)
         let intermediateStartingOffsets = indexOffsets(for: intermediateSections)
         let targetStartingOffsets = indexOffsets(for: targetSections)
         
-        func indexPath(for rowIndex: Int, in offsets: [Int]) -> IndexPath {
+        func indexPath(for itemIndex: Int, in offsets: [Int]) -> IndexPath {
             var section = 0
-            var row = 0
+            var item = 0
             
             let start = offsets.count-1
-            for sectionIndex in stride(from: start, to: -1, by: -1) where rowIndex >= offsets[sectionIndex] {
+            for sectionIndex in stride(from: start, to: -1, by: -1) where itemIndex >= offsets[sectionIndex] {
                 section = sectionIndex
-                row = rowIndex - offsets[sectionIndex]
+                item = itemIndex - offsets[sectionIndex]
                 break
             }
             
-            return IndexPath(row: row, section: section)
+            return IndexPath(item: item, section: section)
         }
         
         // index adjustment
@@ -538,40 +538,40 @@ private extension SectionDataCalculator {
             return adjustedSection
         }
         
-        func convertSourceRowsToIndexPaths(_ rows: [Int]) -> [IndexPath] {
+        func convertSourceItemsToIndexPaths(_ items: [Int]) -> [IndexPath] {
             
             var indexPaths: [IndexPath] = []
             
-            for rowIndex in rows {
-                let index = indexPath(for: rowIndex, in: intermediateStartingOffsets)
+            for itemIndex in items {
+                let index = indexPath(for: itemIndex, in: intermediateStartingOffsets)
                 let adjustedSection = adjustSectionForInsertions(index.section)
-                let adjustedIndexPath = IndexPath(row: index.row, section: adjustedSection)
+                let adjustedIndexPath = IndexPath(item: index.item, section: adjustedSection)
                 indexPaths.append(adjustedIndexPath)
             }
             
             return indexPaths
         }
         
-        func convertTargetRowsToIndexPaths(_ rows: [Int]) -> [IndexPath] {
+        func convertTargetItemsToIndexPaths(_ items: [Int]) -> [IndexPath] {
             // calculate final index path
             var indexPaths: [IndexPath] = []
             
-            for rowIndex in rows {
-                let index = indexPath(for: rowIndex, in: targetStartingOffsets)
+            for itemIndex in items {
+                let index = indexPath(for: itemIndex, in: targetStartingOffsets)
                 let adjustedSection = adjustSectionForInsertions(index.section)
-                let adjustedIndexPath = IndexPath(row: index.row, section: adjustedSection)
+                let adjustedIndexPath = IndexPath(item: index.item, section: adjustedSection)
                 indexPaths.append(adjustedIndexPath)
             }
             
             return indexPaths
         }
         
-        func convertRowPairsToIndexPathPairs(_ indexPairRows: [IndexPair]) -> [IndexPathPair] {
+        func convertItemPairsToIndexPathPairs(_ indexPairItems: [IndexPair]) -> [IndexPathPair] {
             var indexPathPairs: [IndexPathPair] = []
             
-            for indexPair in indexPairRows {
-                let sourceIndexPaths = convertSourceRowsToIndexPaths([indexPair.source])
-                let targetIndexPaths = convertTargetRowsToIndexPaths([indexPair.target])
+            for indexPair in indexPairItems {
+                let sourceIndexPaths = convertSourceItemsToIndexPaths([indexPair.source])
+                let targetIndexPaths = convertTargetItemsToIndexPaths([indexPair.target])
                 
                 if sourceIndexPaths.count == 1 && targetIndexPaths.count == 1 {
                     let source = sourceIndexPaths[0]
@@ -607,7 +607,7 @@ private extension SectionDataCalculator {
             
             for move in moves {
                 if move.source.section == move.target.section &&
-                    move.source.row == move.target.row {
+                    move.source.item == move.target.item {
                     
                     // compare data
                     let adjustedSourceSection = adjustSectionByRemovingInsertions(move.source.section)
@@ -616,8 +616,8 @@ private extension SectionDataCalculator {
                     let intermediateSection = intermediateSections[adjustedSourceSection]
                     let targetSection = targetSections[adjustedTargetSection]
                     
-                    let intermediateItem = intermediateSection.items[move.source.row]
-                    let targetItem = targetSection.items[move.target.row]
+                    let intermediateItem = intermediateSection.items[move.source.item]
+                    let targetItem = targetSection.items[move.target.item]
                     
                     if intermediateItem != targetItem {
                         updatedReloads.append(move)
@@ -630,11 +630,11 @@ private extension SectionDataCalculator {
             return (updatedReloads: updatedReloads, updatedMoves: updatedMoves)
         }
         
-        let deletedIndexPaths = convertSourceRowsToIndexPaths(indexDelta.deletions)
-        let insertedIndexPaths = convertTargetRowsToIndexPaths(indexDelta.insertions)
+        let deletedIndexPaths = convertSourceItemsToIndexPaths(indexDelta.deletions)
+        let insertedIndexPaths = convertTargetItemsToIndexPaths(indexDelta.insertions)
         
-        let reloadedIndexPathPairs = convertRowPairsToIndexPathPairs(indexDelta.reloads)
-        let movedIndexPathPairs = convertRowPairsToIndexPathPairs(indexDelta.moves)
+        let reloadedIndexPathPairs = convertItemPairsToIndexPathPairs(indexDelta.reloads)
+        let movedIndexPathPairs = convertItemPairsToIndexPathPairs(indexDelta.moves)
         
         let (updatedReloads, updatedMoves) = convertNecessaryMovesToReloads(reloads: reloadedIndexPathPairs, moves: movedIndexPathPairs)
         

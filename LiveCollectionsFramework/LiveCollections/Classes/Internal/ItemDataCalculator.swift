@@ -1,5 +1,5 @@
 //
-//  RowDataCalculator.swift
+//  ItemDataCalculator.swift
 //  LiveCollections
 //
 //  Created by Stephane Magne on 9/5/18.
@@ -8,50 +8,50 @@
 
 import Foundation
 
-final class RowDataCalculator<DataType: UniquelyIdentifiable> {
-
+final class ItemDataCalculator<DataType: UniquelyIdentifiable> {
+    
     // MARK: State
     
-    private var processingQueue = DispatchQueue(label: "\(RowDataCalculator.self) ordering queue")
-    private let dataQueue = DispatchQueue(label: "\(RowDataCalculator.self) dispatch queue", attributes: .concurrent)
+    private var processingQueue = DispatchQueue(label: "\(ItemDataCalculator.self) ordering queue")
+    private let dataQueue = DispatchQueue(label: "\(ItemDataCalculator.self) dispatch queue", attributes: .concurrent)
     
     private var _isCalculating: Bool = false
     private var isCalculating: Bool {
         get { return dataQueue.sync { return _isCalculating } }
         set { dataQueue.async(flags: .barrier) { self._isCalculating = newValue } }
     }
-
+    
     private let _orderedQueue = DataCalculatorQueue()
     private var orderedQueue: DataCalculatorQueue { return dataQueue.sync { return _orderedQueue } }
     
     // MARK: API
-
-    func calculateDelta<RowProvider>(_ updatedRows: [DataType],
-                                     rowProvider: RowProvider) -> IndexDelta where RowProvider: RowDataProvider, RowProvider.DataType == DataType {
-
-        let (delta, _) = _calculateDelta(updatedRows, rowProvider: rowProvider)
+    
+    func calculateDelta<ItemProvider>(_ updatedItems: [DataType],
+                                      itemProvider: ItemProvider) -> IndexDelta where ItemProvider: ItemDataProvider, ItemProvider.DataType == DataType {
+        
+        let (delta, _) = _calculateDelta(updatedItems, itemProvider: itemProvider)
         return delta
     }
     
-    func calculateAppendDelta<RowProvider>(_ appendedItems: [DataType],
-                                           rowProvider: RowProvider) -> IndexDelta where RowProvider: RowDataProvider, RowProvider.DataType == DataType {
+    func calculateAppendDelta<ItemProvider>(_ appendedItems: [DataType],
+                                            itemProvider: ItemProvider) -> IndexDelta where ItemProvider: ItemDataProvider, ItemProvider.DataType == DataType {
         
-        return _calculateAppendDelta(appendedItems, rowProvider: rowProvider)
+        return _calculateAppendDelta(appendedItems, itemProvider: itemProvider)
     }
     
-    func updateAndAnimate<DeletionDelegate, RowProvider>(_ updatedRows: [DataType],
-                                                         rawData: [DataType.RawType],
-                                                         rowProvider: RowProvider,
-                                                         section: Int,
-                                                         viewProvider: CollectionViewProvider,
-                                                         reloadDelegate: CollectionDataManualReloadDelegate?,
-                                                         deletionDelegate: DeletionDelegate?,
-                                                         completion: (() -> Void)?) where DeletionDelegate: CollectionDataDeletionNotificationDelegate, DeletionDelegate.DataType == DataType, RowProvider: RowDataProvider, RowProvider: RowCalculatingDataProvider, RowProvider.DataType == DataType, RowProvider.CalculatingRawType == DataType.RawType {
+    func updateAndAnimate<DeletionDelegate, ItemProvider>(_ updatedItems: [DataType],
+                                                          rawData: [DataType.RawType],
+                                                          itemProvider: ItemProvider,
+                                                          section: Int,
+                                                          viewProvider: CollectionViewProvider,
+                                                          reloadDelegate: CollectionDataManualReloadDelegate?,
+                                                          deletionDelegate: DeletionDelegate?,
+                                                          completion: (() -> Void)?) where DeletionDelegate: CollectionDataDeletionNotificationDelegate, DeletionDelegate.DataType == DataType, ItemProvider: ItemDataProvider, ItemProvider: ItemCalculatingDataProvider, ItemProvider.DataType == DataType, ItemProvider.CalculatingRawType == DataType.RawType {
         
         _processCalculation { [weak self] in
-            self?._updateAndAnimate(updatedRows,
+            self?._updateAndAnimate(updatedItems,
                                     rawData: rawData,
-                                    rowProvider: rowProvider,
+                                    itemProvider: itemProvider,
                                     section: section,
                                     viewProvider: viewProvider,
                                     reloadDelegate: reloadDelegate,
@@ -60,18 +60,18 @@ final class RowDataCalculator<DataType: UniquelyIdentifiable> {
         }
     }
     
-    func appendAndAnimate<RowProvider>(_ appendedItems: [DataType],
-                                       rawData: [DataType.RawType],
-                                       rowProvider: RowProvider,
-                                       section: Int,
-                                       viewProvider: CollectionViewProvider,
-                                       reloadDelegate: CollectionDataManualReloadDelegate?,
-                                       completion: (() -> Void)?) where RowProvider: RowDataProvider, RowProvider: RowCalculatingDataProvider, RowProvider.DataType == DataType, RowProvider.CalculatingRawType == DataType.RawType {
+    func appendAndAnimate<ItemProvider>(_ appendedItems: [DataType],
+                                        rawData: [DataType.RawType],
+                                        itemProvider: ItemProvider,
+                                        section: Int,
+                                        viewProvider: CollectionViewProvider,
+                                        reloadDelegate: CollectionDataManualReloadDelegate?,
+                                        completion: (() -> Void)?) where ItemProvider: ItemDataProvider, ItemProvider: ItemCalculatingDataProvider, ItemProvider.DataType == DataType, ItemProvider.CalculatingRawType == DataType.RawType {
         
         _processCalculation { [weak self] in
             self?._appendAndAnimate(appendedItems,
                                     rawData: rawData,
-                                    rowProvider: rowProvider,
+                                    itemProvider: itemProvider,
                                     section: section,
                                     viewProvider: viewProvider,
                                     reloadDelegate: reloadDelegate,
@@ -82,7 +82,7 @@ final class RowDataCalculator<DataType: UniquelyIdentifiable> {
 
 // MARK: - Private
 
-private extension RowDataCalculator {
+private extension ItemDataCalculator {
     
     // MARK: Calculation Queue Management
     
@@ -111,59 +111,47 @@ private extension RowDataCalculator {
     
     // MARK: Perform Calculations
     
-    func _calculateDelta<RowProvider>(_ updatedRows: [DataType],
-                                      rowProvider: RowProvider) -> (delta: IndexDelta, deletedItems: [DataType]) where RowProvider: RowDataProvider, RowProvider.DataType == DataType {
+    func _calculateDelta<ItemProvider>(_ updatedItems: [DataType],
+                                       itemProvider: ItemProvider) -> (delta: IndexDelta, deletedItems: [DataType]) where ItemProvider: ItemDataProvider, ItemProvider.DataType == DataType {
         
-        let deltaCalculator = DeltaCalculator<DataType>(startingData: rowProvider.rows, updatedData: updatedRows)
-        let (delta, deletedItems) = deltaCalculator.calculateRowDelta()
+        let deltaCalculator = DeltaCalculator<DataType>(startingData: itemProvider.items, updatedData: updatedItems)
+        let (delta, deletedItems) = deltaCalculator.calculateItemDelta()
         
         return (delta: delta, deletedItems: deletedItems)
     }
     
-    func _calculateAppendDelta<RowProvider>(_ appendedItems: [DataType],
-                                            rowProvider: RowProvider) -> IndexDelta where RowProvider: RowDataProvider, RowProvider.DataType == DataType {
+    func _calculateAppendDelta<ItemProvider>(_ appendedItems: [DataType],
+                                             itemProvider: ItemProvider) -> IndexDelta where ItemProvider: ItemDataProvider, ItemProvider.DataType == DataType {
         
         guard appendedItems.isEmpty == false else {
             return .empty
         }
         
-        var rows = rowProvider.rows
-        let originalCount = rows.count
-        rows.append(contentsOf: appendedItems)
-        
-        let updatedCount = rows.count
-        
-        var insertedRowIndexes = [Int]()
-        for index in originalCount..<updatedCount {
-            insertedRowIndexes.append(index)
-        }
-        
-        let delta = IndexDelta(deletions: [],
-                               insertions: insertedRowIndexes,
-                               reloads: [],
-                               moves: [])
+        let originalCount = itemProvider.items.count
+        let insertedItemIndices = [Int](originalCount..<(originalCount + appendedItems.count))
+        let delta = IndexDelta(insertions: insertedItemIndices)
         return delta
     }
     
-    func _updateAndAnimate<DeletionDelegate, RowProvider>(_ updatedRows: [DataType],
-                                                          rawData: [DataType.RawType],
-                                                          rowProvider: RowProvider,
-                                                          section: Int,
-                                                          viewProvider: CollectionViewProvider,
-                                                          reloadDelegate: CollectionDataManualReloadDelegate?,
-                                                          deletionDelegate: DeletionDelegate?,
-                                                          completion: (() -> Void)?) where DeletionDelegate: CollectionDataDeletionNotificationDelegate, DeletionDelegate.DataType == DataType, RowProvider: RowDataProvider, RowProvider: RowCalculatingDataProvider, RowProvider.DataType == DataType, RowProvider.CalculatingRawType == DataType.RawType {
+    func _updateAndAnimate<DeletionDelegate, ItemProvider>(_ updatedItems: [DataType],
+                                                           rawData: [DataType.RawType],
+                                                           itemProvider: ItemProvider,
+                                                           section: Int,
+                                                           viewProvider: CollectionViewProvider,
+                                                           reloadDelegate: CollectionDataManualReloadDelegate?,
+                                                           deletionDelegate: DeletionDelegate?,
+                                                           completion: (() -> Void)?) where DeletionDelegate: CollectionDataDeletionNotificationDelegate, DeletionDelegate.DataType == DataType, ItemProvider: ItemDataProvider, ItemProvider: ItemCalculatingDataProvider, ItemProvider.DataType == DataType, ItemProvider.CalculatingRawType == DataType.RawType {
         
-        rowProvider.calculatingRows = rawData
+        itemProvider.calculatingItems = rawData
         let view = viewProvider.view
         
-        let updateData = { [weak weakRowProvider = rowProvider, weak weakViewProvider = viewProvider] in
-            guard let strongRowProvider = weakRowProvider,
+        let updateData = { [weak weakItemProvider = itemProvider, weak weakViewProvider = viewProvider] in
+            guard let strongItemProvider = weakItemProvider,
                 let strongViewProvider = weakViewProvider else { return }
             
-            let updatedRows = [DataType](updatedRows)
-            strongRowProvider.rows = updatedRows
-            strongRowProvider.calculatingRows = nil
+            let updatedItems = [DataType](updatedItems)
+            strongItemProvider.items = updatedItems
+            strongItemProvider.calculatingItems = nil
             
             if view !== strongViewProvider.view {
                 DispatchQueue.main.async { [weak weakViewProvider = viewProvider] in
@@ -171,23 +159,23 @@ private extension RowDataCalculator {
                 }
             }
         }
-
+        
         let viewDelegate = AnyDeltaUpdatableViewDelegate(reloadDelegate,
                                                          viewProvider: viewProvider)
-
-        // Short circuit if there are too many rows
         
-        guard rowProvider.rows.count <= rowProvider.dataCountAnimationThreshold &&
-            updatedRows.count <= rowProvider.dataCountAnimationThreshold else {
-
+        // Short circuit if there are too many items
+        
+        guard itemProvider.items.count <= itemProvider.dataCountAnimationThreshold &&
+            updatedItems.count <= itemProvider.dataCountAnimationThreshold else {
+                
                 let deletedItems: [DataType]
                 if deletionDelegate == nil {
                     deletedItems = []
                 } else {
-                    let deltaCalculator = DeltaCalculator<DataType>(startingData: rowProvider.rows, updatedData: updatedRows)
-                    (deletedItems, _) = deltaCalculator.deletedRows()
+                    let deltaCalculator = DeltaCalculator<DataType>(startingData: itemProvider.items, updatedData: updatedItems)
+                    (deletedItems, _) = deltaCalculator.deletedItems()
                 }
-
+                
                 let calculationCompletion: () -> Void = { [weak self, weak weakDeletionDelegate = deletionDelegate] in
                     completion?()
                     if deletedItems.isEmpty == false {
@@ -197,11 +185,11 @@ private extension RowDataCalculator {
                 }
                 
                 let sectionUpdate = SectionUpdate(section: section,
-                                                 delta: .empty,
-                                                 delegate: viewDelegate,
-                                                 update: updateData,
-                                                 completion: calculationCompletion)
-
+                                                  delta: .empty,
+                                                  delegate: viewDelegate,
+                                                  update: updateData,
+                                                  completion: calculationCompletion)
+                
                 DispatchQueue.main.async { [weak weakViewProvider = viewProvider] in
                     guard let targetView = weakViewProvider?.view else {
                         updateData()
@@ -212,10 +200,10 @@ private extension RowDataCalculator {
                 }
                 return
         }
-
+        
         // Otherwise, calculate
         
-        let (delta, deletedItems) = _calculateDelta(updatedRows, rowProvider: rowProvider)
+        let (delta, deletedItems) = _calculateDelta(updatedItems, itemProvider: itemProvider)
         
         let calculationCompletion: () -> Void = { [weak self, weak weakDeletionDelegate = deletionDelegate] in
             completion?()
@@ -231,9 +219,9 @@ private extension RowDataCalculator {
             return
         }
         
-        let rowAnimationStlye: AnimationStyle = {
+        let itemAnimationStlye: AnimationStyle = {
             guard let reloadDelegate = reloadDelegate else { return .preciseAnimations }
-            return reloadDelegate.preferredRowAnimationStyle(for: delta)
+            return reloadDelegate.preferredItemAnimationStyle(for: delta)
         }()
         
         DispatchQueue.main.async { [weak weakViewProvider = viewProvider] in
@@ -246,8 +234,8 @@ private extension RowDataCalculator {
             if targetView !== view {
                 targetView.reloadData()
             }
-
-            switch rowAnimationStlye {
+            
+            switch itemAnimationStlye {
             case .reloadData:
                 updateData()
                 targetView.reloadData()
@@ -271,19 +259,19 @@ private extension RowDataCalculator {
         }
     }
     
-    func _appendAndAnimate<RowProvider>(_ appendedItems: [DataType],
-                                        rawData: [DataType.RawType],
-                                        rowProvider: RowProvider,
-                                        section: Int,
-                                        viewProvider: CollectionViewProvider,
-                                        reloadDelegate: CollectionDataManualReloadDelegate?,
-                                        completion: (() -> Void)?) where RowProvider: RowDataProvider, RowProvider: RowCalculatingDataProvider, RowProvider.DataType == DataType, RowProvider.CalculatingRawType == DataType.RawType {
-
+    func _appendAndAnimate<ItemProvider>(_ appendedItems: [DataType],
+                                         rawData: [DataType.RawType],
+                                         itemProvider: ItemProvider,
+                                         section: Int,
+                                         viewProvider: CollectionViewProvider,
+                                         reloadDelegate: CollectionDataManualReloadDelegate?,
+                                         completion: (() -> Void)?) where ItemProvider: ItemDataProvider, ItemProvider: ItemCalculatingDataProvider, ItemProvider.DataType == DataType, ItemProvider.CalculatingRawType == DataType.RawType {
+        
         // Note: we don't short circuit for appending, because there is no calculation, it costs nothing to determine the delta
-
-        rowProvider.calculatingRows = rawData
+        
+        itemProvider.calculatingItems = rawData
         let view = viewProvider.view
-        let delta = _calculateAppendDelta(appendedItems, rowProvider: rowProvider)
+        let delta = _calculateAppendDelta(appendedItems, itemProvider: itemProvider)
         
         let calculationCompletion: () -> Void = { [weak self] in
             completion?()
@@ -291,37 +279,37 @@ private extension RowDataCalculator {
         }
         
         guard delta.hasChanges else {
-            rowProvider.calculatingRows = nil
+            itemProvider.calculatingItems = nil
             calculationCompletion()
             return
         }
-
-        let updatedRows = rowProvider.rows + appendedItems
-
-        let updateData = { [weak weakRowProvider = rowProvider, weak weakViewProvider = viewProvider] in
-            guard let strongRowProvider = weakRowProvider,
+        
+        let updatedItems = itemProvider.items + appendedItems
+        
+        let updateData = { [weak weakItemProvider = itemProvider, weak weakViewProvider = viewProvider] in
+            guard let strongItemProvider = weakItemProvider,
                 let strongViewProvider = weakViewProvider else { return }
             
-            strongRowProvider.rows = updatedRows
-            strongRowProvider.calculatingRows = nil
-
+            strongItemProvider.items = updatedItems
+            strongItemProvider.calculatingItems = nil
+            
             if view !== strongViewProvider.view {
                 DispatchQueue.main.async {
                     strongViewProvider.view?.reloadData()
                 }
             }
         }
-
-        let rowAnimationStlye: AnimationStyle = {
+        
+        let itemAnimationStlye: AnimationStyle = {
             guard let reloadDelegate = reloadDelegate else { return .preciseAnimations }
-            return reloadDelegate.preferredRowAnimationStyle(for: delta)
+            return reloadDelegate.preferredItemAnimationStyle(for: delta)
         }()
         
         let viewDelegate = AnyDeltaUpdatableViewDelegate(viewProvider: viewProvider)
-        let startingRowCount = rowProvider.rows.count
+        let startingItemCount = itemProvider.items.count
         
-        DispatchQueue.main.async { [weak weakRowProvider = rowProvider, weak weakViewProvider = viewProvider] in
-            guard let strongRowProvider = weakRowProvider,
+        DispatchQueue.main.async { [weak weakItemProvider = itemProvider, weak weakViewProvider = viewProvider] in
+            guard let strongItemProvider = weakItemProvider,
                 let strongViewProvider = weakViewProvider,
                 let targetView = weakViewProvider?.view else {
                     updateData()
@@ -333,7 +321,7 @@ private extension RowDataCalculator {
                 targetView.reloadData()
             }
             
-            switch rowAnimationStlye {
+            switch itemAnimationStlye {
             case .reloadData:
                 updateData()
                 targetView.reloadData()
@@ -348,9 +336,9 @@ private extension RowDataCalculator {
                 targetView.reloadSections(for: [sectionUpdate])
                 
             case .preciseAnimations:
-                if startingRowCount == 0 {
+                if startingItemCount == 0 {
                     self._appendIndividuallyAndAnimate(appendedItems,
-                                                       rowProvider: strongRowProvider,
+                                                       itemProvider: strongItemProvider,
                                                        section: section,
                                                        viewProvider: strongViewProvider,
                                                        calculationCompletion: calculationCompletion)
@@ -366,33 +354,33 @@ private extension RowDataCalculator {
         }
     }
     
-    func _appendIndividuallyAndAnimate<RowProvider>(_ appendedItems: [DataType],
-                                                    rowProvider: RowProvider,
-                                                    section: Int,
-                                                    viewProvider: CollectionViewProvider,
-                                                    calculationCompletion: (() -> Void)?) where RowProvider: RowDataProvider, RowProvider: RowCalculatingDataProvider, RowProvider.DataType == DataType {
+    func _appendIndividuallyAndAnimate<ItemProvider>(_ appendedItems: [DataType],
+                                                     itemProvider: ItemProvider,
+                                                     section: Int,
+                                                     viewProvider: CollectionViewProvider,
+                                                     calculationCompletion: (() -> Void)?) where ItemProvider: ItemDataProvider, ItemProvider: ItemCalculatingDataProvider, ItemProvider.DataType == DataType {
         
-        let startingIndex = rowProvider.rows.count
+        let startingIndex = itemProvider.items.count
         let viewDelegate = AnyDeltaUpdatableViewDelegate(viewProvider: viewProvider)
         let view = viewProvider.view
-
+        
         appendedItems.enumerated().forEach { index, item in
             let isFinalItem = index == (appendedItems.count - 1)
             
             let completion: (() -> Void)? = isFinalItem ? calculationCompletion : nil
             
-            let updateAppend = { [weak weakRowProvider = rowProvider, weak weakViewProvider = viewProvider] in
-                guard let strongRowProvider = weakRowProvider,
+            let updateAppend = { [weak weakItemProvider = itemProvider, weak weakViewProvider = viewProvider] in
+                guard let strongItemProvider = weakItemProvider,
                     let strongViewProvider = weakViewProvider else { return }
-
-                strongRowProvider.rows = strongRowProvider.rows + [item]
-                strongRowProvider.calculatingRows = nil
+                
+                strongItemProvider.items = strongItemProvider.items + [item]
+                strongItemProvider.calculatingItems = nil
                 
                 if view !== strongViewProvider.view {
                     strongViewProvider.view?.reloadData()
                 }
             }
-
+            
             let insertedIndex = startingIndex + index
             let delta = IndexDelta(insertions: [insertedIndex])
             view?.performAnimations(section: section,

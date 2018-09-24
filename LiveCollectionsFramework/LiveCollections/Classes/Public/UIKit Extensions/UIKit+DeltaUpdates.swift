@@ -234,7 +234,7 @@ private struct Mapping {
     static func generateIndexToIndexPathMap(forSection section: Int) -> ((Int) -> IndexPath) {
         
         func indexToIndexPath(_ index: Int) -> IndexPath {
-            return IndexPath(row: index, section: section)
+            return IndexPath(item: index, section: section)
         }
         
         return indexToIndexPath
@@ -243,8 +243,8 @@ private struct Mapping {
     static func generateIndexPairToIndexPathPairMapping(forSection section: Int) -> ((IndexPair) -> IndexPathPair) {
         
         func indexPairToIndexPathPair(_ indexPair: IndexPair) -> IndexPathPair {
-            let sourceIndexPath = IndexPath(row: indexPair.source, section: section)
-            let targetIndexPath = IndexPath(row: indexPair.target, section: section)
+            let sourceIndexPath = IndexPath(item: indexPair.source, section: section)
+            let targetIndexPath = IndexPath(item: indexPair.target, section: section)
             return IndexPathPair(source: sourceIndexPath, target: targetIndexPath)
         }
         
@@ -303,7 +303,7 @@ private extension IndexPathsToAnimate {
         
         // Calculate manual reloads to pass down to the delegate
         delta.reloads.forEach { indexPair in
-            let targetIndexPath = IndexPath(row: indexPair.target, section: section)
+            let targetIndexPath = IndexPath(item: indexPair.target, section: section)
             if let delegate = sectionUpdate.delegate, delegate.willHandleReload(at: targetIndexPath) {
                 manualReloadIndexPaths.append(targetIndexPath)
             } else {
@@ -347,7 +347,7 @@ private extension Array where Element == EntireViewSectionUpdate {
         
         var remainingIndexPaths = Set(allManualReloadIndexPaths)
         
-        let dispathQueue = DispatchQueue(label: "\(UITableView.self) rowDeltaUpdates dispatch queue")
+        let dispathQueue = DispatchQueue(label: "\(UITableView.self) itemDeltaUpdates dispatch queue")
         let completion: (IndexPath) -> Void = { indexPath in
             dispathQueue.sync {
                 guard remainingIndexPaths.isEmpty == false else { return }

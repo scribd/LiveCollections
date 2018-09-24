@@ -29,7 +29,7 @@ public protocol DeltaUpdatableView: AnyObject {
      Animate the view with the updatedData and delta.
      - parameter updateData: A closure in which the calling class must set its data.  If the data is set before calling performAnimations, then
      you may end up causing a crash as the UITableView or UICollectionView have very specific timing needs for when the data must update.
-     - parameter delta: The row delta (deletions, insertions, reloads, and moves)
+     - parameter delta: The item delta (deletions, insertions, reloads, and moves)
      */
     func performAnimations(delta: IndexDelta, updateData: @escaping () -> Void)
     func performAnimations(section: Int, delta: IndexDelta, delegate: DeltaUpdatableViewDelegate?, updateData: @escaping () -> Void, completion: (() -> Void)?)
@@ -52,7 +52,7 @@ public protocol SectionDeltaUpdatableView: AnyObject {
 
     /**
      After the section animations have been performed, you can then call this function which will animate the items, possibly between sections.
-     - note: IndexPathDelta is used instead of IndexDelta. Every position is defined by both section and row.
+     - note: IndexPathDelta is used instead of IndexDelta. Every position is defined by both section and item.
      */
-    func performAnimations(sectionRowDelta rowIndexPathDelta: IndexPathDelta, delegate: CollectionDataManualReloadDelegate?, updateData: (() -> Void), completion: (() -> Void)?)
+    func performAnimations(sectionItemDelta itemIndexPathDelta: IndexPathDelta, delegate: CollectionDataManualReloadDelegate?, updateData: (() -> Void), completion: (() -> Void)?)
 }

@@ -34,7 +34,7 @@ public final class CollectionSectionData<SectionType: UniquelyIdentifiableSectio
     
     // section data
     private var _sections: [SectionType]
-    var sections: [SectionType] {
+    internal(set) public var sections: [SectionType] {
         get { return dataQueue.sync { _sections } }
         set { dataQueue.async(flags: .barrier) { self._sections = newValue } }
     }
@@ -50,11 +50,11 @@ public final class CollectionSectionData<SectionType: UniquelyIdentifiableSectio
         }
     }
     
-    // row data
-    private var _rows: [DataType]
-    var rows: [DataType] {
-        get { return dataQueue.sync { _rows } }
-        set { dataQueue.async(flags: .barrier) { self._rows = newValue } }
+    // item data
+    private var _items: [DataType]
+    internal(set) public var items: [DataType] {
+        get { return dataQueue.sync { _items } }
+        set { dataQueue.async(flags: .barrier) { self._items = newValue } }
     }
 
     // calculator
@@ -71,7 +71,7 @@ public final class CollectionSectionData<SectionType: UniquelyIdentifiableSectio
     public init(view: SectionDeltaUpdatableView, sectionData: [SectionType] = []) {
         self.view = view
         self._sections = sectionData
-        self._rows = dataCalculator.orderedRows(for: sectionData)
+        self._items = dataCalculator.orderedItems(for: sectionData)
     }
     
     public func setDeletionNotificationDelegate<Delegate: CollectionDataDeletionNotificationDelegate>(_ delegate: Delegate) where Delegate.DataType == DataType {
@@ -93,7 +93,7 @@ public final class CollectionSectionData<SectionType: UniquelyIdentifiableSectio
         return calculatingSections.isEmpty == false
     }
     
-    public func rowCount(forSection section: Int) -> Int {
+    public func itemCount(forSection section: Int) -> Int {
         return sections[section].items.count
     }
 
@@ -101,18 +101,14 @@ public final class CollectionSectionData<SectionType: UniquelyIdentifiableSectio
         return sections[index]
     }
     
-    public subscript(section: Int, row: Int) -> DataType {
-        return sections[section].items[row]
+    public subscript(section: Int, item: Int) -> DataType {
+        return sections[section].items[item]
     }
     
     public subscript(indexPath: IndexPath) -> DataType {
-        return self[indexPath.section, indexPath.row]
+        return self[indexPath.section, indexPath.item]
     }
 
-    public var snapshot: [SectionType] {
-        return sections
-    }
-    
     // MARK: CollectionSectionDataActionsInterface
     
     public func update(_ updatedData: [SectionType], completion: (() -> Void)? = nil) {
@@ -126,6 +122,7 @@ public final class CollectionSectionData<SectionType: UniquelyIdentifiableSectio
             return
         }
 
+        calculatingSections = updatedData
         calculationQueue.async {
             self.dataCalculator.updateAndAnimate(updatedData,
                                                  sectionProvider: self,
@@ -137,6 +134,7 @@ public final class CollectionSectionData<SectionType: UniquelyIdentifiableSectio
     }
     
     public func append(_ appendedItems: [SectionType], completion: (() -> Void)? = nil) {
+        calculatingSections = appendedItems
         calculationQueue.async {
             self.dataCalculator.appendAndAnimate(appendedItems,
                                                  sectionProvider: self,

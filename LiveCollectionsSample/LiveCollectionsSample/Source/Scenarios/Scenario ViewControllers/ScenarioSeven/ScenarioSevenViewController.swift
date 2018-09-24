@@ -78,18 +78,18 @@ extension ScenarioSevenViewController: CollectionDataManualReloadDelegate {
     func reloadItems(at indexPaths: [IndexPath], completion: @escaping (IndexPath) -> Void) {
 
         indexPaths.forEach { indexPath in
-            let carouselRow = collectionData[indexPath.row]
+            let carouselRow = collectionData[indexPath.item]
             let dataSource = _carouselDataSource(for: carouselRow.identifier)
             
-            let rowCompletion = {
+            let itemCompletion = {
                 completion(indexPath)
             }
             
-            dataSource.update(with: carouselRow.movies, completion: rowCompletion)
+            dataSource.update(with: carouselRow.movies, completion: itemCompletion)
         }
     }
     
-    func preferredRowAnimationStyle(for rowDelta: IndexDelta) -> AnimationStyle {
+    func preferredItemAnimationStyle(for itemDelta: IndexDelta) -> AnimationStyle {
         // option to suppress deltas that result in undesired animations
         return .preciseAnimations
     }
@@ -118,7 +118,7 @@ extension ScenarioSevenViewController: UITableViewDataSource {
             return cell
         }
         
-        let carouselRow = collectionData[indexPath.row]
+        let carouselRow = collectionData[indexPath.item]
         let dataSource = _carouselDataSource(for: carouselRow.identifier)
         carouselCell.register(with: dataSource)
         dataSource.update(with: carouselRow.movies)

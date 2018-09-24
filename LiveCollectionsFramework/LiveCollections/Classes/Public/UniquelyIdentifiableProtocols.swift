@@ -45,7 +45,7 @@ public extension UniquelyIdentifiable where Self: Hashable, UniqueIDType == Self
 
 /**
  This is specifically for creating a data set to represent a single section in a multi-section view.
- The section item, and all of its row items, are uniquely identifiable.
+ The section item, and all of its items, are uniquely identifiable.
  */
 public protocol UniquelyIdentifiableSection: UniquelyIdentifiable {
     associatedtype DataType: UniquelyIdentifiable

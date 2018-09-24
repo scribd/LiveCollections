@@ -59,9 +59,9 @@ extension UITableView: SectionDeltaUpdatableView {
         }
     }
     
-    public func performAnimations(sectionRowDelta rowIndexPathDelta: IndexPathDelta, delegate: CollectionDataManualReloadDelegate?, updateData: (() -> Void), completion: (() -> Void)?) {
+    public func performAnimations(sectionItemDelta itemIndexPathDelta: IndexPathDelta, delegate: CollectionDataManualReloadDelegate?, updateData: (() -> Void), completion: (() -> Void)?) {
         
-        guard rowIndexPathDelta.hasChanges, dataSource != nil else {
+        guard itemIndexPathDelta.hasChanges, dataSource != nil else {
             updateData()
             completion?()
             return
@@ -71,7 +71,7 @@ extension UITableView: SectionDeltaUpdatableView {
         var manualReloadIndexPaths = [IndexPath]()
         
         // Calculate manual reloads to pass down to the delegate
-        rowIndexPathDelta.reloads.forEach { indexPathPair in
+        itemIndexPathDelta.reloads.forEach { indexPathPair in
             if let delegate = delegate, delegate.willHandleReload(at: indexPathPair.target) {
                 manualReloadIndexPaths.append(indexPathPair.target as IndexPath)
             } else {
@@ -80,11 +80,11 @@ extension UITableView: SectionDeltaUpdatableView {
         }
         
         let deleteMoveInsert = {
-            self.deleteRows(at: rowIndexPathDelta.deletions as [IndexPath], with: .top)
-            rowIndexPathDelta.moves.forEach { indexPathPair in
+            self.deleteRows(at: itemIndexPathDelta.deletions as [IndexPath], with: .top)
+            itemIndexPathDelta.moves.forEach { indexPathPair in
                 self.moveRow(at: indexPathPair.source as IndexPath, to: indexPathPair.target as IndexPath)
             }
-            self.insertRows(at: rowIndexPathDelta.insertions as [IndexPath], with: .top)
+            self.insertRows(at: itemIndexPathDelta.insertions as [IndexPath], with: .top)
         }
 
         let reload = {
@@ -234,9 +234,9 @@ extension UICollectionView: SectionDeltaUpdatableView {
         })
     }
     
-    public func performAnimations(sectionRowDelta rowIndexPathDelta: IndexPathDelta, delegate: CollectionDataManualReloadDelegate?, updateData: (() -> Void), completion: (() -> Void)?) {
+    public func performAnimations(sectionItemDelta itemIndexPathDelta: IndexPathDelta, delegate: CollectionDataManualReloadDelegate?, updateData: (() -> Void), completion: (() -> Void)?) {
         
-        guard rowIndexPathDelta.hasChanges, dataSource != nil else {
+        guard itemIndexPathDelta.hasChanges, dataSource != nil else {
             completion?()
             return
         }
@@ -245,7 +245,7 @@ extension UICollectionView: SectionDeltaUpdatableView {
         var manualReloadIndexPaths = [IndexPath]()
 
         // Calculate manual reloads to pass down to the delegate
-        rowIndexPathDelta.reloads.forEach { indexPathPair in
+        itemIndexPathDelta.reloads.forEach { indexPathPair in
             if let delegate = delegate, delegate.willHandleReload(at: indexPathPair.target) {
                 manualReloadIndexPaths.append(indexPathPair.target as IndexPath)
             } else {
@@ -260,11 +260,11 @@ extension UICollectionView: SectionDeltaUpdatableView {
                 strongSelf.reloadData()
                 return
             }
-            strongSelf.deleteItems(at: rowIndexPathDelta.deletions as [IndexPath])
-            rowIndexPathDelta.moves.forEach { indexPathPair in
+            strongSelf.deleteItems(at: itemIndexPathDelta.deletions as [IndexPath])
+            itemIndexPathDelta.moves.forEach { indexPathPair in
                 strongSelf.moveItem(at: indexPathPair.source as IndexPath, to: indexPathPair.target as IndexPath)
             }
-            strongSelf.insertItems(at: rowIndexPathDelta.insertions as [IndexPath])
+            strongSelf.insertItems(at: itemIndexPathDelta.insertions as [IndexPath])
         }, completion: { [weak self] _ in
             guard let strongSelf = self else {
                 completion?()
