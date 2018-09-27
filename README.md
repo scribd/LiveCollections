@@ -136,7 +136,7 @@ final class YourClass {
         super.init()
         
         // Optionally apply a synchronizer to multiple sections to have them
-        // perofrm their animations in the same block when possible
+        // perform their animations in the same block when possible
         let synchronizer = CollectionDataSynchronizer(delay: .short)
         dataList.forEach { $0.synchronizer = synchronizer }
     }
