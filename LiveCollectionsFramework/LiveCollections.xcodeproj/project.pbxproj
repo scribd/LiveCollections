@@ -22,8 +22,6 @@
 		F4D772EE20FBC4BF002F1C43 /* LiveCollectionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D772ED20FBC4BF002F1C43 /* LiveCollectionsTests.swift */; };
 		F4D772F020FBC4BF002F1C43 /* LiveCollections.h in Headers */ = {isa = PBXBuildFile; fileRef = F4D772E220FBC4BE002F1C43 /* LiveCollections.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F4D7731720FBC4E7002F1C43 /* DataProviderProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D772FB20FBC4E7002F1C43 /* DataProviderProtocols.swift */; };
-		F4D7731820FBC4E7002F1C43 /* InvocationCompressor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D772FD20FBC4E7002F1C43 /* InvocationCompressor.swift */; };
-		F4D7731920FBC4E7002F1C43 /* AnimationAggregator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D772FE20FBC4E7002F1C43 /* AnimationAggregator.swift */; };
 		F4D7731B20FBC4E7002F1C43 /* SectionDataCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D7730020FBC4E7002F1C43 /* SectionDataCalculator.swift */; };
 		F4D7731C20FBC4E7002F1C43 /* SectionUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D7730320FBC4E7002F1C43 /* SectionUpdate.swift */; };
 		F4D7731D20FBC4E7002F1C43 /* IndexDelta.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D7730420FBC4E7002F1C43 /* IndexDelta.swift */; };
@@ -32,12 +30,12 @@
 		F4D7732020FBC4E7002F1C43 /* UIKit+SectionDeltaUpdates.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D7730820FBC4E7002F1C43 /* UIKit+SectionDeltaUpdates.swift */; };
 		F4D7732120FBC4E7002F1C43 /* CollectionSectionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D7730920FBC4E7002F1C43 /* CollectionSectionData.swift */; };
 		F4D7732220FBC4E7002F1C43 /* CollectionDataDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D7730B20FBC4E7002F1C43 /* CollectionDataDelegate.swift */; };
-		F4D7732420FBC4E7002F1C43 /* DiscreteSectionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D7730D20FBC4E7002F1C43 /* DiscreteSectionsView.swift */; };
 		F4D7732520FBC4E7002F1C43 /* CollectionDataProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D7731020FBC4E7002F1C43 /* CollectionDataProtocols.swift */; };
 		F4D7732620FBC4E7002F1C43 /* CollectionSectionDataProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D7731120FBC4E7002F1C43 /* CollectionSectionDataProtocols.swift */; };
 		F4D7732720FBC4E7002F1C43 /* DeltaVisualUpdateProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D7731320FBC4E7002F1C43 /* DeltaVisualUpdateProtocols.swift */; };
 		F4D7732820FBC4E7002F1C43 /* UniquelyIdentifiableDataFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D7731520FBC4E7002F1C43 /* UniquelyIdentifiableDataFactory.swift */; };
 		F4D7732920FBC4E7002F1C43 /* UniquelyIdentifiableProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D7731620FBC4E7002F1C43 /* UniquelyIdentifiableProtocols.swift */; };
+		F4EC1E30215C88EB00ACCBDB /* CollectionDataSynchronizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4EC1E2F215C88EB00ACCBDB /* CollectionDataSynchronizer.swift */; };
 		F4F59E6A214C34AA00B4AB19 /* CollectionDataReusableViewVerificationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4F59E69214C34AA00B4AB19 /* CollectionDataReusableViewVerificationDelegate.swift */; };
 /* End PBXBuildFile section */
 
@@ -70,8 +68,6 @@
 		F4D772ED20FBC4BF002F1C43 /* LiveCollectionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveCollectionsTests.swift; sourceTree = "<group>"; };
 		F4D772EF20FBC4BF002F1C43 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F4D772FB20FBC4E7002F1C43 /* DataProviderProtocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataProviderProtocols.swift; sourceTree = "<group>"; };
-		F4D772FD20FBC4E7002F1C43 /* InvocationCompressor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InvocationCompressor.swift; sourceTree = "<group>"; };
-		F4D772FE20FBC4E7002F1C43 /* AnimationAggregator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationAggregator.swift; sourceTree = "<group>"; };
 		F4D7730020FBC4E7002F1C43 /* SectionDataCalculator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionDataCalculator.swift; sourceTree = "<group>"; };
 		F4D7730320FBC4E7002F1C43 /* SectionUpdate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionUpdate.swift; sourceTree = "<group>"; };
 		F4D7730420FBC4E7002F1C43 /* IndexDelta.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IndexDelta.swift; sourceTree = "<group>"; };
@@ -80,12 +76,12 @@
 		F4D7730820FBC4E7002F1C43 /* UIKit+SectionDeltaUpdates.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIKit+SectionDeltaUpdates.swift"; sourceTree = "<group>"; };
 		F4D7730920FBC4E7002F1C43 /* CollectionSectionData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionSectionData.swift; sourceTree = "<group>"; };
 		F4D7730B20FBC4E7002F1C43 /* CollectionDataDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionDataDelegate.swift; sourceTree = "<group>"; };
-		F4D7730D20FBC4E7002F1C43 /* DiscreteSectionsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscreteSectionsView.swift; sourceTree = "<group>"; };
 		F4D7731020FBC4E7002F1C43 /* CollectionDataProtocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionDataProtocols.swift; sourceTree = "<group>"; };
 		F4D7731120FBC4E7002F1C43 /* CollectionSectionDataProtocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionSectionDataProtocols.swift; sourceTree = "<group>"; };
 		F4D7731320FBC4E7002F1C43 /* DeltaVisualUpdateProtocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeltaVisualUpdateProtocols.swift; sourceTree = "<group>"; };
 		F4D7731520FBC4E7002F1C43 /* UniquelyIdentifiableDataFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UniquelyIdentifiableDataFactory.swift; sourceTree = "<group>"; };
 		F4D7731620FBC4E7002F1C43 /* UniquelyIdentifiableProtocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UniquelyIdentifiableProtocols.swift; sourceTree = "<group>"; };
+		F4EC1E2F215C88EB00ACCBDB /* CollectionDataSynchronizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionDataSynchronizer.swift; sourceTree = "<group>"; };
 		F4F59E69214C34AA00B4AB19 /* CollectionDataReusableViewVerificationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionDataReusableViewVerificationDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -128,14 +124,6 @@
 				F454C234212A545D0018DC6E /* AnyUniquelyIdentifiableDataFactory.swift */,
 			);
 			path = AnyProtocols;
-			sourceTree = "<group>";
-		};
-		F4AF3BC52146DB3600917DF5 /* Discrete Sections */ = {
-			isa = PBXGroup;
-			children = (
-				F4D7730D20FBC4E7002F1C43 /* DiscreteSectionsView.swift */,
-			);
-			path = "Discrete Sections";
 			sourceTree = "<group>";
 		};
 		F4D772D520FBC4BE002F1C43 = {
@@ -194,18 +182,8 @@
 				F4D7730020FBC4E7002F1C43 /* SectionDataCalculator.swift */,
 				F47AE72C214103A300FE7360 /* DeltaCalculator.swift */,
 				F4AF3BC42146DB0700917DF5 /* AnyProtocols */,
-				F4D772FC20FBC4E7002F1C43 /* Support Classes */,
 			);
 			path = Internal;
-			sourceTree = "<group>";
-		};
-		F4D772FC20FBC4E7002F1C43 /* Support Classes */ = {
-			isa = PBXGroup;
-			children = (
-				F4D772FE20FBC4E7002F1C43 /* AnimationAggregator.swift */,
-				F4D772FD20FBC4E7002F1C43 /* InvocationCompressor.swift */,
-			);
-			path = "Support Classes";
 			sourceTree = "<group>";
 		};
 		F4D7730120FBC4E7002F1C43 /* Public */ = {
@@ -216,8 +194,8 @@
 				F4D7731620FBC4E7002F1C43 /* UniquelyIdentifiableProtocols.swift */,
 				F4D7730220FBC4E7002F1C43 /* Delta */,
 				F4D7730A20FBC4E7002F1C43 /* Delegate */,
-				F4AF3BC52146DB3600917DF5 /* Discrete Sections */,
 				F4D7730E20FBC4E7002F1C43 /* Protocols */,
+				F4EC1E2E215C88D100ACCBDB /* Synchronizer */,
 				F4D7730620FBC4E7002F1C43 /* UIKit Extensions */,
 			);
 			path = Public;
@@ -283,6 +261,14 @@
 				F4D7731520FBC4E7002F1C43 /* UniquelyIdentifiableDataFactory.swift */,
 			);
 			path = "Data Factory";
+			sourceTree = "<group>";
+		};
+		F4EC1E2E215C88D100ACCBDB /* Synchronizer */ = {
+			isa = PBXGroup;
+			children = (
+				F4EC1E2F215C88EB00ACCBDB /* CollectionDataSynchronizer.swift */,
+			);
+			path = Synchronizer;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -394,11 +380,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F4D7731920FBC4E7002F1C43 /* AnimationAggregator.swift in Sources */,
-				F4D7731820FBC4E7002F1C43 /* InvocationCompressor.swift in Sources */,
 				F4D7731C20FBC4E7002F1C43 /* SectionUpdate.swift in Sources */,
 				F47AE72D214103A300FE7360 /* DeltaCalculator.swift in Sources */,
-				F4D7732420FBC4E7002F1C43 /* DiscreteSectionsView.swift in Sources */,
 				F4D7731720FBC4E7002F1C43 /* DataProviderProtocols.swift in Sources */,
 				F4D7732920FBC4E7002F1C43 /* UniquelyIdentifiableProtocols.swift in Sources */,
 				F4D7732020FBC4E7002F1C43 /* UIKit+SectionDeltaUpdates.swift in Sources */,
@@ -407,6 +390,7 @@
 				F4AF3BC32145B2C500917DF5 /* AnyCollectionDataDeletionNotificationDelegate.swift in Sources */,
 				F47AE72B2140F98100FE7360 /* ItemDataCalculator.swift in Sources */,
 				F42115E7214986F2003B57A6 /* AnyDeltaUpdatableView.swift in Sources */,
+				F4EC1E30215C88EB00ACCBDB /* CollectionDataSynchronizer.swift in Sources */,
 				F4D7731E20FBC4E7002F1C43 /* CollectionData.swift in Sources */,
 				F454C235212A545D0018DC6E /* AnyUniquelyIdentifiableDataFactory.swift in Sources */,
 				F4D7732720FBC4E7002F1C43 /* DeltaVisualUpdateProtocols.swift in Sources */,

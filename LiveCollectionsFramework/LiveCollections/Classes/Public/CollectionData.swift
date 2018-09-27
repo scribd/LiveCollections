@@ -30,15 +30,22 @@ import Foundation
  available to be used with this class.
 */
 
-public final class CollectionData<DataType: UniquelyIdentifiable>: CollectionDataActionsInterface, ItemDataProvider, ItemCalculatingDataProvider, CollectionViewProvider {
+public final class CollectionData<DataType: UniquelyIdentifiable>: CollectionDataActionsInterface, ItemDataProvider, ItemCalculatingDataProvider, CollectionViewProvider, CollectionDataSynchronizable {
     
     // UITableView, UICollectionView, or a custom view
     // Assign to animate view as soon as data is updated, otherwise you must manually call `calculateDelta`
     private weak var _view: DeltaUpdatableView?
     public var view: DeltaUpdatableView? {
-        get { return dataQueue.sync { _view } }
+        get { return dataQueue.sync {
+            if let synchronizer = self.synchronizer { return synchronizer }
+            return _view
+        }
+        }
         set {
-            dataQueue.async(flags: .barrier) { self._view = newValue }
+            dataQueue.async(flags: .barrier) {
+                self._view = newValue
+                self.synchronizer?.view = newValue
+            }
             if Thread.isMainThread  { self.view?.reloadData() }
             else { DispatchQueue.main.sync { return self.view?.reloadData() } }
         }
@@ -71,6 +78,11 @@ public final class CollectionData<DataType: UniquelyIdentifiable>: CollectionDat
     // calculator
     private let dataCalculator = ItemDataCalculator<DataType>()
 
+    // syncronizer
+    public var synchronizer: CollectionDataSynchronizer? {
+        didSet { dataQueue.async(flags: .barrier) { self.synchronizer?.view = self._view } }
+    }
+    
     // animation threshold
     public var dataCountAnimationThreshold: Int = 10000
 

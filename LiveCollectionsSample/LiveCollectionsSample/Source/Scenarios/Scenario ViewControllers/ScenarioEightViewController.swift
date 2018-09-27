@@ -20,7 +20,7 @@ final class ScenarioEightViewController: UIViewController {
     }()
     private let dataCoordinator: MultiSectionCarouselDataCoordinator
     private let imageLoader: MovieImageLoaderInterface
-    private var sectionHeaderViews: [Int: UIView] = [:]
+    private var sectionHeaderViews: [String: UIView] = [:]
     private var carouselDataSources: [String: CarouselController] = [:]
     private lazy var collectionData: CollectionSectionData<CarouselSection> = {
         let data = CollectionSectionData<CarouselSection>(view: tableView)
@@ -141,17 +141,18 @@ extension ScenarioEightViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if let view = sectionHeaderViews[section] { return view }
+        let sectionData = collectionData[section]
+        if let view = sectionHeaderViews[sectionData.uniqueID] { return view }
         let label = UILabel()
-        label.backgroundColor = UIColor.blue.withAlphaComponent(0.8)
+        label.backgroundColor = UIColor(displayP3Red: 14/255, green: 122/255, blue: 254/255, alpha: 1)
         label.font = UIFont.systemFont(ofSize: 16, weight: .bold)
         label.textColor = .white
-        label.text = "Section \(section)"
+        label.text = "Movie Group \(sectionData.uniqueID)"
         label.textAlignment = .center
-        sectionHeaderViews[section] = label
+        sectionHeaderViews[sectionData.uniqueID] = label
         return label
     }
-    
+
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 30
     }

@@ -84,7 +84,7 @@ extension UITableView: SectionDeltaUpdatableView {
             itemIndexPathDelta.moves.forEach { indexPathPair in
                 self.moveRow(at: indexPathPair.source as IndexPath, to: indexPathPair.target as IndexPath)
             }
-            self.insertRows(at: itemIndexPathDelta.insertions as [IndexPath], with: .top)
+            self.insertRows(at: itemIndexPathDelta.insertions as [IndexPath], with: .fade)
         }
 
         let reload = {

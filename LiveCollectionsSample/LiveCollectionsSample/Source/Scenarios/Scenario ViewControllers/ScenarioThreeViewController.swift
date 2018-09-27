@@ -14,7 +14,7 @@ import LiveCollections
 final class ScenarioThreeViewController: UIViewController {
     
     private let presentationView = PresentationView()
-    private let discreteSectionsView = DiscreteSectionsView()
+    private let synchronizer = CollectionDataSynchronizer(delay: .short)
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = isIpad() ? CGSize(width: 66, height: 99) : CGSize(width: 44, height: 66)
@@ -38,6 +38,8 @@ final class ScenarioThreeViewController: UIViewController {
 
         super.init(nibName: nil, bundle: nil)
         
+        dataList[0].synchronizer = synchronizer
+        dataList[1].synchronizer = synchronizer
         setUpSubviews()
         dataCoordinator.nextPressed()
     }
@@ -61,9 +63,8 @@ final class ScenarioThreeViewController: UIViewController {
         presentationView.playerControl.delegate = dataCoordinator
         presentationView.addViewToPresent(collectionView)
         
-        discreteSectionsView.view = collectionView
         dataList.enumerated().forEach { index, collectionData in
-            collectionData.view = discreteSectionsView
+            collectionData.view = collectionView
             collectionData.section = index
         }
         

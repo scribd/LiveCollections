@@ -325,7 +325,11 @@ private extension EntireViewSectionUpdate {
 
     func isDataSourceValid(for view: UIView) -> Bool {
         guard let sectionDelegate = sectionUpdate.delegate else { return true }
-        return sectionDelegate.view === view
+        if let synchronizer = sectionDelegate.view as? CollectionDataSynchronizer {
+            return synchronizer.view === view
+        } else {
+            return sectionDelegate.view === view
+        }
     }
 }
 

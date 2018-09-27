@@ -26,6 +26,10 @@ public protocol CollectionDataFixedSectionInterface: AnyObject {
     var section: Int { get set }
 }
 
+public protocol CollectionDataSynchronizable: AnyObject {
+    var synchronizer: CollectionDataSynchronizer? { get set }
+}
+
 public protocol CollectionDataActionsInterface: CollectionDataStateInterface, CollectionDataFixedSectionInterface {
     associatedtype RawType
 

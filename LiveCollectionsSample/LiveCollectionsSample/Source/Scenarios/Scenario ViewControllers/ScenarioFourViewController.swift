@@ -12,7 +12,7 @@ import LiveCollections
 final class ScenarioFourViewController: UIViewController {
     
     private let presentationView = PresentationView()
-    private let discreteSectionsView = DiscreteSectionsView()
+    private let synchronizer = CollectionDataSynchronizer(delay: .short)
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.dataSource = self
@@ -33,6 +33,9 @@ final class ScenarioFourViewController: UIViewController {
 
         super.init(nibName: nil, bundle: nil)
         
+        dataList[1].synchronizer = synchronizer
+        dataList[2].synchronizer = synchronizer
+
         setUpSubviews()
         dataCoordinator.nextPressed()
     }
@@ -56,9 +59,8 @@ final class ScenarioFourViewController: UIViewController {
         presentationView.playerControl.delegate = dataCoordinator
         presentationView.addViewToPresent(tableView)
         
-        discreteSectionsView.view = tableView
         dataList.enumerated().forEach { index, collectionData in
-            collectionData.view = discreteSectionsView
+            collectionData.view = tableView
             collectionData.section = index
         }
         
