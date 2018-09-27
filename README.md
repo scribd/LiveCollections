@@ -15,7 +15,7 @@ Full detail for the use case of each scenario <a href="https://medium.com/p/59ea
 <h2>Importing From Carthage</h2>
 
 <br>
-github "scribd/LiveCollections" "beta_0.9.1"
+github "scribd/LiveCollections" "beta_0.9.2"
 <br>
 <br>
 
@@ -116,15 +116,16 @@ The same as scenario 1 but swap in UITableView.
 
 <img src="https://github.com/scribd/LiveCollections/blob/master/ReadMe/discrete_sections_collection_view.png" alt="Multiple discrete sections collection view class graph">
 
+or
+
+<img src="https://github.com/scribd/LiveCollections/blob/master/ReadMe/discrete_sections_collection_view_with_synchronizer.png" alt="Multiple discrete sections collection view class graph with two sections synchronized">
+
 ```swift
 final class YourClass {
     private let collectionView: UICollectionView
-    private let discreteSectionsView: DiscreteSectionsView
     private let dataList: [CollectionData<YourData>]
 
     init() {
-        discreteSectionsView = DiscreteSectionsView()
-
         // you can also assign section later on if that better fits your class design
         dataList = [
              CollectionData<YourData>(section: 0),
@@ -133,8 +134,11 @@ final class YourClass {
         ]
         ...
         super.init()
-        discreteSectionsView.view = collectionView
-        dataList.forEach { $0.view = discreteSectionsView }
+        
+        // Optionally apply a synchronizer to multiple sections to have them
+        // perofrm their animations in the same block when possible
+        let synchronizer = CollectionDataSynchronizer(delay: .short)
+        dataList.forEach { $0.synchronizer = synchronizer }
     }
 
     func someMethodToUpdateYourData(_ data: [YourData], section: Int) {
