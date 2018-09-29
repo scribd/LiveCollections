@@ -10,7 +10,7 @@ import Foundation
 
 /**
  A minimum set of delegate methods required to handle manually reloading a table view with an IndexDelta.
- The most common use case of when you would return `true` for `willHandleReload(at indexPath: IndexPath) -> Bool`
+ The most common use case of when you would return `true` for `willHandleReload(at indexPathPair: IndexPathPair) -> Bool`
  is when a tableView row contains a collection view. Allowing the table view to reload
  the data will prevent the collection view from performing its own animation. In this case, we just want
  to update the collection view and not perform any table view animations. Instead trigger your collection
@@ -25,7 +25,11 @@ import Foundation
 */
 public protocol CollectionDataManualReloadDelegate: AnyObject {
     
-    func willHandleReload(at indexPath: IndexPath) -> Bool
+    /** - note:
+     pair.source == position before animation
+     pair.target == position after animation
+     */
+    func willHandleReload(at indexPathPair: IndexPathPair) -> Bool
     func reloadItems(at indexPaths: [IndexPath], completion: @escaping (IndexPath) -> Void)
 
     func preferredItemAnimationStyle(for itemDelta: IndexDelta) -> AnimationStyle

@@ -72,7 +72,7 @@ extension UITableView: SectionDeltaUpdatableView {
         
         // Calculate manual reloads to pass down to the delegate
         itemIndexPathDelta.reloads.forEach { indexPathPair in
-            if let delegate = delegate, delegate.willHandleReload(at: indexPathPair.target) {
+            if let delegate = delegate, delegate.willHandleReload(at: indexPathPair) {
                 manualReloadIndexPaths.append(indexPathPair.target as IndexPath)
             } else {
                 automaticReloadIndexPaths.append(indexPathPair.target as IndexPath)
@@ -246,7 +246,7 @@ extension UICollectionView: SectionDeltaUpdatableView {
 
         // Calculate manual reloads to pass down to the delegate
         itemIndexPathDelta.reloads.forEach { indexPathPair in
-            if let delegate = delegate, delegate.willHandleReload(at: indexPathPair.target) {
+            if let delegate = delegate, delegate.willHandleReload(at: indexPathPair) {
                 manualReloadIndexPaths.append(indexPathPair.target as IndexPath)
             } else {
                 automaticReloadIndexPaths.append(indexPathPair.target as IndexPath)

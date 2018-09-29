@@ -303,11 +303,13 @@ private extension IndexPathsToAnimate {
         
         // Calculate manual reloads to pass down to the delegate
         delta.reloads.forEach { indexPair in
-            let targetIndexPath = IndexPath(item: indexPair.target, section: section)
-            if let delegate = sectionUpdate.delegate, delegate.willHandleReload(at: targetIndexPath) {
-                manualReloadIndexPaths.append(targetIndexPath)
+            let source = IndexPath(item: indexPair.source, section: section)
+            let target = IndexPath(item: indexPair.target, section: section)
+            let indexPathPair = IndexPathPair(source: source, target: target)
+            if let delegate = sectionUpdate.delegate, delegate.willHandleReload(at: indexPathPair) {
+                manualReloadIndexPaths.append(target)
             } else {
-                automaticReloadIndexPaths.append(targetIndexPath)
+                automaticReloadIndexPaths.append(target)
             }
         }
         

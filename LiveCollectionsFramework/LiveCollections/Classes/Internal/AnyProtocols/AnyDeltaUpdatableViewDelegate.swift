@@ -11,14 +11,14 @@ import Foundation
 // MARK: - Generic Wrapper
 
 final class AnyDeltaUpdatableViewDelegate {
-    private let _getItemWillHandleReload: ((IndexPath) -> Bool)
+    private let _getItemWillHandleReload: ((IndexPathPair) -> Bool)
     private let _performReloadItems: (([IndexPath], @escaping (IndexPath) -> Void) -> Void)
     private let _getPreferredItemAnimationStyle: ((IndexDelta) -> AnimationStyle)
     private let _getView: (() -> DeltaUpdatableView?)
 
     init(_ delegate: CollectionDataManualReloadDelegate? = nil, viewProvider: CollectionViewProvider? = nil) {
-        _getItemWillHandleReload = { [weak weakDelegate = delegate] indexPath in
-            return weakDelegate?.willHandleReload(at: indexPath) ?? false
+        _getItemWillHandleReload = { [weak weakDelegate = delegate] indexPathPair in
+            return weakDelegate?.willHandleReload(at: indexPathPair) ?? false
         }
         
         _performReloadItems = { [weak weakDelegate = delegate] indexPaths, completion in
@@ -36,7 +36,7 @@ final class AnyDeltaUpdatableViewDelegate {
 }
 
 extension AnyDeltaUpdatableViewDelegate: DeltaUpdatableViewDelegate {
-    func willHandleReload(at indexPath: IndexPath) -> Bool { return _getItemWillHandleReload(indexPath) }
+    func willHandleReload(at indexPathPair: IndexPathPair) -> Bool { return _getItemWillHandleReload(indexPathPair) }
     func reloadItems(at indexPaths: [IndexPath], completion: @escaping (IndexPath) -> Void) { _performReloadItems(indexPaths, completion) }
     func preferredItemAnimationStyle(for itemDelta: IndexDelta) -> AnimationStyle { return _getPreferredItemAnimationStyle(itemDelta) }
     var view: DeltaUpdatableView? {

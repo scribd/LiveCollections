@@ -83,7 +83,7 @@ extension ScenarioEightViewController: CollectionSectionDataManualReloadDelegate
         return .preciseAnimations
     }
 
-    func willHandleReload(at indexPath: IndexPath) -> Bool {
+    func willHandleReload(at indexPathPair: IndexPathPair) -> Bool {
         return true
     }
     

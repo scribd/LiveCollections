@@ -71,7 +71,7 @@ final class ScenarioSevenViewController: UIViewController {
 
 extension ScenarioSevenViewController: CollectionDataManualReloadDelegate {
     
-    func willHandleReload(at indexPath: IndexPath) -> Bool {
+    func willHandleReload(at indexPathPair: IndexPathPair) -> Bool {
         return true
     }
     
