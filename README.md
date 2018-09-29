@@ -15,7 +15,7 @@ Full detail for the use case of each scenario <a href="https://medium.com/p/59ea
 <h2>Importing From Carthage</h2>
 
 <br>
-github "scribd/LiveCollections" "beta_0.9.2"
+github "scribd/LiveCollections" "beta_0.9.3"
 <br>
 <br>
 
@@ -136,7 +136,7 @@ final class YourClass {
         super.init()
         
         // Optionally apply a synchronizer to multiple sections to have them
-        // perofrm their animations in the same block when possible
+        // perform their animations in the same block when possible
         let synchronizer = CollectionDataSynchronizer(delay: .short)
         dataList.forEach { $0.synchronizer = synchronizer }
     }
@@ -304,7 +304,11 @@ extension YourClass: UITableViewDelegate {
 
 extension YourClass: CollectionDataManualReloadDelegate {
     
-    func willHandleReload(at indexPath: IndexPath) -> Bool {
+    // IndexPathPair is a struct that contains both the source index path for the original data set
+    // and the target index path of the updated data set. You may need to know one or both pieces 
+    // of information to determine if you want to handle the reload.
+    
+    func willHandleReload(at indexPathPair: IndexPathPair) -> Bool {
         return true
     }
     
