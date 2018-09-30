@@ -21,6 +21,6 @@ final class ImageFileEncoder: FileEncoderInterface {
     }
     
     func encode(for image: UIImage) -> Data? {
-        return UIImagePNGRepresentation(image)
+        return image.pngData()
     }
 }

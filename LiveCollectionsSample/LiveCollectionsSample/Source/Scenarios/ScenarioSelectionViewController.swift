@@ -80,7 +80,7 @@ private extension ScenarioSelectionViewController {
 
 private final class ScenarioDescrpitionTableViewCell: UITableViewCell {
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
         detailTextLabel?.numberOfLines = 0
     }
