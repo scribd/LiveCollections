@@ -15,7 +15,7 @@ Full detail for the use case of each scenario <a href="https://medium.com/p/59ea
 <h2>Importing From Carthage</h2>
 
 <br>
-github "scribd/LiveCollections" "beta_0.9.3"
+github "scribd/LiveCollections" "beta_0.9.4"
 <br>
 <br>
 
