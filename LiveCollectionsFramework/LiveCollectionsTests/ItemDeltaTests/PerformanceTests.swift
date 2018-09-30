@@ -28,7 +28,7 @@ final class PerformanceTests: XCTestCase {
         collectionData = CollectionData<Int>(startingData)
         
         measure {
-            _ = collectionData.calculateDelta(updatedData)
+            _ = collectionData.calculateDeltaSync(updatedData)
         }
     }
 
@@ -38,7 +38,7 @@ final class PerformanceTests: XCTestCase {
         collectionData = CollectionData<Int>(startingData)
         
         measure {
-            _ = collectionData.calculateDelta(updatedData)
+            _ = collectionData.calculateDeltaSync(updatedData)
         }
     }
 
@@ -48,7 +48,7 @@ final class PerformanceTests: XCTestCase {
         collectionData = CollectionData<Int>(startingData)
         
         measure {
-            _ = collectionData.calculateDelta(updatedData)
+            _ = collectionData.calculateDeltaSync(updatedData)
         }
     }
 
@@ -58,7 +58,7 @@ final class PerformanceTests: XCTestCase {
         collectionData = CollectionData<Int>(startingData)
         
         measure {
-            _ = collectionData.calculateDelta(updatedData)
+            _ = collectionData.calculateDeltaSync(updatedData)
         }
     }
 
@@ -68,7 +68,7 @@ final class PerformanceTests: XCTestCase {
         collectionData = CollectionData<Int>(startingData)
         
         measure {
-            _ = collectionData.calculateDelta(updatedData)
+            _ = collectionData.calculateDeltaSync(updatedData)
         }
     }
     
@@ -78,7 +78,7 @@ final class PerformanceTests: XCTestCase {
         collectionData = CollectionData<Int>(startingData)
         
         measure {
-            _ = collectionData.calculateDelta(updatedData)
+            _ = collectionData.calculateDeltaSync(updatedData)
         }
     }
 
@@ -88,7 +88,7 @@ final class PerformanceTests: XCTestCase {
         collectionData = CollectionData<Int>(startingData)
         
         measure {
-            _ = collectionData.calculateDelta(updatedData)
+            _ = collectionData.calculateDeltaSync(updatedData)
         }
     }
 
@@ -98,7 +98,7 @@ final class PerformanceTests: XCTestCase {
         collectionData = CollectionData<Int>(startingData)
         
         measure {
-            _ = collectionData.calculateDelta(updatedData)
+            _ = collectionData.calculateDeltaSync(updatedData)
         }
     }
 }
