@@ -353,9 +353,9 @@ private extension Array where Element == EntireViewSectionUpdate {
         
         var remainingIndexPaths = Set(allManualReloadIndexPaths)
         
-        let dispathQueue = DispatchQueue(label: "\(UITableView.self) itemDeltaUpdates dispatch queue")
+        let completionQueue = DispatchQueue(label: "\(UITableView.self) itemDeltaUpdates dispatch queue")
         let completion: (IndexPath) -> Void = { indexPath in
-            dispathQueue.sync {
+            completionQueue.sync {
                 guard remainingIndexPaths.isEmpty == false else { return }
                 remainingIndexPaths.remove(indexPath)
                 guard remainingIndexPaths.isEmpty else { return }
@@ -363,12 +363,14 @@ private extension Array where Element == EntireViewSectionUpdate {
             }
         }
         
-        self.forEach { update in
-            guard let delegate = update.sectionUpdate.delegate else { return }
-            guard update.isDataSourceValid(for: view) else { return }
-            guard update.indexPathsToAnimate.manualReloadIndexPaths.isEmpty == false else { return }
-            let delta = update.indexPathsToAnimate
-            delegate.reloadItems(at: delta.manualReloadIndexPaths, completion: completion)
+        DispatchQueue.main.async {
+            self.forEach { update in
+                guard let delegate = update.sectionUpdate.delegate else { return }
+                guard update.isDataSourceValid(for: view) else { return }
+                guard update.indexPathsToAnimate.manualReloadIndexPaths.isEmpty == false else { return }
+                let delta = update.indexPathsToAnimate
+                delegate.reloadItems(at: delta.manualReloadIndexPaths, completion: completion)
+            }
         }
     }
 }

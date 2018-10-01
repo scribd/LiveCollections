@@ -322,17 +322,19 @@ private extension UIView {
             return
         }
         
-        let dispathQueue = DispatchQueue(label: "\(UITableView.self) sectionDeltaUpdates dispatch queue")
+        let completionQueue = DispatchQueue(label: "\(UITableView.self) sectionDeltaUpdates dispatch queue")
         var remainingIndexPaths = Set(indexPaths)
         
-        delegate.reloadItems(at: indexPaths, completion: { indexPath in
-            dispathQueue.sync {
-                guard remainingIndexPaths.isEmpty == false else { return }
-                remainingIndexPaths.remove(indexPath)
-                guard remainingIndexPaths.isEmpty else { return }
-                viewCompletion?()
-            }
-        })
+        DispatchQueue.main.async {
+            delegate.reloadItems(at: indexPaths, completion: { indexPath in
+                completionQueue.sync {
+                    guard remainingIndexPaths.isEmpty == false else { return }
+                    remainingIndexPaths.remove(indexPath)
+                    guard remainingIndexPaths.isEmpty else { return }
+                    viewCompletion?()
+                }
+            })
+        }
         
     }
 }
