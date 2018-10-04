@@ -15,7 +15,7 @@ Full detail for the use case of each scenario <a href="https://medium.com/p/59ea
 <h2>Importing From Carthage</h2>
 
 <br>
-github "scribd/LiveCollections" "beta_0.9.5"
+github "scribd/LiveCollections" "beta_0.9.6"
 <br>
 <br>
 
@@ -312,22 +312,21 @@ extension YourClass: CollectionDataManualReloadDelegate {
         return true
     }
     
-    func reloadItems(at indexPaths: [IndexPath], completion: @escaping (IndexPath) -> Void) {
+    func reloadItems(at indexPaths: [IndexPath], indexPathCompletion: @escaping (IndexPath) -> Void) {
 
         indexPaths.forEach { indexPath in
-            let carouselRow = collectionData[indexPath.row]
+            let carouselRow = collectionData[indexPath.item]
             let carouselDataSource = _carouselDataSource(for: carouselRow.identifier)
             
-            let rowCompletion = {
-                completion(indexPath)
+            let itemCompletion = {
+                indexPathCompletion(indexPath)
             }
             
-            carouselDataSource.update(with: carouselRow.movies, completion: rowCompletion)
+            carouselDataSource.update(with: carouselRow.movies, completion: itemCompletion)
         }
     }
     
     func preferredRowAnimationStyle(for rowDelta: IndexDelta) -> AnimationStyle {
-
          return .preciseAnimation
     }
 }
