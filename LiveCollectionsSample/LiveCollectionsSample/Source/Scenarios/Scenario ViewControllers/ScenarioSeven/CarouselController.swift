@@ -44,7 +44,7 @@ final class CarouselController: NSObject, CollectionViewDataProvider {
 extension CarouselController: CollectionDataReusableViewVerificationDelegate {
 
     // NOTE: If you look at the file `LiveCollections.CollectionDataReusableViewVerificationDelegate.swift`,
-    //       you'll see that this is already handled by an extension.  I left the code here for completeness,
+    //       you'll see that this is already handled by an extension. I left the code here for completeness,
     //       but you could replace this etension with:
     //       extension CarouselController: CollectionDataReusableViewVerificationDelegate { }
     

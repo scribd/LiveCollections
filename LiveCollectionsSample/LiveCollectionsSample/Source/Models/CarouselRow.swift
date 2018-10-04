@@ -18,6 +18,6 @@ extension CarouselRow: UniquelyIdentifiable {
     typealias RawType = CarouselRow
     var uniqueID: String { return identifier }
     var hashValue: Int {
-        return  movies.reduce(identifier.hashValue) { $0 ^ $1.hashValue }
+        return movies.reduce(identifier.hashValue) { $0 ^ $1.hashValue }
     }
 }

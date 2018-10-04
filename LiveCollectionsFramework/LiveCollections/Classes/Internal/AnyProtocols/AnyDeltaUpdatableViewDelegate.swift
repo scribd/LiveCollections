@@ -21,8 +21,8 @@ final class AnyDeltaUpdatableViewDelegate {
             return weakDelegate?.willHandleReload(at: indexPathPair) ?? false
         }
         
-        _performReloadItems = { [weak weakDelegate = delegate] indexPaths, completion in
-            weakDelegate?.reloadItems(at: indexPaths, completion: completion)
+        _performReloadItems = { [weak weakDelegate = delegate] indexPaths, indexPathCompletion in
+            weakDelegate?.reloadItems(at: indexPaths, indexPathCompletion: indexPathCompletion)
         }
         
         _getPreferredItemAnimationStyle = { [weak weakDelegate = delegate] indexDelta in
@@ -37,7 +37,7 @@ final class AnyDeltaUpdatableViewDelegate {
 
 extension AnyDeltaUpdatableViewDelegate: DeltaUpdatableViewDelegate {
     func willHandleReload(at indexPathPair: IndexPathPair) -> Bool { return _getItemWillHandleReload(indexPathPair) }
-    func reloadItems(at indexPaths: [IndexPath], completion: @escaping (IndexPath) -> Void) { _performReloadItems(indexPaths, completion) }
+    func reloadItems(at indexPaths: [IndexPath], indexPathCompletion: @escaping (IndexPath) -> Void) { _performReloadItems(indexPaths, indexPathCompletion) }
     func preferredItemAnimationStyle(for itemDelta: IndexDelta) -> AnimationStyle { return _getPreferredItemAnimationStyle(itemDelta) }
     var view: DeltaUpdatableView? {
         get { return _getView() }

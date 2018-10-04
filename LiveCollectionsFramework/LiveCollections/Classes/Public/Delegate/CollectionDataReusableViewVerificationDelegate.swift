@@ -10,7 +10,7 @@ import Foundation
 
 /**
  This is a specific protocol for the `Table of Carousels` scenario (A UITableView that has a UICollectionView in
- it's row cells).  You can read about how this is used here (https://medium.com/p/3bf877e78f50), but the gist is,
+ it's row cells). You can read about how this is used here (https://medium.com/p/3bf877e78f50), but the gist is,
  make sure the view object is a UICollectionView and check to see if the dataSource/delegate point to your object.
  
  I've added the most common extensions for classes that adopt both CollectionDataReusableViewVerificationDelegate

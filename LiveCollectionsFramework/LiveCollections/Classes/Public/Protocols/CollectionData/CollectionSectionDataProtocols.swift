@@ -34,9 +34,9 @@ public protocol CollectionSectionDataStateInterface: AnyObject {
 protocol CollectionSectionDataActionsInterface: CollectionSectionDataStateInterface {
     
     /**
-     Call this when you want to update the entire data set.  All deletions, insertions, reloads, and moves will be calculated for you.
+     Call this when you want to update the entire data set. All deletions, insertions, reloads, and moves will be calculated for you.
      Since you must assign a UITableView, UICollectionView, or custom view to the data source, it will trigger the animation immediately.
-     - parameter updatedData: The updated state array of your data.  The change delta will be calculated form the current data set.
+     - parameter updatedData: The updated state array of your data. The change delta will be calculated form the current data set.
      - parameter completion: A completion block triggered at the end of the animation.
      */
     func update(_ updatedData: [SectionType], completion: (() -> Void)?)

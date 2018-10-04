@@ -16,7 +16,7 @@ import Foundation
  Due to the timing nature of animations, a view must be set on this object and all animations will
  be performed automatically.
 
- Much like the use of CollectionData, you only need to call `update` or `append`.  However to use
+ Much like the use of CollectionData, you only need to call `update` or `append`. However to use
  this class, you will need to create a section based data structure that adheres to
  `UniquelyIdentifiableSection`.
  */

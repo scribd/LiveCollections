@@ -21,7 +21,7 @@ final class MultiSectionCarouselDataCoordinator {
     private var playbackRate: MovieProviderPlaybackRate = .slow
     weak var delegate: MultiSectionCarouselDataCoordinatorDelegate?
     
-    init(sectionCount: Int,  dataProviders: [MovieDataProviderInterface]) {
+    init(sectionCount: Int, dataProviders: [MovieDataProviderInterface]) {
         self.sectionCount = sectionCount
         self.dataProviders = dataProviders
     }

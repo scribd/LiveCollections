@@ -27,7 +27,7 @@ public protocol DeltaUpdatableView: AnyObject {
 
     /**
      Animate the view with the updatedData and delta.
-     - parameter updateData: A closure in which the calling class must set its data.  If the data is set before calling performAnimations, then
+     - parameter updateData: A closure in which the calling class must set its data. If the data is set before calling performAnimations, then
      you may end up causing a crash as the UITableView or UICollectionView have very specific timing needs for when the data must update.
      - parameter delta: The item delta (deletions, insertions, reloads, and moves)
      */

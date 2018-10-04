@@ -326,7 +326,7 @@ private extension UIView {
         var remainingIndexPaths = Set(indexPaths)
         
         DispatchQueue.main.async {
-            delegate.reloadItems(at: indexPaths, completion: { indexPath in
+            delegate.reloadItems(at: indexPaths, indexPathCompletion: { indexPath in
                 completionQueue.sync {
                     guard remainingIndexPaths.isEmpty == false else { return }
                     remainingIndexPaths.remove(indexPath)

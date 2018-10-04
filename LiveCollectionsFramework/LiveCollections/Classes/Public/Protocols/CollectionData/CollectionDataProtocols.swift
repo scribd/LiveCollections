@@ -39,7 +39,7 @@ public protocol CollectionDataActionsInterface: CollectionDataStateInterface, Co
      CollectionData object. (Or in rare scenarios where you want to analyze the delta in advance).
      - note: This does *not* update the data, but only calculates a delta. You must still call the `update` method as part of a
              manual animation call.
-     - parameter updatedData: The updated state array of your data.  The change delta will be calculated form the current data set.
+     - parameter updatedData: The updated state array of your data. The change delta will be calculated form the current data set.
      - parameter completion: A completion block to receive the asyncronously calculated delta
      - returns: An IndexDelta that tells you what animations will take place.
      */
@@ -52,15 +52,15 @@ public protocol CollectionDataActionsInterface: CollectionDataStateInterface, Co
      This action has O(1) computational cost, so there is no need for an asyncronous counterpart.
      - note: This does *not* update the data, but only calculates a delta. You must still call the `append` method as part of a
      manual animation call.
-     - parameter updatedData: The updated state array of your data.  The change delta will be calculated form the current data set.
+     - parameter updatedData: The updated state array of your data. The change delta will be calculated form the current data set.
      - returns: An IndexDelta that tells you what animations will take place.
      */
     func calculateAppendDelta(_ updatedData: [RawType]) -> IndexDelta
     
     /**
-     Update the entire data set.  All deletions, insertions, reloads, and moves will be calculated for you.
+     Update the entire data set. All deletions, insertions, reloads, and moves will be calculated for you.
      If you assign a UITableView, UICollectionView, or custom view to the data source, it will trigger the animation immediately.
-     - parameter updatedData: The updated state array of your data.  The change delta will be calculated form the current data set.
+     - parameter updatedData: The updated state array of your data. The change delta will be calculated form the current data set.
      - parameter completion: A completion block triggered at the end of the animation.
      */
     func update(_ updatedData: [RawType], completion: (() -> Void)?)

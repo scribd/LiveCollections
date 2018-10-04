@@ -106,7 +106,10 @@ final class PlayerControl: UIView {
 private extension PlayerControl {
     
     func configureStackViewForPlaying() {
-        stackView.arrangedSubviews.forEach { stackView.removeArrangedSubview($0) }
+        stackView.arrangedSubviews.forEach { subview in
+            stackView.removeArrangedSubview(subview)
+            subview.removeFromSuperview()
+        }
         stackView.addArrangedSubview(deltaControl)
         stackView.setCustomSpacing(10, after: deltaControl)
         stackView.addArrangedSubview(rateControl)
@@ -117,7 +120,10 @@ private extension PlayerControl {
     }
 
     func configureStackViewForPaused() {
-        stackView.arrangedSubviews.forEach { stackView.removeArrangedSubview($0) }
+        stackView.arrangedSubviews.forEach { subview in
+            stackView.removeArrangedSubview(subview)
+            subview.removeFromSuperview()
+        }
         stackView.addArrangedSubview(deltaControl)
         stackView.setCustomSpacing(10, after: deltaControl)
         stackView.addArrangedSubview(rateControl)

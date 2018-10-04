@@ -87,14 +87,14 @@ extension ScenarioEightViewController: CollectionSectionDataManualReloadDelegate
         return true
     }
     
-    func reloadItems(at indexPaths: [IndexPath], completion: @escaping (IndexPath) -> Void) {
+    func reloadItems(at indexPaths: [IndexPath], indexPathCompletion: @escaping (IndexPath) -> Void) {
 
         for indexPath in indexPaths {
             let carouselRow = collectionData[indexPath]
             let dataSource = _carouselDataSource(for: carouselRow.identifier)
             
             let itemCompletion = {
-                completion(indexPath)
+                indexPathCompletion(indexPath)
             }
             
             dataSource.update(with: carouselRow.movies, completion: itemCompletion)

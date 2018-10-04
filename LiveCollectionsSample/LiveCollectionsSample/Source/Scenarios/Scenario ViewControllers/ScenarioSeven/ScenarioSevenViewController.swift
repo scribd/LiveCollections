@@ -75,14 +75,14 @@ extension ScenarioSevenViewController: CollectionDataManualReloadDelegate {
         return true
     }
     
-    func reloadItems(at indexPaths: [IndexPath], completion: @escaping (IndexPath) -> Void) {
+    func reloadItems(at indexPaths: [IndexPath], indexPathCompletion: @escaping (IndexPath) -> Void) {
 
         indexPaths.forEach { indexPath in
             let carouselRow = collectionData[indexPath.item]
             let dataSource = _carouselDataSource(for: carouselRow.identifier)
             
             let itemCompletion = {
-                completion(indexPath)
+                indexPathCompletion(indexPath)
             }
             
             dataSource.update(with: carouselRow.movies, completion: itemCompletion)

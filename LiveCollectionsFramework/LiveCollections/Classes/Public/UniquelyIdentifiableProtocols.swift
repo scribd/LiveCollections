@@ -18,7 +18,7 @@ import Foundation
    of carousels scenario, the contents of an array could have shifted).
  • Hashable - Needed for management in set unions, subtractions and intersects. This should reflect the same concepts as Equatable.
  • UniquelyIdentifiable - The uniqueID is used to determine identity (e.g. A person object is the same even if they have changed
-   their name). The RawType value is what determines the interface of the `update(_ data: [RawType])` method.  In many cases,
+   their name). The RawType value is what determines the interface of the `update(_ data: [RawType])` method. In many cases,
    it will simply be the Self type, but when using data factories, it should represent the underlying type that is being wrapped.
  
  - warning: Since the UniquelyIdentifiable protocol inherits from Equatable, your object's default equatability function will be

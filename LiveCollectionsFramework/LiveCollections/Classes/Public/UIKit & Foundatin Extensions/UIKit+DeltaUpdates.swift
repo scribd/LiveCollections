@@ -292,7 +292,7 @@ private extension IndexPathsToAnimate {
         }
         
         let indexToIndexPathMap = Mapping.generateIndexToIndexPathMap(forSection: section)
-        let indexPairToIndexPathPair  = Mapping.generateIndexPairToIndexPathPairMapping(forSection: section)
+        let indexPairToIndexPathPair = Mapping.generateIndexPairToIndexPathPairMapping(forSection: section)
         
         let insertedIndexPaths = delta.insertions.map(indexToIndexPathMap)
         let deletedIndexPaths = delta.deletions.map(indexToIndexPathMap)
@@ -354,7 +354,7 @@ private extension Array where Element == EntireViewSectionUpdate {
         var remainingIndexPaths = Set(allManualReloadIndexPaths)
         
         let completionQueue = DispatchQueue(label: "\(UITableView.self) itemDeltaUpdates dispatch queue")
-        let completion: (IndexPath) -> Void = { indexPath in
+        let indexPathCompletion: (IndexPath) -> Void = { indexPath in
             completionQueue.sync {
                 guard remainingIndexPaths.isEmpty == false else { return }
                 remainingIndexPaths.remove(indexPath)
@@ -369,7 +369,7 @@ private extension Array where Element == EntireViewSectionUpdate {
                 guard update.isDataSourceValid(for: view) else { return }
                 guard update.indexPathsToAnimate.manualReloadIndexPaths.isEmpty == false else { return }
                 let delta = update.indexPathsToAnimate
-                delegate.reloadItems(at: delta.manualReloadIndexPaths, completion: completion)
+                delegate.reloadItems(at: delta.manualReloadIndexPaths, indexPathCompletion: indexPathCompletion)
             }
         }
     }

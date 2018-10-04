@@ -30,7 +30,7 @@ public protocol CollectionDataManualReloadDelegate: AnyObject {
      pair.target == position after animation
      */
     func willHandleReload(at indexPathPair: IndexPathPair) -> Bool
-    func reloadItems(at indexPaths: [IndexPath], completion: @escaping (IndexPath) -> Void)
+    func reloadItems(at indexPaths: [IndexPath], indexPathCompletion: @escaping (IndexPath) -> Void)
 
     func preferredItemAnimationStyle(for itemDelta: IndexDelta) -> AnimationStyle
 }

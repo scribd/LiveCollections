@@ -225,8 +225,8 @@ private extension SectionDataCalculator {
             // FINAL ANIMATIONS
             // *******************
             
-            // finally we convert the item deltas that we calculated in MIS1 into index paths.  This will include making
-            // adjustments for the (then) missing inserted sections.  Once those adjustments are made, trigger the item animations
+            // finally we convert the item deltas that we calculated in MIS1 into index paths. This will include making
+            // adjustments for the (then) missing inserted sections. Once those adjustments are made, trigger the item animations
             
             let calculationCompletion: () -> Void = { [weak self, weak weakDeletionDelegate = deletionDelegate] in
                 completion?()

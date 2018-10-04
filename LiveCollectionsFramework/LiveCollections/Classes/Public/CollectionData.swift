@@ -17,7 +17,7 @@ import Foundation
  Assigning a view (reactive):
  If there is an assigned view (UITableView, UICollectionView, or DiscreteSectionsView), any time you
  call the `update` or `append` functions, the delta calculation and resulting animation will be performed
- immediately and automatically.  So calling `update` or `append` is all you need to do.
+ immediately and automatically. So calling `update` or `append` is all you need to do.
  
  Nil view (non-reactive):
  Without an assigned view, you give your app more flexibility to manage the timing of the animation.
@@ -46,7 +46,7 @@ public final class CollectionData<DataType: UniquelyIdentifiable>: CollectionDat
                 self._view = newValue
                 self.synchronizer?.view = newValue
             }
-            if Thread.isMainThread  { self.view?.reloadData() }
+            if Thread.isMainThread { self.view?.reloadData() }
             else { DispatchQueue.main.sync { return self.view?.reloadData() } }
         }
     }
