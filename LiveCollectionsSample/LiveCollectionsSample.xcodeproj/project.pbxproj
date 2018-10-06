@@ -338,6 +338,7 @@
 		F4876F892104ECD400D7C6F5 /* 825 in Resources */ = {isa = PBXBuildFile; fileRef = F4876E4B2104ECD400D7C6F5 /* 825 */; };
 		F4876F8A2104ECD400D7C6F5 /* 927 in Resources */ = {isa = PBXBuildFile; fileRef = F4876E4C2104ECD400D7C6F5 /* 927 */; };
 		F4876F8C210563D300D7C6F5 /* ScenarioThreeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4876F8B210563D300D7C6F5 /* ScenarioThreeViewController.swift */; };
+		F48BF27D21697742002DAEF7 /* ScenarioElevenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F48BF27C21697742002DAEF7 /* ScenarioElevenViewController.swift */; };
 		F4AE4CEA2105911E000205E1 /* ScenarioFourViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4AE4CE92105911E000205E1 /* ScenarioFourViewController.swift */; };
 		F4AE4CEC21063CC2000205E1 /* ScenarioSevenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4AE4CEB21063CC2000205E1 /* ScenarioSevenViewController.swift */; };
 		F4AE4CEF21063D14000205E1 /* CarouselController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4AE4CEE21063D14000205E1 /* CarouselController.swift */; };
@@ -722,6 +723,7 @@
 		F4876E4B2104ECD400D7C6F5 /* 825 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 825; sourceTree = "<group>"; };
 		F4876E4C2104ECD400D7C6F5 /* 927 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 927; sourceTree = "<group>"; };
 		F4876F8B210563D300D7C6F5 /* ScenarioThreeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenarioThreeViewController.swift; sourceTree = "<group>"; };
+		F48BF27C21697742002DAEF7 /* ScenarioElevenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenarioElevenViewController.swift; sourceTree = "<group>"; };
 		F4AE4CE92105911E000205E1 /* ScenarioFourViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenarioFourViewController.swift; sourceTree = "<group>"; };
 		F4AE4CEB21063CC2000205E1 /* ScenarioSevenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenarioSevenViewController.swift; sourceTree = "<group>"; };
 		F4AE4CEE21063D14000205E1 /* CarouselController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselController.swift; sourceTree = "<group>"; };
@@ -1218,6 +1220,7 @@
 				F4B0F799213DB0B700179029 /* ScenarioEightViewController.swift */,
 				F47AE71E21409BDD00FE7360 /* ScenarioNine */,
 				F4F59E6C214C3DD900B4AB19 /* ScenarioTenViewController.swift */,
+				F48BF27C21697742002DAEF7 /* ScenarioElevenViewController.swift */,
 			);
 			path = "Scenario ViewControllers";
 			sourceTree = "<group>";
@@ -1660,6 +1663,7 @@
 				F4D7736820FC26DD002F1C43 /* ScenarioSelectionViewController.swift in Sources */,
 				F4D7737F20FC5F14002F1C43 /* PresentationView.swift in Sources */,
 				F4876D0D2104E91400D7C6F5 /* MovieImageLoader.swift in Sources */,
+				F48BF27D21697742002DAEF7 /* ScenarioElevenViewController.swift in Sources */,
 				F4847DF82137AB8000859EFF /* MovieSection.swift in Sources */,
 				F4F34D042104DCFC00FCC079 /* ScenarioTwoViewController.swift in Sources */,
 				F47AE71D21409BC800FE7360 /* ScenarioNineViewController.swift in Sources */,

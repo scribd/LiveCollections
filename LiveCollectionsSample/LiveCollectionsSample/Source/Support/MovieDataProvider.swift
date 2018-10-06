@@ -51,15 +51,26 @@ final class RandomMovieDataProvider: MovieDataProviderInterface {
         }
         return Array(identifiers)
     }
+
+    static func randomNonUniqueMovieIdentifiers(count: Int, availableIDs: [UInt], existingIdentifiers: [UInt] = []) -> [UInt] {
+        var identifiers = existingIdentifiers
+        (0..<count).forEach { _ in
+            let index = Int(arc4random_uniform(UInt32(availableIDs.count)))
+            let uniqueIdentifier = availableIDs[index]
+            identifiers.append(uniqueIdentifier)
+        }
+        return Array(identifiers)
+    }
     
     private let initialDataCount: Int
     private let minCount: UInt32
     private let maxCount: UInt32
+    private let allowsDuplicates: Bool
     private let movieLoader: MovieLoaderInterface
     
     private var dataSet: [Movie] = []
     
-    init(initialDataCount: Int, minCount: UInt32 = 1, maxCount: UInt32 = 100, movieLoader: MovieLoaderInterface) {
+    init(initialDataCount: Int, minCount: UInt32 = 1, maxCount: UInt32 = 100, allowsDuplicates: Bool = false, movieLoader: MovieLoaderInterface) {
         self.initialDataCount = initialDataCount
         self.minCount = minCount
         if maxCount < minCount {
@@ -68,6 +79,7 @@ final class RandomMovieDataProvider: MovieDataProviderInterface {
         } else {
             self.maxCount = maxCount
         }
+        self.allowsDuplicates = allowsDuplicates
         self.movieLoader = movieLoader
     }
     
@@ -100,8 +112,13 @@ final class RandomMovieDataProvider: MovieDataProviderInterface {
 
     private func calculateWildlyDifferentDelta(exactCount: Int? = nil) -> [UInt] {
         let count = exactCount ?? Int(arc4random_uniform(maxCount-minCount)+minCount)
-        return RandomMovieDataProvider.randomUniqueMovieIdentifiers(count: count,
-                                                                    availableIDs: movieLoader.availableMovieIdentifiers)
+        if allowsDuplicates {
+            return RandomMovieDataProvider.randomNonUniqueMovieIdentifiers(count: count,
+                                                                           availableIDs: movieLoader.availableMovieIdentifiers)
+        } else {
+            return RandomMovieDataProvider.randomUniqueMovieIdentifiers(count: count,
+                                                                        availableIDs: movieLoader.availableMovieIdentifiers)
+        }
     }
     
     private func calculateDelta(modifier: UInt32) -> [UInt] {
@@ -122,10 +139,17 @@ final class RandomMovieDataProvider: MovieDataProviderInterface {
         }
         
         // insertions
-        let newIdentifiers = RandomMovieDataProvider.randomUniqueMovieIdentifiers(count: numberOfInsertions,
+        let newIdentifiers: [UInt]
+        if allowsDuplicates {
+            newIdentifiers = RandomMovieDataProvider.randomNonUniqueMovieIdentifiers(count: numberOfInsertions,
+                                                                                     availableIDs: movieLoader.availableMovieIdentifiers,
+                                                                                     existingIdentifiers: updatedIdentifiers)
+        } else {
+            newIdentifiers = RandomMovieDataProvider.randomUniqueMovieIdentifiers(count: numberOfInsertions,
                                                                                   availableIDs: movieLoader.availableMovieIdentifiers,
                                                                                   existingIdentifiers: updatedIdentifiers)
-
+        }
+        
         newIdentifiers.forEach { identifier in
             guard updatedIdentifiers.contains(identifier) == false else { return }
             let indexToInsert = Int(arc4random_uniform(UInt32(updatedIdentifiers.count)))

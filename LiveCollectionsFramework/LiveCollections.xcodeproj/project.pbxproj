@@ -16,6 +16,8 @@
 		F47AE73321419A8700FE7360 /* AdvancedItemDeltaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47AE73221419A8700FE7360 /* AdvancedItemDeltaTests.swift */; };
 		F47EFA922161638A00E53750 /* BaseTypes+UniquelyIdentifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4847DFC2137CA0C00859EFF /* BaseTypes+UniquelyIdentifiable.swift */; };
 		F4847DFB2137C8A200859EFF /* BasicItemDeltaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4847DFA2137C8A200859EFF /* BasicItemDeltaTests.swift */; };
+		F48BF27921694B30002DAEF7 /* NonUniquelyIdentifiableProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = F48BF27821694B30002DAEF7 /* NonUniquelyIdentifiableProtocols.swift */; };
+		F48BF27B21694B4B002DAEF7 /* NonUniqueDataFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = F48BF27A21694B4B002DAEF7 /* NonUniqueDataFactory.swift */; };
 		F4AF3BC32145B2C500917DF5 /* AnyCollectionDataDeletionNotificationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4AF3BC22145B2C500917DF5 /* AnyCollectionDataDeletionNotificationDelegate.swift */; };
 		F4B9013F2133A2A400E3B51C /* AnyDeltaUpdatableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4B9013E2133A2A400E3B51C /* AnyDeltaUpdatableViewDelegate.swift */; };
 		F4D772E920FBC4BF002F1C43 /* LiveCollections.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4D772DF20FBC4BE002F1C43 /* LiveCollections.framework */; };
@@ -59,6 +61,8 @@
 		F47AE73221419A8700FE7360 /* AdvancedItemDeltaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedItemDeltaTests.swift; sourceTree = "<group>"; };
 		F4847DFA2137C8A200859EFF /* BasicItemDeltaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicItemDeltaTests.swift; sourceTree = "<group>"; };
 		F4847DFC2137CA0C00859EFF /* BaseTypes+UniquelyIdentifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BaseTypes+UniquelyIdentifiable.swift"; sourceTree = "<group>"; };
+		F48BF27821694B30002DAEF7 /* NonUniquelyIdentifiableProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonUniquelyIdentifiableProtocols.swift; sourceTree = "<group>"; };
+		F48BF27A21694B4B002DAEF7 /* NonUniqueDataFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonUniqueDataFactory.swift; sourceTree = "<group>"; };
 		F4AF3BC22145B2C500917DF5 /* AnyCollectionDataDeletionNotificationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyCollectionDataDeletionNotificationDelegate.swift; sourceTree = "<group>"; };
 		F4B9013E2133A2A400E3B51C /* AnyDeltaUpdatableViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyDeltaUpdatableViewDelegate.swift; sourceTree = "<group>"; };
 		F4D772DF20FBC4BE002F1C43 /* LiveCollections.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LiveCollections.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -112,6 +116,15 @@
 				F47AE7282140F4DA00FE7360 /* PerformanceTests.swift */,
 			);
 			path = ItemDeltaTests;
+			sourceTree = "<group>";
+		};
+		F48BF27721694B0F002DAEF7 /* Non-Unique */ = {
+			isa = PBXGroup;
+			children = (
+				F48BF27821694B30002DAEF7 /* NonUniquelyIdentifiableProtocols.swift */,
+				F48BF27A21694B4B002DAEF7 /* NonUniqueDataFactory.swift */,
+			);
+			path = "Non-Unique";
 			sourceTree = "<group>";
 		};
 		F4AF3BC42146DB0700917DF5 /* AnyProtocols */ = {
@@ -193,6 +206,7 @@
 				F4D7731620FBC4E7002F1C43 /* UniquelyIdentifiableProtocols.swift */,
 				F4D7730220FBC4E7002F1C43 /* Delta */,
 				F4D7730A20FBC4E7002F1C43 /* Delegate */,
+				F48BF27721694B0F002DAEF7 /* Non-Unique */,
 				F4D7730E20FBC4E7002F1C43 /* Protocols */,
 				F4EC1E2E215C88D100ACCBDB /* Synchronizer */,
 				F4D7730620FBC4E7002F1C43 /* UIKit & Foundatin Extensions */,
@@ -403,6 +417,8 @@
 				F4D7731D20FBC4E7002F1C43 /* IndexDelta.swift in Sources */,
 				F4D7732820FBC4E7002F1C43 /* UniquelyIdentifiableDataFactory.swift in Sources */,
 				F4D7731B20FBC4E7002F1C43 /* SectionDataCalculator.swift in Sources */,
+				F48BF27B21694B4B002DAEF7 /* NonUniqueDataFactory.swift in Sources */,
+				F48BF27921694B30002DAEF7 /* NonUniquelyIdentifiableProtocols.swift in Sources */,
 				F4D7731F20FBC4E7002F1C43 /* UIKit+DeltaUpdates.swift in Sources */,
 				F4D7732620FBC4E7002F1C43 /* CollectionSectionDataProtocols.swift in Sources */,
 			);

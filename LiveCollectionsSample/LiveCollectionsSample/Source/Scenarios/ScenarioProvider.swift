@@ -99,6 +99,15 @@ final class ScenarioProvider: ScenarioProviderInterface {
                                                        movieLoader: movieLoader)
             let dataCoordinator = DataCoordinator(dataProviders: [dataProvider])
             return ScenarioTenViewController(dataCoordinator: dataCoordinator, imageLoader: imageLoader)
+
+        case .dataWithNonUniqueIDs:
+            let dataProvider = RandomMovieDataProvider(initialDataCount: isIpad() ? 120 : 40,
+                                                       minCount: 5,
+                                                       maxCount: isIpad() ? 300 : 80,
+                                                       allowsDuplicates: true,
+                                                       movieLoader: movieLoader)
+            let dataCoordinator = DataCoordinator(dataProviders: [dataProvider])
+            return ScenarioElevenViewController(dataCoordinator: dataCoordinator, imageLoader: imageLoader)
         }
     }
 }

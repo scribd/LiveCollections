@@ -28,23 +28,33 @@ public protocol UniquelyIdentifiableDataFactory {
 
     var buildQueue: DispatchQueue? { get } // optional queue if your data is thread sensitive
     func buildUniquelyIdentifiableDatum(_ rawType: RawType) -> UniquelyIdentifiableType
+    
+    func didBeginBuildingData()
+    func didEndBuildingData()
 }
 
 public extension UniquelyIdentifiableDataFactory {
     var buildQueue: DispatchQueue? { return nil }
+    public func didBeginBuildingData() { }
+    public func didEndBuildingData() { }
 }
 
 extension UniquelyIdentifiableDataFactory {
     
     func buildUniquelyIdentifiableData(_ rawType: [RawType]) -> [UniquelyIdentifiableType] {
-        guard let buildQueue = buildQueue,
-            buildQueue !== DispatchQueue.main || Thread.isMainThread == false else {
-                return rawType.map { buildUniquelyIdentifiableDatum($0) }
+        let buildData: ([RawType]) -> [UniquelyIdentifiableType] = { rawType in
+            self.didBeginBuildingData()
+            let data = rawType.map { self.buildUniquelyIdentifiableDatum($0) }
+            self.didEndBuildingData()
+            return data
         }
         
-        return buildQueue.sync {
-            rawType.map { buildUniquelyIdentifiableDatum($0) }
+        guard let buildQueue = buildQueue,
+            buildQueue !== DispatchQueue.main || Thread.isMainThread == false else {
+                return buildData(rawType)
         }
+        
+        return buildQueue.sync { buildData(rawType) }
     }
 }
 
@@ -57,8 +67,6 @@ public protocol UniquelyIdentifiableIdentityDataFactory: UniquelyIdentifiableDat
  As you can see, it does not manipulation and simply returns the object it was given.
  */
 public struct IdentityDataFactory<DataType: UniquelyIdentifiable>: UniquelyIdentifiableIdentityDataFactory {
-    
-    public init() { }
     
     public func buildUniquelyIdentifiableDatum(_ rawType: DataType) -> DataType {
         return rawType

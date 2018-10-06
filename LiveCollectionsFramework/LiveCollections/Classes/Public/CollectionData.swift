@@ -254,11 +254,24 @@ public final class CollectionData<DataType: UniquelyIdentifiable>: CollectionDat
     }
 }
 
+// MARK: - Identity Data
+
 public extension CollectionData where DataType == DataType.RawType {
     
     public convenience init(_ rawData: [DataType.RawType] = [], section: Int = 0) {
         let identityFactory = IdentityDataFactory<DataType>()
-        let anyDataFactory = AnyUniquelyIdentifiableDataFactory(identityFactory)
-        self.init(anyDataFactory: anyDataFactory, rawData: rawData, section: section)
+        self.init(dataFactory: identityFactory, rawData: rawData, section: section)
+    }
+}
+
+// MARK: - Non-unique Data
+
+public typealias NonUniqueCollectionData<NonUniqueDataType: NonUniquelyIdentifiable> = CollectionData<NonUniqueDatum<NonUniqueDataType>>
+
+public extension NonUniqueCollectionData where DataType.RawType: NonUniquelyIdentifiable {
+    
+    public convenience init<RawType>(_ rawData: [RawType] = [], section: Int = 0) where DataType == NonUniqueDatum<RawType> {
+        let duplicatableFactory = NonUniqueDataFactory<RawType>()
+        self.init(dataFactory: duplicatableFactory, rawData: rawData, section: section)
     }
 }

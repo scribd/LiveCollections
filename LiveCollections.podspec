@@ -7,7 +7,7 @@ Pod::Spec.new do |s|
   s.license               = "MIT"
   s.author                = { "Stephane Magne" => "stephane@scribd.com" }
   s.source                = { :git => "https://github.com/scribd/LiveCollections.git", :tag => "beta_0.9.6" }
-  s.source_files          = "LiveCollectionsFramework/LiveCollections/", "LiveCollectionsSample/LiveCollectionsSample/"
+  s.source_files          = "LiveCollectionsFramework/LiveCollections/**/*.swift"
   s.exclude_files         = "LiveCollectionsFramework/LiveCollections/Info.plist", "LiveCollectionsSample/LiveCollectionsSample/Info.plist"
   s.swift_version         = "4.2"
   s.platform              = :ios, "9.0"
