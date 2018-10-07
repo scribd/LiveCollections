@@ -57,6 +57,14 @@ public final class CollectionSectionData<SectionType: UniquelyIdentifiableSectio
         set { dataQueue.async(flags: .barrier) { self._items = newValue } }
     }
 
+    func orderedItems(for sections: [SectionType]) -> [DataType] {
+        return sections.flatMap { $0.items }
+    }
+
+    private static func orderedItems(for sections: [SectionType]) -> [DataType] {
+       return sections.flatMap { $0.items }
+    }
+    
     // calculator
     private let dataCalculator = SectionDataCalculator<SectionType>()
     
@@ -71,7 +79,7 @@ public final class CollectionSectionData<SectionType: UniquelyIdentifiableSectio
     public init(view: SectionDeltaUpdatableView, sectionData: [SectionType] = []) {
         self.view = view
         self._sections = sectionData
-        self._items = dataCalculator.orderedItems(for: sectionData)
+        self._items = CollectionSectionData.orderedItems(for: sectionData)
     }
     
     public func setDeletionNotificationDelegate<Delegate: CollectionDataDeletionNotificationDelegate>(_ delegate: Delegate) where Delegate.DataType == DataType {

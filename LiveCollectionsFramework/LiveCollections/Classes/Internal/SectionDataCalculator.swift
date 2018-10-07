@@ -66,11 +66,6 @@ final class SectionDataCalculator<SectionType: UniquelyIdentifiableSection> {
                                     completion: completion)
         }
     }
-    
-    func orderedItems(for sections: [SectionType]) -> [DataType] {
-        let allItems = sections.flatMap { $0.items }
-        return [DataType](allItems)
-    }
 }
 
 // MARK: - Private
@@ -150,7 +145,7 @@ private extension SectionDataCalculator {
         sections = dataWithMovesAndDeletions(byApplying: sectionDelta, on: sections, matching: sanitizedUpdatedSections)
         sectionProvider.sections = sections
         
-        var items = orderedItems(for: sections)
+        var items = sectionProvider.orderedItems(for: sections)
         sectionProvider.items = items
         
         let intermediateSections = sections
@@ -183,7 +178,7 @@ private extension SectionDataCalculator {
         // (remember that we've already applied the deletions and moves) and trigger the section animations
         
         sections = dataWithInsertionsAdded(byApplying: sectionDelta, on: sections, from: sanitizedUpdatedSections)
-        items = orderedItems(for: sections)
+        items = sectionProvider.orderedItems(for: sections)
         
         typealias SectionUpdateCompletion = () -> Void
         
@@ -242,10 +237,10 @@ private extension SectionDataCalculator {
             
             guard shortCircuitAnimation == false else {
                 
-                let updateData = { [weak self, weak weakProvider = sectionProvider] in
-                    guard let strongSelf = self, let strongProvider = weakProvider else { return }
+                let updateData = { [weak weakProvider = sectionProvider] in
+                    guard let strongProvider = weakProvider else { return }
                     strongProvider.sections = sanitizedUpdatedSections
-                    let items = strongSelf.orderedItems(for: sanitizedUpdatedSections)
+                    let items = strongProvider.orderedItems(for: sanitizedUpdatedSections)
                     strongProvider.items = items
                     strongProvider.calculatingSections = nil
                 }
@@ -269,7 +264,7 @@ private extension SectionDataCalculator {
             
             // finally we set our data with what was passed into the update() function
             sections = sanitizedUpdatedSections
-            items = self.orderedItems(for: sections)
+            items = sectionProvider.orderedItems(for: sections)
             
             let updateData = {
                 sectionProvider.sections = sections
@@ -333,7 +328,7 @@ private extension SectionDataCalculator {
         }
 
         let updatedSections = sectionProvider.sections + appendedItems
-        let updatedItems = orderedItems(for: updatedSections)
+        let updatedItems = sectionProvider.orderedItems(for: updatedSections)
         
         let updateData = { [weak weakSectionProvider = sectionProvider] in
             guard let strongSectionProvider = weakSectionProvider else { return }
@@ -402,7 +397,7 @@ private extension SectionDataCalculator {
                 guard let strongSectionProvider = weakSectionProvider else { return }
                 
                 strongSectionProvider.sections = strongSectionProvider.sections + [item]
-                let updatedItems = self.orderedItems(for: [item])
+                let updatedItems = sectionProvider.orderedItems(for: [item])
                 strongSectionProvider.items = strongSectionProvider.items + updatedItems
                 strongSectionProvider.calculatingSections = nil
             }

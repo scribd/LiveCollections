@@ -27,6 +27,7 @@ protocol ItemCalculatingDataProvider: AnyObject {
 protocol SectionDataProvider: ItemDataProvider {
     associatedtype SectionType: UniquelyIdentifiableSection
     var sections: [SectionType] { get set }
+    func orderedItems(for sections: [SectionType]) -> [DataType]
 }
 
 protocol SectionCalculatingDataProvider: AnyObject {
