@@ -58,7 +58,7 @@ public final class CollectionSectionData<SectionType: UniquelyIdentifiableSectio
     }
 
     func orderedItems(for sections: [SectionType]) -> [DataType] {
-        return sections.flatMap { $0.items }
+        return CollectionSectionData.orderedItems(for: sections)
     }
 
     private static func orderedItems(for sections: [SectionType]) -> [DataType] {
@@ -150,5 +150,32 @@ public final class CollectionSectionData<SectionType: UniquelyIdentifiableSectio
                                                  reloadDelegate: self.reloadDelegate,
                                                  completion: completion)
         }
+    }
+}
+
+// MARK: - Non-unique Data
+
+public typealias NonUniqueCollectionSectionData<NonUniqueSection: UniquelyIdentifiableSection> = CollectionSectionData<NonUniqueSectionDatum<NonUniqueSection>> where NonUniqueSection.DataType: NonUniquelyIdentifiable
+
+public extension NonUniqueCollectionSectionData {
+
+    public convenience init<NonUniqueSection>(view: SectionDeltaUpdatableView, sectionData: [NonUniqueSection] = []) where SectionType == NonUniqueSectionDatum<NonUniqueSection> {
+        let updatedUniqueData = NonUniqueCollectionSectionData._transformData(sectionData)
+        self.init(view: view, sectionData: updatedUniqueData)
+    }
+    
+    public func update<NonUniqueSection>(_ nonUniqueData: [NonUniqueSection], completion: (() -> Void)? = nil) where SectionType == NonUniqueSectionDatum<NonUniqueSection> {
+        let updatedUniqueData = NonUniqueCollectionSectionData._transformData(nonUniqueData)
+        self.update(updatedUniqueData, completion: completion)
+    }
+
+    public func append<NonUniqueSection>(_ nonUniqueData: [NonUniqueSection], completion: (() -> Void)? = nil) where SectionType == NonUniqueSectionDatum<NonUniqueSection> {
+            let updatedUniqueData = NonUniqueCollectionSectionData._transformData(nonUniqueData)
+            self.append(updatedUniqueData, completion: completion)
+    }
+    
+    private static func _transformData<NonUniqueSection>(_ nonUniqueData: [NonUniqueSection]) -> [NonUniqueSectionDatum<NonUniqueSection>] where SectionType == NonUniqueSectionDatum<NonUniqueSection> {
+        let dataFactory = NonUniqueDataFactory<NonUniqueSection.DataType>(automaticallyClearsData: false)
+        return nonUniqueData.map { NonUniqueSectionDatum<NonUniqueSection>(sectionData: $0, dataFactory: dataFactory) }
     }
 }

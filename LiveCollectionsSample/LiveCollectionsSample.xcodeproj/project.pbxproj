@@ -347,6 +347,7 @@
 		F4B0F79A213DB0B700179029 /* ScenarioEightViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4B0F799213DB0B700179029 /* ScenarioEightViewController.swift */; };
 		F4B0F79C213DB15200179029 /* CarouselSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4B0F79B213DB15200179029 /* CarouselSection.swift */; };
 		F4B0F79F213DB2DF00179029 /* MultiSectionCarouselDataCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4B0F79E213DB2DF00179029 /* MultiSectionCarouselDataCoordinator.swift */; };
+		F4B7571D2169A27200712B46 /* ScenarioTwelveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4B7571C2169A27200712B46 /* ScenarioTwelveViewController.swift */; };
 		F4B9013821337BDD00E3B51C /* CarouselRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4B9013721337BDD00E3B51C /* CarouselRow.swift */; };
 		F4B9013D21338DCD00E3B51C /* Sequence+Shuffle.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4B9013C21338DCD00E3B51C /* Sequence+Shuffle.swift */; };
 		F4B90140213463EE00E3B51C /* LiveCollections.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F435941B2106A007009F3073 /* LiveCollections.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -732,6 +733,7 @@
 		F4B0F799213DB0B700179029 /* ScenarioEightViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenarioEightViewController.swift; sourceTree = "<group>"; };
 		F4B0F79B213DB15200179029 /* CarouselSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselSection.swift; sourceTree = "<group>"; };
 		F4B0F79E213DB2DF00179029 /* MultiSectionCarouselDataCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiSectionCarouselDataCoordinator.swift; sourceTree = "<group>"; };
+		F4B7571C2169A27200712B46 /* ScenarioTwelveViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenarioTwelveViewController.swift; sourceTree = "<group>"; };
 		F4B9013721337BDD00E3B51C /* CarouselRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselRow.swift; sourceTree = "<group>"; };
 		F4B9013C21338DCD00E3B51C /* Sequence+Shuffle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sequence+Shuffle.swift"; sourceTree = "<group>"; };
 		F4D7733320FC147E002F1C43 /* LC Scenarios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "LC Scenarios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1221,6 +1223,7 @@
 				F47AE71E21409BDD00FE7360 /* ScenarioNine */,
 				F4F59E6C214C3DD900B4AB19 /* ScenarioTenViewController.swift */,
 				F48BF27C21697742002DAEF7 /* ScenarioElevenViewController.swift */,
+				F4B7571C2169A27200712B46 /* ScenarioTwelveViewController.swift */,
 			);
 			path = "Scenario ViewControllers";
 			sourceTree = "<group>";
@@ -1676,6 +1679,7 @@
 				F4D7736B20FC28F3002F1C43 /* ScenarioProvider.swift in Sources */,
 				F4D7736320FC2106002F1C43 /* MovieLoader.swift in Sources */,
 				F47AE72021409BFC00FE7360 /* DistributedMovieFactory.swift in Sources */,
+				F4B7571D2169A27200712B46 /* ScenarioTwelveViewController.swift in Sources */,
 				F4B0F79C213DB15200179029 /* CarouselSection.swift in Sources */,
 				F4D7735E20FC1810002F1C43 /* Movie.swift in Sources */,
 				F4D7736D20FC2945002F1C43 /* Scenario.swift in Sources */,

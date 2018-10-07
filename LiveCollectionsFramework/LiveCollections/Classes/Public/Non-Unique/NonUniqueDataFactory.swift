@@ -37,9 +37,27 @@ public struct NonUniqueDatum<DataType: NonUniquelyIdentifiable>: UniquelyIdentif
     }
 }
 
+public struct NonUniqueSectionDatum<SectionType: UniquelyIdentifiableSection>: UniquelyIdentifiableSection where SectionType.DataType: NonUniquelyIdentifiable {
+    
+    public typealias UniqueItem = NonUniqueDatum<SectionType.DataType>
+    
+    public let uniqueID: SectionType.UniqueIDType
+    public let items: [UniqueItem]
+    
+    init<Factory>(sectionData: SectionType, dataFactory: Factory) where Factory: UniquelyIdentifiableDataFactory, Factory.UniquelyIdentifiableType == UniqueItem, Factory.RawType == SectionType.DataType {
+        self.uniqueID = sectionData.uniqueID
+        self.items = dataFactory.buildUniquelyIdentifiableData(sectionData.items)
+    }
+}
+
 final class NonUniqueDataFactory<RawType: NonUniquelyIdentifiable>: UniquelyIdentifiableDataFactory {
     
     private var occurences: [RawType.NonUniqueIDType: Int] = [:]
+    private let automaticallyClearsData: Bool
+    
+    init(automaticallyClearsData: Bool = true) {
+        self.automaticallyClearsData = automaticallyClearsData
+    }
     
     public func buildUniquelyIdentifiableDatum(_ rawData: RawType) -> NonUniqueDatum<RawType> {
         let occurrence = (occurences[rawData.nonUniqueID] ?? 0) + 1
@@ -47,7 +65,8 @@ final class NonUniqueDataFactory<RawType: NonUniquelyIdentifiable>: UniquelyIden
         return NonUniqueDatum(baseValue: rawData, occurrence: occurrence)
     }
     
-    public func didBeginBuildingData() {
+    func didEndBuildingData() {
+        guard automaticallyClearsData else { return }
         occurences = [:]
     }
 }
