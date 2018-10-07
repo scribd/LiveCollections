@@ -1,5 +1,5 @@
 //
-//  ScenarioElevenViewController.swift
+//  ScenarioTenBViewController.swift
 //  LiveCollectionsSample
 //
 //  Created by Stephane Magne on 10/6/18.
@@ -9,7 +9,7 @@
 import UIKit
 import LiveCollections
 
-final class ScenarioElevenViewController: UIViewController {
+final class ScenarioTenBViewController: UIViewController {
     
     private let presentationView = PresentationView()
     private lazy var collectionView: UICollectionView = {
@@ -59,7 +59,7 @@ final class ScenarioElevenViewController: UIViewController {
     }
 }
 
-extension ScenarioElevenViewController: UICollectionViewDataSource {
+extension ScenarioTenBViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return collectionData.count
@@ -78,7 +78,7 @@ extension ScenarioElevenViewController: UICollectionViewDataSource {
     }
 }
 
-extension ScenarioElevenViewController: UICollectionViewDelegate {
+extension ScenarioTenBViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         guard let movieCell = cell as? MovieCollectionViewCell else { return }
@@ -99,7 +99,7 @@ extension ScenarioElevenViewController: UICollectionViewDelegate {
 
 // MARK: DataCoordinatorDelegate
 
-extension ScenarioElevenViewController: DataCoordinatorDelegate {
+extension ScenarioTenBViewController: DataCoordinatorDelegate {
     
     func dataDidUpdate(_ data: [Movie], section: Int) {
         collectionData.update(data)

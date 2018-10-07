@@ -101,7 +101,7 @@ final class ScenarioProvider: ScenarioProviderInterface {
                                                        maxCount: isIpad() ? 300 : 80,
                                                        movieLoader: movieLoader)
             let dataCoordinator = DataCoordinator(dataProviders: [dataProvider])
-            return ScenarioTenViewController(dataCoordinator: dataCoordinator, imageLoader: imageLoader)
+            return ScenarioTwelveBViewController(dataCoordinator: dataCoordinator, imageLoader: imageLoader)
 
         case .dataWithNonUniqueIDs:
             let dataProvider = RandomMovieDataProvider(initialDataCount: isIpad() ? 120 : 40,
@@ -110,7 +110,7 @@ final class ScenarioProvider: ScenarioProviderInterface {
                                                        allowsDuplicates: true,
                                                        movieLoader: movieLoader)
             let dataCoordinator = DataCoordinator(dataProviders: [dataProvider])
-            return ScenarioElevenViewController(dataCoordinator: dataCoordinator, imageLoader: imageLoader)
+            return ScenarioTenBViewController(dataCoordinator: dataCoordinator, imageLoader: imageLoader)
 
         case .sectionDataWithNonUniqueIDs:
             let dataProvider = RandomMovieDataProvider(initialDataCount: isIpad() ? 120 : 40,
@@ -119,7 +119,7 @@ final class ScenarioProvider: ScenarioProviderInterface {
                                                        allowsDuplicates: true,
                                                        movieLoader: movieLoader)
             let dataCoordinator = MultiSectionDataCoordinator(sectionCount: 5, dataProvider: dataProvider)
-            return ScenarioTwelveViewController(dataCoordinator: dataCoordinator, imageLoader: imageLoader)
+            return ScenarioElevenBViewController(dataCoordinator: dataCoordinator, imageLoader: imageLoader)
         }
     }
 }

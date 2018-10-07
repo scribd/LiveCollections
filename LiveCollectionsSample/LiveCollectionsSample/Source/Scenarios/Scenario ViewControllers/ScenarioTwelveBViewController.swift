@@ -1,5 +1,5 @@
 //
-//  ScenarioTenViewController.swift
+//  ScenarioTwelveBViewController.swift
 //  LiveCollectionsSample
 //
 //  Created by Stephane Magne on 9/14/18.
@@ -9,7 +9,7 @@
 import UIKit
 import LiveCollections
 
-final class ScenarioTenViewController: UIViewController {
+final class ScenarioTwelveBViewController: UIViewController {
     
     private let presentationView = PresentationView()
     private lazy var collectionView: UICollectionView = {
@@ -58,7 +58,7 @@ final class ScenarioTenViewController: UIViewController {
     }
 }
 
-extension ScenarioTenViewController: UICollectionViewDataSource {
+extension ScenarioTwelveBViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return collectionData.count
@@ -77,7 +77,7 @@ extension ScenarioTenViewController: UICollectionViewDataSource {
     }
 }
 
-extension ScenarioTenViewController: UICollectionViewDelegate {
+extension ScenarioTwelveBViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         guard let movieCell = cell as? MovieCollectionViewCell else { return }
@@ -98,7 +98,7 @@ extension ScenarioTenViewController: UICollectionViewDelegate {
 
 // MARK: DataCoordinatorDelegate
 
-extension ScenarioTenViewController: DataCoordinatorDelegate {
+extension ScenarioTwelveBViewController: DataCoordinatorDelegate {
     
     func dataDidUpdate(_ data: [Movie], section: Int) {
         let delta = collectionData.calculateDeltaSync(data)
