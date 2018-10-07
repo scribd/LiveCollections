@@ -12,10 +12,23 @@ Full detail for the use case of each scenario <a href="https://medium.com/p/59ea
 
 <hr>
 
-<h2>Importing From Carthage</h2>
+<h2>Importing With Carthage</h2>
 
 <br>
 github "scribd/LiveCollections" "beta_0.9.6"
+<br>
+<br>
+
+<hr>
+
+<h2>Importing With CocoaPods</h2>
+
+<br>
+pod 'LiveCollections', '~> 0.9.6'
+<br>
+or
+<br>
+pod 'LiveCollections'
 <br>
 <br>
 
