@@ -15,7 +15,7 @@ Full detail for the use case of each scenario <a href="https://medium.com/p/59ea
 <h2>Importing With Carthage</h2>
 
 <br>
-github "scribd/LiveCollections" "beta_0.9.6"
+github "scribd/LiveCollections" "beta_0.9.7"
 <br>
 <br>
 
@@ -80,6 +80,29 @@ extension Movie: UniquelyIdentifiable {
 
 Note: Take a look at Scenario 9 below to see an example where RawType is not simply the Self type. We will use a different type if we want to have different equatability functions for the same RawType object in different views, or if we want to create a new object that includes additional metadata.
 
+<BR>
+<h2>Adopting the protocol NonUniquelyIdentifiable</h2>
+
+Support has been added for non-unique sets of data as well. 
+
+```swift
+public protocol NonUniquelyIdentifiable: Equatable {
+    associatedtype NonUniqueIDType: Hashable
+    var nonUniqueID: NonUniqueIDType { get }
+}
+```
+
+By adopting this protocol and using one of the two type aliases `NonUniqueCollectionData` or `NonUniqueCollectionSectionData`, a factory will be built under the hood that will transform your non-unique data into a `UniquelyIdentifiable` type. See Scenarios 11 and 12.
+
+Since the data is wrapped in a new struct, to access your original object you'll need to call the `rawData` getter like so:
+
+```
+let data = collectionData[indexPath.item].rawData
+```
+
+<i>Note:This will use "best guess" logic, and the identifiers will be determined based on array order.</i>
+<br>
+<br>
 
 <hr>
 
@@ -530,7 +553,88 @@ collectionView.performAnimations(section: collectionData.section, delta: delta, 
 ```
 
 Note: This is unavailable for <b>CollectionSectionData</b> as the animations occur in multiple steps and the timing of the updates is very specific. 
+<br>
+<br>
+<br>
 
+<h2>Scenario 11: Non-unique data in a single section</h2>
+
+Use the typealiased data struct `NonUniqueCollectionData` with your non-unique data.
+
+```swift
+final class YourClass {
+    private let collectionView: UICollectionView
+    private let collectionData: NonUniqueCollectionData<YourData>
+
+    init(_ data: [YourData]) {
+        collectionData = CollectionData(data)
+        ...
+        super.init()
+        collectionData.view = collectionView
+    }
+
+    func someMethodToUpdateYourData(_ data: [YourData]) {
+        collectionData.update(data)
+    }
+}
+
+extension YourClass: UICollectionViewDelegate {
+  
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return collectionData.count
+    }  
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    
+        ...
+        // note that your data is wrapped in a unique type, it must be fetched with rawData
+        let movie = collectionData[indexPath.item].rawData
+        ...
+    }
+
+    // etc
+}
+```
+<br>
+<br>
+<br>
+
+<h2>Scenario 12: Non-unique data in multiple sections</h2>
+
+Use the typealiased data struct `NonUniqueCollectionSectionData` with your non-unique section data.
+
+```swift
+final class YourClass {
+    private let collectionView: UICollectionView
+    private let collectionData: NonUniqueCollectionSectionData<YourSectionData>
+
+    init(_ data: [YourSectionData]) {
+        collectionData = CollectionData(view: view, sectionData: data)
+        ...
+        super.init()
+    }
+
+    func someMethodToUpdateYourData(_ data: [YourData]) {
+        collectionData.update(data)
+    }
+}
+
+extension YourClass: UICollectionViewDelegate {
+  
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    
+        ...
+        // note that your data is wrapped in a unique type, it must be fetched with rawData
+        let movie = collectionData[indexPath.item].rawData
+        ...
+    }
+
+    // etc
+}
+```
+<br>
+<br>
+<br>
 <hr>
 <br>
 
