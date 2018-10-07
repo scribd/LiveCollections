@@ -1,15 +1,15 @@
 //
-//  ScenarioTwelveBViewController.swift
+//  ScenarioTenViewController.swift
 //  LiveCollectionsSample
 //
-//  Created by Stephane Magne on 9/14/18.
+//  Created by Stephane Magne on 10/6/18.
 //  Copyright © 2018 Scribd. All rights reserved.
 //
 
 import UIKit
 import LiveCollections
 
-final class ScenarioTwelveBViewController: UIViewController {
+final class ScenarioTenViewController: UIViewController {
     
     private let presentationView = PresentationView()
     private lazy var collectionView: UICollectionView = {
@@ -24,7 +24,7 @@ final class ScenarioTwelveBViewController: UIViewController {
     }()
     private let dataCoordinator: DataCoordinator
     private let imageLoader: MovieImageLoaderInterface
-    private let collectionData = CollectionData<Movie>()
+    private let collectionData = NonUniqueCollectionData<Movie>()
     
     init(dataCoordinator: DataCoordinator, imageLoader: MovieImageLoaderInterface) {
         self.dataCoordinator = dataCoordinator
@@ -55,10 +55,11 @@ final class ScenarioTwelveBViewController: UIViewController {
         presentationView.playerControl.delegate = dataCoordinator
         presentationView.addViewToPresent(collectionView)
         collectionView.register(MovieCollectionViewCell.self, forCellWithReuseIdentifier: MovieCollectionViewCell.reuseIdentifier)
+        collectionData.view = collectionView
     }
 }
 
-extension ScenarioTwelveBViewController: UICollectionViewDataSource {
+extension ScenarioTenViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return collectionData.count
@@ -70,19 +71,19 @@ extension ScenarioTwelveBViewController: UICollectionViewDataSource {
             return cell
         }
         
-        let movie = collectionData[indexPath.item]
+        let movie = collectionData[indexPath.item].rawData
         movieCell.update(with: movie)
         
         return movieCell
     }
 }
 
-extension ScenarioTwelveBViewController: UICollectionViewDelegate {
+extension ScenarioTenViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         guard let movieCell = cell as? MovieCollectionViewCell else { return }
         
-        let movie = collectionData[indexPath.item]
+        let movie = collectionData[indexPath.item].rawData
         
         imageLoader.loadPosterImage(movie) { result in
             switch result {
@@ -98,35 +99,17 @@ extension ScenarioTwelveBViewController: UICollectionViewDelegate {
 
 // MARK: DataCoordinatorDelegate
 
-extension ScenarioTwelveBViewController: DataCoordinatorDelegate {
+extension ScenarioTenViewController: DataCoordinatorDelegate {
     
     func dataDidUpdate(_ data: [Movie], section: Int) {
-        let delta = collectionData.calculateDeltaSync(data)
+        collectionData.update(data)
+    }
+}
 
-        // perform any analysis or analytics on the delta
+// MARK: DataCoordinatorDelegate
 
-        let updateData = {
-            self.collectionData.update(data)
-        }
-
-        // when the time is right, call...
-        collectionView.performAnimations(section: collectionData.section, delta: delta, updateData: updateData)
-
-        /**
-         NOTE 1:
-         You'll notice if you click the "next" button as fast as you can, that the animations don't wait for the
-         previous animation to finish like they do in other scenarios. This is a side effect of talking to the
-         view directly. If you update quickly enough, the next animation will start from the mid-point of the
-         previous animation. Feature or bug? You decide.
-         */
-        
-        /**
-         NOTE 2:
-         Alternatively, if you decided you didn't want to animate this update, you could instead call
-         
-         collectionData.update(data)
-         collectionView.reloadData()
-         
-         */
+extension Movie: NonUniquelyIdentifiable {
+    var nonUniqueID: UInt {
+        return id
     }
 }

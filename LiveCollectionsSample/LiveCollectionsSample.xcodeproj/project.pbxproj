@@ -338,7 +338,7 @@
 		F4876F892104ECD400D7C6F5 /* 825 in Resources */ = {isa = PBXBuildFile; fileRef = F4876E4B2104ECD400D7C6F5 /* 825 */; };
 		F4876F8A2104ECD400D7C6F5 /* 927 in Resources */ = {isa = PBXBuildFile; fileRef = F4876E4C2104ECD400D7C6F5 /* 927 */; };
 		F4876F8C210563D300D7C6F5 /* ScenarioThreeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4876F8B210563D300D7C6F5 /* ScenarioThreeViewController.swift */; };
-		F48BF27D21697742002DAEF7 /* ScenarioTenBViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F48BF27C21697742002DAEF7 /* ScenarioTenBViewController.swift */; };
+		F48BF27D21697742002DAEF7 /* ScenarioTenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F48BF27C21697742002DAEF7 /* ScenarioTenViewController.swift */; };
 		F4AE4CEA2105911E000205E1 /* ScenarioFourViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4AE4CE92105911E000205E1 /* ScenarioFourViewController.swift */; };
 		F4AE4CEC21063CC2000205E1 /* ScenarioSevenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4AE4CEB21063CC2000205E1 /* ScenarioSevenViewController.swift */; };
 		F4AE4CEF21063D14000205E1 /* CarouselController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4AE4CEE21063D14000205E1 /* CarouselController.swift */; };
@@ -347,7 +347,7 @@
 		F4B0F79A213DB0B700179029 /* ScenarioEightViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4B0F799213DB0B700179029 /* ScenarioEightViewController.swift */; };
 		F4B0F79C213DB15200179029 /* CarouselSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4B0F79B213DB15200179029 /* CarouselSection.swift */; };
 		F4B0F79F213DB2DF00179029 /* MultiSectionCarouselDataCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4B0F79E213DB2DF00179029 /* MultiSectionCarouselDataCoordinator.swift */; };
-		F4B7571D2169A27200712B46 /* ScenarioElevenBViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4B7571C2169A27200712B46 /* ScenarioElevenBViewController.swift */; };
+		F4B7571D2169A27200712B46 /* ScenarioElevenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4B7571C2169A27200712B46 /* ScenarioElevenViewController.swift */; };
 		F4B9013821337BDD00E3B51C /* CarouselRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4B9013721337BDD00E3B51C /* CarouselRow.swift */; };
 		F4B9013D21338DCD00E3B51C /* Sequence+Shuffle.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4B9013C21338DCD00E3B51C /* Sequence+Shuffle.swift */; };
 		F4B90140213463EE00E3B51C /* LiveCollections.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F435941B2106A007009F3073 /* LiveCollections.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -375,7 +375,7 @@
 		F4D7738820FC64FD002F1C43 /* MovieCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D7738720FC64FD002F1C43 /* MovieCollectionViewCell.swift */; };
 		F4D7738A20FD057C002F1C43 /* ResuableViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D7738920FD057C002F1C43 /* ResuableViewProtocol.swift */; };
 		F4F34D042104DCFC00FCC079 /* ScenarioTwoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4F34D032104DCFC00FCC079 /* ScenarioTwoViewController.swift */; };
-		F4F59E6D214C3DD900B4AB19 /* ScenarioTwelveBViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4F59E6C214C3DD900B4AB19 /* ScenarioTwelveBViewController.swift */; };
+		F4F59E6D214C3DD900B4AB19 /* ScenarioTwelveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4F59E6C214C3DD900B4AB19 /* ScenarioTwelveViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -724,7 +724,7 @@
 		F4876E4B2104ECD400D7C6F5 /* 825 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 825; sourceTree = "<group>"; };
 		F4876E4C2104ECD400D7C6F5 /* 927 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 927; sourceTree = "<group>"; };
 		F4876F8B210563D300D7C6F5 /* ScenarioThreeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenarioThreeViewController.swift; sourceTree = "<group>"; };
-		F48BF27C21697742002DAEF7 /* ScenarioTenBViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenarioTenBViewController.swift; sourceTree = "<group>"; };
+		F48BF27C21697742002DAEF7 /* ScenarioTenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenarioTenViewController.swift; sourceTree = "<group>"; };
 		F4AE4CE92105911E000205E1 /* ScenarioFourViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenarioFourViewController.swift; sourceTree = "<group>"; };
 		F4AE4CEB21063CC2000205E1 /* ScenarioSevenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenarioSevenViewController.swift; sourceTree = "<group>"; };
 		F4AE4CEE21063D14000205E1 /* CarouselController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselController.swift; sourceTree = "<group>"; };
@@ -733,7 +733,7 @@
 		F4B0F799213DB0B700179029 /* ScenarioEightViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenarioEightViewController.swift; sourceTree = "<group>"; };
 		F4B0F79B213DB15200179029 /* CarouselSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselSection.swift; sourceTree = "<group>"; };
 		F4B0F79E213DB2DF00179029 /* MultiSectionCarouselDataCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiSectionCarouselDataCoordinator.swift; sourceTree = "<group>"; };
-		F4B7571C2169A27200712B46 /* ScenarioElevenBViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenarioElevenBViewController.swift; sourceTree = "<group>"; };
+		F4B7571C2169A27200712B46 /* ScenarioElevenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenarioElevenViewController.swift; sourceTree = "<group>"; };
 		F4B9013721337BDD00E3B51C /* CarouselRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselRow.swift; sourceTree = "<group>"; };
 		F4B9013C21338DCD00E3B51C /* Sequence+Shuffle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sequence+Shuffle.swift"; sourceTree = "<group>"; };
 		F4D7733320FC147E002F1C43 /* LC Scenarios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "LC Scenarios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -762,7 +762,7 @@
 		F4D7738720FC64FD002F1C43 /* MovieCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCollectionViewCell.swift; sourceTree = "<group>"; };
 		F4D7738920FD057C002F1C43 /* ResuableViewProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResuableViewProtocol.swift; sourceTree = "<group>"; };
 		F4F34D032104DCFC00FCC079 /* ScenarioTwoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenarioTwoViewController.swift; sourceTree = "<group>"; };
-		F4F59E6C214C3DD900B4AB19 /* ScenarioTwelveBViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenarioTwelveBViewController.swift; sourceTree = "<group>"; };
+		F4F59E6C214C3DD900B4AB19 /* ScenarioTwelveViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenarioTwelveViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1221,9 +1221,9 @@
 				F4AE4CED21063CC6000205E1 /* ScenarioSeven */,
 				F4B0F799213DB0B700179029 /* ScenarioEightViewController.swift */,
 				F47AE71E21409BDD00FE7360 /* ScenarioNine */,
-				F48BF27C21697742002DAEF7 /* ScenarioTenBViewController.swift */,
-				F4B7571C2169A27200712B46 /* ScenarioElevenBViewController.swift */,
-				F4F59E6C214C3DD900B4AB19 /* ScenarioTwelveBViewController.swift */,
+				F48BF27C21697742002DAEF7 /* ScenarioTenViewController.swift */,
+				F4B7571C2169A27200712B46 /* ScenarioElevenViewController.swift */,
+				F4F59E6C214C3DD900B4AB19 /* ScenarioTwelveViewController.swift */,
 			);
 			path = "Scenario ViewControllers";
 			sourceTree = "<group>";
@@ -1666,7 +1666,7 @@
 				F4D7736820FC26DD002F1C43 /* ScenarioSelectionViewController.swift in Sources */,
 				F4D7737F20FC5F14002F1C43 /* PresentationView.swift in Sources */,
 				F4876D0D2104E91400D7C6F5 /* MovieImageLoader.swift in Sources */,
-				F48BF27D21697742002DAEF7 /* ScenarioTenBViewController.swift in Sources */,
+				F48BF27D21697742002DAEF7 /* ScenarioTenViewController.swift in Sources */,
 				F4847DF82137AB8000859EFF /* MovieSection.swift in Sources */,
 				F4F34D042104DCFC00FCC079 /* ScenarioTwoViewController.swift in Sources */,
 				F47AE71D21409BC800FE7360 /* ScenarioNineViewController.swift in Sources */,
@@ -1679,13 +1679,13 @@
 				F4D7736B20FC28F3002F1C43 /* ScenarioProvider.swift in Sources */,
 				F4D7736320FC2106002F1C43 /* MovieLoader.swift in Sources */,
 				F47AE72021409BFC00FE7360 /* DistributedMovieFactory.swift in Sources */,
-				F4B7571D2169A27200712B46 /* ScenarioElevenBViewController.swift in Sources */,
+				F4B7571D2169A27200712B46 /* ScenarioElevenViewController.swift in Sources */,
 				F4B0F79C213DB15200179029 /* CarouselSection.swift in Sources */,
 				F4D7735E20FC1810002F1C43 /* Movie.swift in Sources */,
 				F4D7736D20FC2945002F1C43 /* Scenario.swift in Sources */,
 				F4D7735920FC14F1002F1C43 /* Result.swift in Sources */,
 				F4D7736520FC217E002F1C43 /* MovieAPI.swift in Sources */,
-				F4F59E6D214C3DD900B4AB19 /* ScenarioTwelveBViewController.swift in Sources */,
+				F4F59E6D214C3DD900B4AB19 /* ScenarioTwelveViewController.swift in Sources */,
 				F4B0F79A213DB0B700179029 /* ScenarioEightViewController.swift in Sources */,
 				F4876F8C210563D300D7C6F5 /* ScenarioThreeViewController.swift in Sources */,
 				F4D7737420FC38EE002F1C43 /* ImageFileEncoder.swift in Sources */,

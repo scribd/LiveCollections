@@ -94,14 +94,6 @@ final class ScenarioProvider: ScenarioProviderInterface {
             let inTheatersController = InTheatersController(allMovieIdentifiers: movieLoader.availableMovieIdentifiers)
             let dataCoordinator = InTheatersDataCoordinator(dataProviders: [dataProvider], inTheatersController: inTheatersController)
             return ScenarioNineViewController(dataCoordinator: dataCoordinator, imageLoader: imageLoader, inTheatersState: inTheatersController)
-            
-        case .calculateTheDeltaManually:
-            let dataProvider = RandomMovieDataProvider(initialDataCount: isIpad() ? 120 : 40,
-                                                       minCount: 5,
-                                                       maxCount: isIpad() ? 300 : 80,
-                                                       movieLoader: movieLoader)
-            let dataCoordinator = DataCoordinator(dataProviders: [dataProvider])
-            return ScenarioTwelveBViewController(dataCoordinator: dataCoordinator, imageLoader: imageLoader)
 
         case .dataWithNonUniqueIDs:
             let dataProvider = RandomMovieDataProvider(initialDataCount: isIpad() ? 120 : 40,
@@ -110,7 +102,7 @@ final class ScenarioProvider: ScenarioProviderInterface {
                                                        allowsDuplicates: true,
                                                        movieLoader: movieLoader)
             let dataCoordinator = DataCoordinator(dataProviders: [dataProvider])
-            return ScenarioTenBViewController(dataCoordinator: dataCoordinator, imageLoader: imageLoader)
+            return ScenarioTenViewController(dataCoordinator: dataCoordinator, imageLoader: imageLoader)
 
         case .sectionDataWithNonUniqueIDs:
             let dataProvider = RandomMovieDataProvider(initialDataCount: isIpad() ? 120 : 40,
@@ -119,7 +111,15 @@ final class ScenarioProvider: ScenarioProviderInterface {
                                                        allowsDuplicates: true,
                                                        movieLoader: movieLoader)
             let dataCoordinator = MultiSectionDataCoordinator(sectionCount: 5, dataProvider: dataProvider)
-            return ScenarioElevenBViewController(dataCoordinator: dataCoordinator, imageLoader: imageLoader)
+            return ScenarioElevenViewController(dataCoordinator: dataCoordinator, imageLoader: imageLoader)
+            
+        case .calculateTheDeltaManually:
+            let dataProvider = RandomMovieDataProvider(initialDataCount: isIpad() ? 120 : 40,
+                                                       minCount: 5,
+                                                       maxCount: isIpad() ? 300 : 80,
+                                                       movieLoader: movieLoader)
+            let dataCoordinator = DataCoordinator(dataProviders: [dataProvider])
+            return ScenarioTwelveViewController(dataCoordinator: dataCoordinator, imageLoader: imageLoader)
         }
     }
 }

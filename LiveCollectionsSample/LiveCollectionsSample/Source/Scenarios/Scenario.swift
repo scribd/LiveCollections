@@ -18,9 +18,9 @@ enum Scenario {
     case collectionViewsInTableView
     case uniqueCollectionViewsAcrossSectionsTableView
     case collectionViewUsingDataFactory
-    case calculateTheDeltaManually
     case dataWithNonUniqueIDs
     case sectionDataWithNonUniqueIDs
+    case calculateTheDeltaManually
 
     static let allScenarios: [Scenario] = [.basicCollectionView,
                                          .basicTableView,
@@ -31,9 +31,9 @@ enum Scenario {
                                          .collectionViewsInTableView,
                                          .uniqueCollectionViewsAcrossSectionsTableView,
                                          .collectionViewUsingDataFactory,
-                                         .calculateTheDeltaManually,
                                          .dataWithNonUniqueIDs,
-                                         .sectionDataWithNonUniqueIDs]
+                                         .sectionDataWithNonUniqueIDs,
+                                         .calculateTheDeltaManually]
 }
 
 extension Scenario {
@@ -49,9 +49,9 @@ extension Scenario {
         case .collectionViewsInTableView: return "A Table of Carousels"
         case .uniqueCollectionViewsAcrossSectionsTableView: return "A Sectioned Table of Carousels"
         case .collectionViewUsingDataFactory: return "Using a Data Factory"
-        case .calculateTheDeltaManually: return "Not assigning a view to CollectionData"
         case .dataWithNonUniqueIDs: return "Data With Duplicate Items"
         case .sectionDataWithNonUniqueIDs: return "Section Data With Duplicate Items"
+        case .calculateTheDeltaManually: return "Not assigning a view to CollectionData"
         }
     }
     
@@ -71,9 +71,9 @@ extension Scenario {
         case .collectionViewsInTableView: return "A table view with collection views in its cells. Carousel items can be inserted, deleted, and moved, but you must handle reloads manually. You don't want to reload the table row in the table animation, as it will result in an unpleasing effect. Instead, you want to delegate the reload action to the row controller and animate the collection view directly."
         case .uniqueCollectionViewsAcrossSectionsTableView: return "A table view with collection views in its cells. However, the main difference from scenario seven is that you can have multiple carousels in a section and carousels can be moved between sections."
         case .collectionViewUsingDataFactory: return "A basic collection view, but this time we are using a data factory to help us manage changes in externally related information that aren't stored on the data object."
-        case .calculateTheDeltaManually: return "For the times you don't want the animation to occur automatically or every time. Depending on your class structure or needs, you may want to separate the action of calculating the delta with performing the animation. You may even just want the delta without ever associating a view, say, for analytics purposes."
         case .dataWithNonUniqueIDs: return "Have a data set where not every items can be expressed uniquely? No problem. Here's an example of how to set up your data."
         case .sectionDataWithNonUniqueIDs: return "By using the typealias NonUniqueCollectionSectionData, new accessors are introduced to support non-unique data."
+        case .calculateTheDeltaManually: return "For the times you don't want the animation to occur automatically or every time. Depending on your class structure or needs, you may want to separate the action of calculating the delta with performing the animation. You may even just want the delta without ever associating a view, say, for analytics purposes."
         }
     }
 }
