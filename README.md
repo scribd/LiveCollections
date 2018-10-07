@@ -24,7 +24,7 @@ github "scribd/LiveCollections" "beta_0.9.7"
 <h2>Importing With CocoaPods</h2>
 
 <br>
-pod 'LiveCollections', '~> 0.9.6'
+pod 'LiveCollections', '~> 0.9.7'
 <br>
 or
 <br>
@@ -92,7 +92,7 @@ public protocol NonUniquelyIdentifiable: Equatable {
 }
 ```
 
-By adopting this protocol and using one of the two type aliases `NonUniqueCollectionData` or `NonUniqueCollectionSectionData`, a factory will be built under the hood that will transform your non-unique data into a `UniquelyIdentifiable` type. See Scenarios 11 and 12.
+By adopting this protocol and using one of the two type aliases `NonUniqueCollectionData` or `NonUniqueCollectionSectionData`, a factory will be built under the hood that will transform your non-unique data into a `UniquelyIdentifiable` type. See Scenarios 10 and 11.
 
 Since the data is wrapped in a new struct, to access your original object you'll need to call the `rawData` getter like so:
 
@@ -530,34 +530,12 @@ extension YourClass: UICollectionViewDelegate {
 }
 ```
 
-<br>
-<br>
-<br>
-<h2>Scenario 10: Manual timing of the animation</h2>
 
-In every previous case we have assigned the view object to the `CollectionData` object. If you choose to omit this step, you can still get the benefits of LiveCollections caltulations.
-
-Simply do the following:
-
-```swift
-let delta = collectionData.calculateDelta(data)
-
-// perform any analysis or analytics on the delta
-
-let updateData = {
-    self.collectionData.update(data)
-}
-
-// when the time is right, call...
-collectionView.performAnimations(section: collectionData.section, delta: delta, updateData: updateData)
-```
-
-Note: This is unavailable for <b>CollectionSectionData</b> as the animations occur in multiple steps and the timing of the updates is very specific. 
 <br>
 <br>
 <br>
 
-<h2>Scenario 11: Non-unique data in a single section</h2>
+<h2>Scenario 10: Non-unique data in a single section</h2>
 
 Use the typealiased data struct `NonUniqueCollectionData` with your non-unique data.
 
@@ -599,7 +577,7 @@ extension YourClass: UICollectionViewDelegate {
 <br>
 <br>
 
-<h2>Scenario 12: Non-unique data in multiple sections</h2>
+<h2>Scenario 11: Non-unique data in multiple sections</h2>
 
 Use the typealiased data struct `NonUniqueCollectionSectionData` with your non-unique section data.
 
@@ -635,10 +613,33 @@ extension YourClass: UICollectionViewDelegate {
 <br>
 <br>
 <br>
+<h2>Scenario 12: Manual timing of the animation</h2>
+
+In every previous case we have assigned the view object to the `CollectionData` object. If you choose to omit this step, you can still get the benefits of LiveCollections caltulations.
+
+Simply do the following:
+
+```swift
+let delta = collectionData.calculateDelta(data)
+
+// perform any analysis or analytics on the delta
+
+let updateData = {
+    self.collectionData.update(data)
+}
+
+// when the time is right, call...
+collectionView.performAnimations(section: collectionData.section, delta: delta, updateData: updateData)
+```
+
+Note: This is unavailable for <b>CollectionSectionData</b> as the animations occur in multiple steps and the timing of the updates is very specific. 
+<br>
+<br>
+<br>
 <hr>
 <br>
 
-I hope this covers nearly all of the use cases out there, but if you find a gap in what this framework offers, we'd love to hear your suggestions and feedback.
+I hope this covers nearly all of the use cases out there, but if you find a gap in what this framework offers, I'd love to hear your suggestions and feedback.
 
 Happy animating!
 
