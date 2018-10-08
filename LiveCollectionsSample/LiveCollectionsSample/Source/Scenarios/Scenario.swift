@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum Scenario {
+enum Scenario: CaseIterable {
     case basicCollectionView
     case basicTableView
     case discreteSectionsCollectionView
@@ -21,19 +21,6 @@ enum Scenario {
     case dataWithNonUniqueIDs
     case sectionDataWithNonUniqueIDs
     case calculateTheDeltaManually
-
-    static let allScenarios: [Scenario] = [.basicCollectionView,
-                                         .basicTableView,
-                                         .discreteSectionsCollectionView,
-                                         .discreteSectionsTableView,
-                                         .uniqueDataAcrossSectionsCollectionView,
-                                         .uniqueDataAcrossSectionsTableView,
-                                         .collectionViewsInTableView,
-                                         .uniqueCollectionViewsAcrossSectionsTableView,
-                                         .collectionViewUsingDataFactory,
-                                         .dataWithNonUniqueIDs,
-                                         .sectionDataWithNonUniqueIDs,
-                                         .calculateTheDeltaManually]
 }
 
 extension Scenario {
@@ -56,7 +43,7 @@ extension Scenario {
     }
     
     var name: String {
-        guard let index = Scenario.allScenarios.index(of: self) else { return "Unknown" }
+        guard let index = Scenario.allCases.index(of: self) else { return "Unknown" }
         return "Scenario \(index+1): \(title)"
     }
 

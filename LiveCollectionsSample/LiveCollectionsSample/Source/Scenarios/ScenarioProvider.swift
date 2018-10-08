@@ -15,7 +15,7 @@ protocol ScenarioProviderInterface {
 
 final class ScenarioProvider: ScenarioProviderInterface {
     
-    let scenarios: [Scenario] = Scenario.allScenarios
+    let scenarios: [Scenario] = Scenario.allCases
     private let movieLoader: MovieLoaderInterface
     private let imageLoader = MovieImageLoader()
     
