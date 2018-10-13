@@ -6,7 +6,7 @@
 
 Using one of the two main classes `CollectionData` or `CollectionSectionData`, you can build a fully generic, immutable data set that is thread safe, timing safe, and highly performant. Simply connect your view to the data object, call the update method and that's it.
 
-In the sample app, thre are a number of use case scenarios demonstrated, and the sample code of each one can be found by looking up the respective controller (e.g. ScenarioThreeViewController.swift).
+In the sample app, there are a number of use case scenarios demonstrated, and the sample code of each one can be found by looking up the respective controller (e.g. ScenarioThreeViewController.swift).
 
 Full detail for the use case of each scenario <a href="https://medium.com/p/59ea1eda2b2d">can be found in the blog post on Medium</a>, which you can read if you want the full explanation. Below, I am just going to show the class graph and the minimum code needed for each case.
 
