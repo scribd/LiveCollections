@@ -80,7 +80,7 @@ extension UITableView: SectionDeltaUpdatableView {
         }
         
         let deleteMoveInsert = {
-            self.deleteRows(at: itemIndexPathDelta.deletions as [IndexPath], with: .top)
+            self.deleteRows(at: itemIndexPathDelta.deletions as [IndexPath], with: .bottom)
             itemIndexPathDelta.moves.forEach { indexPathPair in
                 self.moveRow(at: indexPathPair.source as IndexPath, to: indexPathPair.target as IndexPath)
             }
@@ -337,4 +337,12 @@ private extension UIView {
         }
         
     }
+}
+
+// MARK: TableView Section Animation Constants
+
+enum TableViewSectionConstants {
+    static let defaultDeleteAnimation: UITableView.RowAnimation = .bottom
+    static let defaultInsertAnimation: UITableView.RowAnimation = .fade
+    static let defaultReloadAnimation: UITableView.RowAnimation = .none
 }

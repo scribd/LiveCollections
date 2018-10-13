@@ -51,6 +51,8 @@ public final class CollectionData<DataType: UniquelyIdentifiable>: CollectionDat
         }
     }
     
+    private var _customTableView: UITableView?
+    
     // delegate
     public weak var validationDelegate: CollectionDataReusableViewVerificationDelegate?
     public weak var reloadDelegate: CollectionDataManualReloadDelegate?
@@ -273,5 +275,25 @@ public extension NonUniqueCollectionData where DataType.RawType: NonUniquelyIden
     public convenience init<RawType>(_ rawData: [RawType] = [], section: Int = 0) where DataType == NonUniqueDatum<RawType> {
         let duplicatableFactory = NonUniqueDataFactory<RawType>()
         self.init(dataFactory: duplicatableFactory, rawData: rawData, section: section)
+    }
+}
+
+// MARK: - Setting UITableView Animation Style
+
+public extension CollectionData {
+    
+    public func setTableView(_ tableView: UITableView,
+                             rowAnimations: TableViewAnimationModel,
+                             sectionReloadAnimation: UITableView.RowAnimation = .none) {
+        
+        let sectionAnimations = TableViewAnimationModel(deleteAnimation: TableViewSectionConstants.defaultDeleteAnimation,
+                                                        insertAnimation: TableViewSectionConstants.defaultInsertAnimation,
+                                                        reloadAnimation: sectionReloadAnimation)
+        
+        self._customTableView = CustomAnimationStyleTableView(tableView: tableView,
+                                                              section: section,
+                                                              rowAnimations: rowAnimations,
+                                                              sectionAnimations: sectionAnimations)
+        self.view = _customTableView
     }
 }

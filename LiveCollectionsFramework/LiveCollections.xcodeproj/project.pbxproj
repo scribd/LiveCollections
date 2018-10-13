@@ -38,6 +38,8 @@
 		F4D7732820FBC4E7002F1C43 /* UniquelyIdentifiableDataFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D7731520FBC4E7002F1C43 /* UniquelyIdentifiableDataFactory.swift */; };
 		F4D7732920FBC4E7002F1C43 /* UniquelyIdentifiableProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D7731620FBC4E7002F1C43 /* UniquelyIdentifiableProtocols.swift */; };
 		F4EC1E30215C88EB00ACCBDB /* CollectionDataSynchronizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4EC1E2F215C88EB00ACCBDB /* CollectionDataSynchronizer.swift */; };
+		F4F20540217278E800C211AB /* TableViewRowAnimationProviding.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4F2053F217278E800C211AB /* TableViewRowAnimationProviding.swift */; };
+		F4F205432172793200C211AB /* CustomAnimationStyleTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4F205422172793200C211AB /* CustomAnimationStyleTableView.swift */; };
 		F4F59E6A214C34AA00B4AB19 /* CollectionDataReusableViewVerificationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4F59E69214C34AA00B4AB19 /* CollectionDataReusableViewVerificationDelegate.swift */; };
 /* End PBXBuildFile section */
 
@@ -86,6 +88,8 @@
 		F4D7731520FBC4E7002F1C43 /* UniquelyIdentifiableDataFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UniquelyIdentifiableDataFactory.swift; sourceTree = "<group>"; };
 		F4D7731620FBC4E7002F1C43 /* UniquelyIdentifiableProtocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UniquelyIdentifiableProtocols.swift; sourceTree = "<group>"; };
 		F4EC1E2F215C88EB00ACCBDB /* CollectionDataSynchronizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionDataSynchronizer.swift; sourceTree = "<group>"; };
+		F4F2053F217278E800C211AB /* TableViewRowAnimationProviding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewRowAnimationProviding.swift; sourceTree = "<group>"; };
+		F4F205422172793200C211AB /* CustomAnimationStyleTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAnimationStyleTableView.swift; sourceTree = "<group>"; };
 		F4F59E69214C34AA00B4AB19 /* CollectionDataReusableViewVerificationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionDataReusableViewVerificationDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -194,6 +198,7 @@
 				F4D7730020FBC4E7002F1C43 /* SectionDataCalculator.swift */,
 				F47AE72C214103A300FE7360 /* DeltaCalculator.swift */,
 				F4AF3BC42146DB0700917DF5 /* AnyProtocols */,
+				F4F205412172790C00C211AB /* Custom TableView Animations */,
 			);
 			path = Internal;
 			sourceTree = "<group>";
@@ -265,6 +270,7 @@
 			isa = PBXGroup;
 			children = (
 				F4D7731320FBC4E7002F1C43 /* DeltaVisualUpdateProtocols.swift */,
+				F4F2053F217278E800C211AB /* TableViewRowAnimationProviding.swift */,
 			);
 			path = "Visual Update";
 			sourceTree = "<group>";
@@ -283,6 +289,14 @@
 				F4EC1E2F215C88EB00ACCBDB /* CollectionDataSynchronizer.swift */,
 			);
 			path = Synchronizer;
+			sourceTree = "<group>";
+		};
+		F4F205412172790C00C211AB /* Custom TableView Animations */ = {
+			isa = PBXGroup;
+			children = (
+				F4F205422172793200C211AB /* CustomAnimationStyleTableView.swift */,
+			);
+			path = "Custom TableView Animations";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -404,6 +418,7 @@
 				F4B9013F2133A2A400E3B51C /* AnyDeltaUpdatableViewDelegate.swift in Sources */,
 				F4F59E6A214C34AA00B4AB19 /* CollectionDataReusableViewVerificationDelegate.swift in Sources */,
 				F4AF3BC32145B2C500917DF5 /* AnyCollectionDataDeletionNotificationDelegate.swift in Sources */,
+				F4F205432172793200C211AB /* CustomAnimationStyleTableView.swift in Sources */,
 				F47AE72B2140F98100FE7360 /* ItemDataCalculator.swift in Sources */,
 				F42115E7214986F2003B57A6 /* AnyDeltaUpdatableView.swift in Sources */,
 				F47EFA922161638A00E53750 /* BaseTypes+UniquelyIdentifiable.swift in Sources */,
@@ -414,6 +429,7 @@
 				F4D7732520FBC4E7002F1C43 /* CollectionDataProtocols.swift in Sources */,
 				F4D7732120FBC4E7002F1C43 /* CollectionSectionData.swift in Sources */,
 				F4D7732220FBC4E7002F1C43 /* CollectionDataDelegate.swift in Sources */,
+				F4F20540217278E800C211AB /* TableViewRowAnimationProviding.swift in Sources */,
 				F4D7731D20FBC4E7002F1C43 /* IndexDelta.swift in Sources */,
 				F4D7732820FBC4E7002F1C43 /* UniquelyIdentifiableDataFactory.swift in Sources */,
 				F4D7731B20FBC4E7002F1C43 /* SectionDataCalculator.swift in Sources */,

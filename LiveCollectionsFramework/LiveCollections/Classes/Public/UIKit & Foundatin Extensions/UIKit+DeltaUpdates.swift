@@ -41,22 +41,21 @@ extension UITableView: DeltaUpdatableView {
             for update in tableViewUpdates {
                 guard update.isDataSourceValid(for: strongSelf) else { continue }
                 let delta = update.indexPathsToAnimate
-                strongSelf.deleteRows(at: delta.deletedIndexPaths, with: .bottom)
+                strongSelf.deleteRows(at: delta.deletedIndexPaths, with: strongSelf.preferredDeleteRowAnimation(for: update.sectionUpdate.section))
                 delta.movedIndexPathPairs.forEach { indexPathPair in
                     strongSelf.moveRow(at: indexPathPair.source as IndexPath, to: indexPathPair.target as IndexPath)
                 }
-                strongSelf.insertRows(at: delta.insertedIndexPaths, with: .fade)
+                strongSelf.insertRows(at: delta.insertedIndexPaths, with: strongSelf.preferredInsertRowAnimation(for: update.sectionUpdate.section))
             }
         }
         
         let reload = { [weak self] in
             guard let strongSelf = self else { return }
-            // Reloads occur on original indexes
-            // These need to be performed after the first animation is complete
+            // Reloads need to occur once the delete/insert/move animations are complete
             for update in tableViewUpdates {
                 guard update.isDataSourceValid(for: strongSelf) else { continue }
                 let delta = update.indexPathsToAnimate
-                strongSelf.reloadRows(at: delta.automaticReloadIndexPaths, with: .fade)
+                strongSelf.reloadRows(at: delta.automaticReloadIndexPaths, with: strongSelf.preferredReloadRowAnimation(for: update.sectionUpdate.section))
             }
         }
         
@@ -373,4 +372,41 @@ private extension Array where Element == EntireViewSectionUpdate {
             }
         }
     }
+}
+
+// MARK: UITableView + TableViewRowAnimationProviding
+
+extension UITableView {
+    
+    func preferredDeleteRowAnimation(for section: Int) -> UITableView.RowAnimation {
+        guard let animationProviding = self as? TableViewRowAnimationProviding,
+            let deleteAnimation = animationProviding.deleteAnimation(for: section) else {
+                return TableViewRowConstants.defaultDeleteAnimation
+        }
+        return deleteAnimation
+    }
+
+    func preferredInsertRowAnimation(for section: Int) -> UITableView.RowAnimation {
+        guard let animationProviding = self as? TableViewRowAnimationProviding,
+            let insertAnimation = animationProviding.insertAnimation(for: section) else {
+                return TableViewRowConstants.defaultInsertAnimation
+        }
+        return insertAnimation
+    }
+
+    func preferredReloadRowAnimation(for section: Int) -> UITableView.RowAnimation {
+        guard let animationProviding = self as? TableViewRowAnimationProviding,
+            let reloadAnimation = animationProviding.reloadAnimation(for: section) else {
+                return TableViewRowConstants.defaultReloadAnimation
+        }
+        return reloadAnimation
+    }
+}
+
+// MARK: TableView Row Animation Constants
+
+enum TableViewRowConstants {
+    static let defaultDeleteAnimation: UITableView.RowAnimation = .bottom
+    static let defaultInsertAnimation: UITableView.RowAnimation = .fade
+    static let defaultReloadAnimation: UITableView.RowAnimation = .fade
 }

@@ -21,6 +21,7 @@ enum Scenario: CaseIterable {
     case dataWithNonUniqueIDs
     case sectionDataWithNonUniqueIDs
     case calculateTheDeltaManually
+    case customTableViewAnimations
 }
 
 extension Scenario {
@@ -39,6 +40,7 @@ extension Scenario {
         case .dataWithNonUniqueIDs: return "Data With Duplicate Items"
         case .sectionDataWithNonUniqueIDs: return "Section Data With Duplicate Items"
         case .calculateTheDeltaManually: return "Not assigning a view to CollectionData"
+        case .customTableViewAnimations: return "Custom UITableView Animations"
         }
     }
     
@@ -61,6 +63,7 @@ extension Scenario {
         case .dataWithNonUniqueIDs: return "Have a data set where not every items can be expressed uniquely? No problem. Here's an example of how to set up your data."
         case .sectionDataWithNonUniqueIDs: return "By using the typealias NonUniqueCollectionSectionData, new accessors are introduced to support non-unique data."
         case .calculateTheDeltaManually: return "For the times you don't want the animation to occur automatically or every time. Depending on your class structure or needs, you may want to separate the action of calculating the delta with performing the animation. You may even just want the delta without ever associating a view, say, for analytics purposes."
+        case .customTableViewAnimations: return "Use the specific setTableView(_) function to tell CollectionData which animation styles to use when updating."
         }
     }
 }

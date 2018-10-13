@@ -120,6 +120,14 @@ final class ScenarioProvider: ScenarioProviderInterface {
                                                        movieLoader: movieLoader)
             let dataCoordinator = DataCoordinator(dataProviders: [dataProvider])
             return ScenarioTwelveViewController(dataCoordinator: dataCoordinator, imageLoader: imageLoader)
+            
+        case .customTableViewAnimations:
+            let dataProvider = RandomMovieDataProvider(initialDataCount: 10,
+                                                       minCount: 5,
+                                                       maxCount: 12,
+                                                       movieLoader: movieLoader)
+            let dataCoordinator = DataCoordinator(dataProviders: [dataProvider])
+            return ScenarioThirteenViewController(dataCoordinator: dataCoordinator, imageLoader: imageLoader)
         }
     }
 }

@@ -10,7 +10,7 @@ import Foundation
 
 public final class CollectionDataSynchronizer: DeltaUpdatableView {
     
-    public weak var view: DeltaUpdatableView?
+    weak var view: DeltaUpdatableView?
     
     private let timingQueue = DispatchQueue(label: "\(CollectionDataSynchronizer.self) timing queue")
     private let dataQueue = DispatchQueue(label: "\(CollectionDataSynchronizer.self) data queue")
