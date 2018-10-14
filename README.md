@@ -15,7 +15,7 @@ Full detail for the use case of each scenario <a href="https://medium.com/p/59ea
 <h2>Importing With Carthage</h2>
 
 <br>
-github "scribd/LiveCollections" "beta_0.9.7"
+github "scribd/LiveCollections" "beta_0.9.8"
 <br>
 <br>
 
@@ -24,7 +24,7 @@ github "scribd/LiveCollections" "beta_0.9.7"
 <h2>Importing With CocoaPods</h2>
 
 <br>
-pod 'LiveCollections', '~> 0.9.7'
+pod 'LiveCollections', '~> 0.9.8'
 <br>
 or
 <br>
@@ -41,7 +41,7 @@ pod 'LiveCollections'
     <li><b>CollectionSectionData&lt;YourSectionType&gt;</b></li>
 </ul>
 
-By wrapping your data in one of these two classes, you can calculate a delta between your update and the current data set. If you assign a view to either object, then it will pass that delta and the data update to the view and perform the animation automatically.  All updates are queued, performant, thread safe, and timing safe. In your UITableViewDataSource and UICollectionViewDataSource methods, you simply need to fetch your data from the <b>CollectionData</b> or <b>CollectionSectionData</b> object directly using the supplied `count`, `subscript`, and `isEmpty` thread-safe accessors.
+By using one of these two classes to hold your data, every time you update with new data it will automatically calculate the delta between your update and the current data set. If you assign a view to either object, then it will pass both the delta and data to the view and perform the animation automatically.  All updates are queued, performant, thread safe, and timing safe. In your UITableViewDataSource and UICollectionViewDataSource methods, you simply need to fetch your data from the <b>CollectionData</b> or <b>CollectionSectionData</b> object directly using the supplied `count`, `subscript`, and `isEmpty` thread-safe accessors.
 
 To prepare your data to be used in <b>CollectionData</b>, you just need to adopt the protocol <b>UniquelyIdentifiable</b>.
 The requirements for <b>CollectionSectionData</b> will be detailed in scenerios 5 and 6 a bit later on.
@@ -613,6 +613,7 @@ extension YourClass: UICollectionViewDelegate {
 <br>
 <br>
 <br>
+
 <h2>Scenario 12: Manual timing of the animation</h2>
 
 In every previous case we have assigned the view object to the `CollectionData` object. If you choose to omit this step, you can still get the benefits of LiveCollections caltulations.
@@ -636,6 +637,81 @@ Note: This is unavailable for <b>CollectionSectionData</b> as the animations occ
 <br>
 <br>
 <br>
+
+<h2>Scenario 13: Custom table view animations</h2>
+
+By default LiveCollections performs a preset selection of table view animations: delete (.bottom), insert (.fade), reload (.fade), reloadSection (.none).
+
+As of 0.9.8 there is support for overriding these defaults and setting your own values. 
+
+There is a new accessor on `CollectionData` to set up your view instead of using `collectionData.view = tableView`.
+
+```swift
+let rowAnimations = TableViewAnimationModel(deleteAnimation: .right,
+                                            insertAnimation: .right,
+                                            reloadAnimation: .middle)
+
+collectionData.setTableView(tableView,
+                            rowAnimations: rowAnimations,
+                            sectionReloadAnimation: .top)
+```
+
+<br>
+<br>
+<br>
+
+<h2>Scenario 14: Multiple data sources pointing at the same table view with custom animations</h2>
+
+If you have multiple data souces each animating a section of a table view, you can give each of them custom animations. They can even be different per section if that's what you really want.
+
+```swift
+let sectionZeroRowAnimations = TableViewAnimationModel(deleteAnimation: .left,
+                                                       insertAnimation: .left,
+                                                       reloadAnimation: .left)
+
+dataList[0].setTableView(tableView, rowAnimations: sectionZeroRowAnimations)
+
+let sectionOneRowAnimations = TableViewAnimationModel(deleteAnimation: .right,
+                                                      insertAnimation: .right,
+                                                      reloadAnimation: .right)
+
+dataList[1].setTableView(tableView, rowAnimations: sectionOneRowAnimations)
+
+let sectionTwoRowAnimations = TableViewAnimationModel(deleteAnimation: .top,
+                                                      insertAnimation: .top,
+                                                      reloadAnimation: .top)
+
+dataList[2].setTableView(tableView, rowAnimations: sectionTwoRowAnimations)
+```
+
+<br>
+<br>
+<br>
+
+<h2>Scenario 15: Custom table view animations for data across all sections</h2>
+
+`CollectionSectionData` has a new initializer.
+
+```swift
+let rowAnimations = TableViewAnimationModel(deleteAnimation: .right,
+                                            insertAnimation: .right,
+                                            reloadAnimation: .right)
+
+let sectionAnimations = TableViewAnimationModel(deleteAnimation: .left,
+                                                insertAnimation: .left,
+                                                reloadAnimation: .left)
+
+return CollectionSectionData<MovieSection>(tableView: tableView,
+                                           sectionData: initialData,
+                                           rowAnimations: rowAnimations,
+                                           sectionAnimations: sectionAnimations)
+```
+
+<br>
+<br>
+<br>
+
+
 <hr>
 <br>
 
