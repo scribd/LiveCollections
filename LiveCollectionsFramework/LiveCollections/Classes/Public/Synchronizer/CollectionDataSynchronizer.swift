@@ -133,4 +133,14 @@ public final class CollectionDataSynchronizer: DeltaUpdatableView {
     public func performAnimations(for sectionUpdates: [SectionUpdate]) {
         sectionUpdates.forEach { add(update: $0)}
     }
+    
+    // MARK: Override pointer equality
+    
+    static func === (lhs: CollectionDataSynchronizer, rhs: UIView) -> Bool {
+        return lhs.view === rhs
+    }
+    
+    static func === (lhs: UIView, rhs: CollectionDataSynchronizer) -> Bool {
+        return lhs === rhs.view
+    }
 }
