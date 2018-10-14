@@ -38,8 +38,6 @@ final class ScenarioThreeViewController: UIViewController {
 
         super.init(nibName: nil, bundle: nil)
         
-        dataList[0].synchronizer = synchronizer
-        dataList[1].synchronizer = synchronizer
         setUpSubviews()
         dataCoordinator.nextPressed()
     }
@@ -67,6 +65,9 @@ final class ScenarioThreeViewController: UIViewController {
             collectionData.view = collectionView
             collectionData.section = index
         }
+        
+        dataList[0].synchronizer = synchronizer
+        dataList[1].synchronizer = synchronizer
         
         collectionView.register(MovieCollectionViewCell.self, forCellWithReuseIdentifier: MovieCollectionViewCell.reuseIdentifier)
     }

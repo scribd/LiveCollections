@@ -10,7 +10,8 @@ import Foundation
 
 public final class CollectionDataSynchronizer: DeltaUpdatableView {
     
-    weak var view: DeltaUpdatableView?
+    private(set) weak var view: DeltaUpdatableView?
+    private var _customTableView: MultiSectionCustomAnimationStyleTableView?
     
     private let timingQueue = DispatchQueue(label: "\(CollectionDataSynchronizer.self) timing queue")
     private let dataQueue = DispatchQueue(label: "\(CollectionDataSynchronizer.self) data queue")
@@ -37,6 +38,44 @@ public final class CollectionDataSynchronizer: DeltaUpdatableView {
     
     public init(delay: BatchDelay) {
         self.batchDelay = delay
+    }
+    
+    func setView(_ view: DeltaUpdatableView?, section: Int) {
+        guard let tableView = view as? UITableView else {
+            if self.view != nil, self.view !== view {
+                assertionFailure("Attemping to add a Synchronizer to different view objects. This is not allowed.")
+                return
+            }
+            
+            self.view = view
+            return
+        }
+        
+        if let singleSectionProvider = tableView as? SingleSectionCustomAnimationStyleTableView,
+            let targetTableView = singleSectionProvider.targetTableView {
+            let customTableView = self.customTableView(for: targetTableView)
+            customTableView.addTableView(targetTableView,
+                                         section: section,
+                                         rowAnimations: singleSectionProvider.rowAnimationModel,
+                                         sectionAnimations: singleSectionProvider.sectionAnimationModel)
+        } else {
+            let customTableView = self.customTableView(for: tableView)
+            customTableView.addTableView(tableView,
+                                         section: section,
+                                         rowAnimations: .defaultRowAnimations,
+                                         sectionAnimations: .defaultSectionAnimations)
+        }
+    }
+    
+    private func customTableView(for tableView: UITableView) -> MultiSectionCustomAnimationStyleTableView {
+        if let customTableView = _customTableView {
+            return customTableView
+        } else {
+            let view = MultiSectionCustomAnimationStyleTableView(tableView: tableView)
+            _customTableView = view
+            self.view = view
+            return view
+        }
     }
     
     private func add(update: SectionUpdate) {

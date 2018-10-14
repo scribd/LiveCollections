@@ -1,15 +1,15 @@
 //
-//  ScenarioFourViewController.swift
+//  ScenarioFourteenViewController.swift
 //  LiveCollectionsSample
 //
-//  Created by Stephane Magne on 7/22/18.
+//  Created by Stephane Magne on 10/13/18.
 //  Copyright © 2018 Scribd. All rights reserved.
 //
 
 import UIKit
 import LiveCollections
 
-final class ScenarioFourViewController: UIViewController {
+final class ScenarioFourteenViewController: UIViewController {
     
     private let presentationView = PresentationView()
     private let synchronizer = CollectionDataSynchronizer(delay: .short)
@@ -30,7 +30,7 @@ final class ScenarioFourViewController: UIViewController {
         self.dataList = [CollectionData<Movie>(),
                          CollectionData<Movie>(),
                          CollectionData<Movie>()]
-
+        
         super.init(nibName: nil, bundle: nil)
         
         setUpSubviews()
@@ -50,25 +50,41 @@ final class ScenarioFourViewController: UIViewController {
             presentationView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             presentationView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             presentationView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-        ])
+            ])
         
         dataCoordinator.delegate = self
         presentationView.playerControl.delegate = dataCoordinator
         presentationView.addViewToPresent(tableView)
+
+        let sectionZeroRowAnimations = TableViewAnimationModel(deleteAnimation: .left,
+                                                               insertAnimation: .left,
+                                                               reloadAnimation: .left)
+        
+        dataList[0].setTableView(tableView, rowAnimations: sectionZeroRowAnimations)
+
+        let sectionOneRowAnimations = TableViewAnimationModel(deleteAnimation: .right,
+                                                              insertAnimation: .right,
+                                                              reloadAnimation: .right)
+        
+        dataList[1].setTableView(tableView, rowAnimations: sectionOneRowAnimations)
+
+        let sectionTwoRowAnimations = TableViewAnimationModel(deleteAnimation: .top,
+                                                              insertAnimation: .top,
+                                                              reloadAnimation: .top)
+        
+        dataList[2].setTableView(tableView, rowAnimations: sectionTwoRowAnimations)
+
         
         dataList.enumerated().forEach { index, collectionData in
-            collectionData.view = tableView
             collectionData.section = index
+            collectionData.synchronizer = synchronizer
         }
-        
-        dataList[1].synchronizer = synchronizer
-        dataList[2].synchronizer = synchronizer
         
         tableView.register(MovieTableViewCell.self, forCellReuseIdentifier: MovieTableViewCell.reuseIdentifier)
     }
 }
 
-extension ScenarioFourViewController: UITableViewDataSource {
+extension ScenarioFourteenViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return dataList.count
@@ -101,7 +117,7 @@ extension ScenarioFourViewController: UITableViewDataSource {
     }
 }
 
-extension ScenarioFourViewController: UITableViewDelegate {
+extension ScenarioFourteenViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return MovieTableViewCell.cellHeight
@@ -126,7 +142,7 @@ extension ScenarioFourViewController: UITableViewDelegate {
 
 // MARK: DataCoordinatorDelegate
 
-extension ScenarioFourViewController: DataCoordinatorDelegate {
+extension ScenarioFourteenViewController: DataCoordinatorDelegate {
     
     func dataDidUpdate(_ data: [Movie], section: Int) {
         dataList[section].update(data)

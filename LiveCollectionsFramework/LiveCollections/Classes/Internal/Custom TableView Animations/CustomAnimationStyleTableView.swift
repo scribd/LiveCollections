@@ -8,31 +8,12 @@
 
 import UIKit
 
-final class CustomAnimationStyleTableView: UITableView, TableViewRowAnimationProviding {
+class CustomAnimationStyleTableView: UITableView {
     
-    private weak var targetTableView: UITableView?
-    private let section: Int
-
-    private let deleteAnimation: UITableView.RowAnimation
-    private let insertAnimation: UITableView.RowAnimation
-    private let reloadAnimation: UITableView.RowAnimation
-
-    private let sectionDeleteAnimation: UITableView.RowAnimation
-    private let sectionInsertAnimation: UITableView.RowAnimation
-    private let sectionReloadAnimation: UITableView.RowAnimation
-
-    init(tableView: UITableView,
-         section: Int,
-         rowAnimations: TableViewAnimationModel,
-         sectionAnimations: TableViewAnimationModel) {
+    weak var targetTableView: UITableView?
+    
+    init(tableView: UITableView) {
         self.targetTableView = tableView
-        self.section = section
-        self.deleteAnimation = rowAnimations.deleteAnimation
-        self.insertAnimation = rowAnimations.insertAnimation
-        self.reloadAnimation = rowAnimations.reloadAnimation
-        self.sectionDeleteAnimation = sectionAnimations.deleteAnimation
-        self.sectionInsertAnimation = sectionAnimations.insertAnimation
-        self.sectionReloadAnimation = sectionAnimations.reloadAnimation
         super.init(frame: .zero, style: .plain)
     }
     
@@ -84,7 +65,7 @@ final class CustomAnimationStyleTableView: UITableView, TableViewRowAnimationPro
     override func reloadRows(at indexPaths: [IndexPath], with animation: UITableView.RowAnimation) {
         targetTableView?.reloadRows(at: indexPaths, with: animation)
     }
-
+    
     override func deleteSections(_ sections: IndexSet, with animation: UITableView.RowAnimation) {
         targetTableView?.deleteSections(sections, with: animation)
     }
@@ -96,32 +77,19 @@ final class CustomAnimationStyleTableView: UITableView, TableViewRowAnimationPro
     override func reloadSections(_ sections: IndexSet, with animation: UITableView.RowAnimation) {
         targetTableView?.reloadSections(sections, with: animation)
     }
-
+    
     override func reloadData() {
         targetTableView?.reloadData()
-    }
-    
-    // MARK: TableViewRowAnimationProviding
-    
-    func deleteAnimation(for section: Int) -> UITableView.RowAnimation? {
-        guard self.section == section else { return nil }
-        return deleteAnimation
-    }
-    
-    func insertAnimation(for section: Int) -> UITableView.RowAnimation? {
-        guard self.section == section else { return nil }
-        return insertAnimation
-    }
-    
-    func reloadAnimation(for section: Int) -> UITableView.RowAnimation? {
-        guard self.section == section else { return nil }
-        return reloadAnimation
     }
     
     // MARK: Override pointer equality
     
     // Note: If this is causing you issues, for true equality you will have to use:
     // (tableView === myTableView && tableView.hash == myTableView.hash)
+
+    static func === (lhs: CustomAnimationStyleTableView, rhs: CustomAnimationStyleTableView) -> Bool {
+        return lhs.targetTableView === rhs.targetTableView
+    }
     
     static func === (lhs: CustomAnimationStyleTableView, rhs: UITableView) -> Bool {
         return lhs.targetTableView === rhs
@@ -131,3 +99,4 @@ final class CustomAnimationStyleTableView: UITableView, TableViewRowAnimationPro
         return lhs === rhs.targetTableView
     }
 }
+

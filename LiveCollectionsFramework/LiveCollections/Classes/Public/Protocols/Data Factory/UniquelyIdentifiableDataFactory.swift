@@ -49,12 +49,11 @@ extension UniquelyIdentifiableDataFactory {
             return data
         }
         
-        guard let buildQueue = buildQueue,
-            buildQueue !== DispatchQueue.main || Thread.isMainThread == false else {
-                return buildData(rawType)
-        }
-        
-        return buildQueue.sync { buildData(rawType) }
+        if let buildQueue = buildQueue {
+            return buildQueue.safeSync { buildData(rawType) }
+        } else {
+            return buildData(rawType)
+        }        
     }
 }
 

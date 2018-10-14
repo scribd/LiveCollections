@@ -36,18 +36,20 @@ public final class CollectionData<DataType: UniquelyIdentifiable>: CollectionDat
     // Assign to animate view as soon as data is updated, otherwise you must manually call `calculateDelta`
     private weak var _view: DeltaUpdatableView?
     public var view: DeltaUpdatableView? {
-        get { return dataQueue.sync {
-            if let synchronizer = self.synchronizer { return synchronizer }
-            return _view
-        }
+        get {
+            return dataQueue.sync {
+                if let synchronizer = synchronizer { return synchronizer }
+                return _view
+            }
         }
         set {
             dataQueue.async(flags: .barrier) {
                 self._view = newValue
-                self.synchronizer?.view = newValue
             }
-            if Thread.isMainThread { self.view?.reloadData() }
-            else { DispatchQueue.main.sync { return self.view?.reloadData() } }
+            DispatchQueue.main.safeSync {
+                synchronizer?.setView(view, section: section)
+                view?.reloadData()
+            }
         }
     }
     
@@ -82,7 +84,10 @@ public final class CollectionData<DataType: UniquelyIdentifiable>: CollectionDat
 
     // syncronizer
     public var synchronizer: CollectionDataSynchronizer? {
-        didSet { dataQueue.async(flags: .barrier) { self.synchronizer?.view = self._view } }
+        didSet {
+            let currentView = dataQueue.sync { return _view }
+            DispatchQueue.main.safeSync { self.synchronizer?.setView(currentView, section: section) }
+        }
     }
     
     // animation threshold
@@ -185,8 +190,7 @@ public final class CollectionData<DataType: UniquelyIdentifiable>: CollectionDat
             return isValid ? view : nil
         }
         
-        guard Thread.isMainThread == false else { return validationFromDelegate() }
-        return DispatchQueue.main.sync { return validationFromDelegate() }
+        return DispatchQueue.main.safeSync { return validationFromDelegate() }
     }
     
     private var viewProvider: CollectionViewProvider {
@@ -290,10 +294,13 @@ public extension CollectionData {
                                                         insertAnimation: TableViewSectionConstants.defaultInsertAnimation,
                                                         reloadAnimation: sectionReloadAnimation)
         
-        self._customTableView = CustomAnimationStyleTableView(tableView: tableView,
+        self._customTableView = DispatchQueue.main.safeSync {
+            return SingleSectionCustomAnimationStyleTableView(tableView: tableView,
                                                               section: section,
                                                               rowAnimations: rowAnimations,
                                                               sectionAnimations: sectionAnimations)
+        }
+        
         self.view = _customTableView
     }
 }
