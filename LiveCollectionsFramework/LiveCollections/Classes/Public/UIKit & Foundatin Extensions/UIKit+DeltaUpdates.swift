@@ -117,21 +117,24 @@ extension UITableView: DeltaUpdatableView {
     
     public func reloadSections(for sectionUpdates: [SectionUpdate]) {
         
-        let sections = sectionUpdates.map { $0.section }
-        let indexSet = IndexSet(sections)
-        
         if #available(iOS 11.0, *) {
             performBatchUpdates({ [weak self] in
-                sectionUpdates.forEach { $0.update() }
-                guard self != nil else { return }
-                reloadSections(indexSet, with: .none)
+                sectionUpdates.forEach {sectionUpdate in
+                    sectionUpdate.update()
+                    guard self != nil else { return }
+                    let indexSet = IndexSet([sectionUpdate.section])
+                    reloadSections(indexSet, with: preferredReloadSectionAnimation(for: sectionUpdate.section))
+                }
             }, completion: { _ in
                 sectionUpdates.forEach { $0.completion?() }
             })
         } else {
             beginUpdates()
-            sectionUpdates.forEach { $0.update() }
-            reloadSections(indexSet, with: .none)
+            sectionUpdates.forEach { sectionUpdate in
+                sectionUpdate.update()
+                let indexSet = IndexSet([sectionUpdate.section])
+                reloadSections(indexSet, with: preferredReloadSectionAnimation(for: sectionUpdate.section))
+            }
             endUpdates()
             sectionUpdates.forEach { $0.completion?() }
         }
@@ -380,7 +383,7 @@ extension UITableView {
     
     func preferredDeleteRowAnimation(for section: Int) -> UITableView.RowAnimation {
         guard let animationProviding = self as? TableViewRowAnimationProviding,
-            let deleteAnimation = animationProviding.deleteAnimation(for: section) else {
+            let deleteAnimation = animationProviding.deleteRowAnimation(for: section) else {
                 return TableViewRowConstants.defaultDeleteAnimation
         }
         return deleteAnimation
@@ -388,7 +391,7 @@ extension UITableView {
 
     func preferredInsertRowAnimation(for section: Int) -> UITableView.RowAnimation {
         guard let animationProviding = self as? TableViewRowAnimationProviding,
-            let insertAnimation = animationProviding.insertAnimation(for: section) else {
+            let insertAnimation = animationProviding.insertRowAnimation(for: section) else {
                 return TableViewRowConstants.defaultInsertAnimation
         }
         return insertAnimation
@@ -396,8 +399,37 @@ extension UITableView {
 
     func preferredReloadRowAnimation(for section: Int) -> UITableView.RowAnimation {
         guard let animationProviding = self as? TableViewRowAnimationProviding,
-            let reloadAnimation = animationProviding.reloadAnimation(for: section) else {
+            let reloadAnimation = animationProviding.reloadRowAnimation(for: section) else {
                 return TableViewRowConstants.defaultReloadAnimation
+        }
+        return reloadAnimation
+    }
+}
+
+// MARK: UITableView + TableViewSectionAnimationProviding
+
+extension UITableView {
+    
+    func preferredDeleteSectionAnimation(for section: Int) -> UITableView.RowAnimation {
+        guard let animationProviding = self as? TableViewSectionAnimationProviding,
+            let deleteAnimation = animationProviding.deleteSectionAnimation(for: section) else {
+                return TableViewSectionConstants.defaultDeleteAnimation
+        }
+        return deleteAnimation
+    }
+    
+    func preferredInsertSectionAnimation(for section: Int) -> UITableView.RowAnimation {
+        guard let animationProviding = self as? TableViewSectionAnimationProviding,
+            let insertAnimation = animationProviding.insertSectionAnimation(for: section) else {
+                return TableViewSectionConstants.defaultInsertAnimation
+        }
+        return insertAnimation
+    }
+    
+    func preferredReloadSectionAnimation(for section: Int) -> UITableView.RowAnimation {
+        guard let animationProviding = self as? TableViewSectionAnimationProviding,
+            let reloadAnimation = animationProviding.reloadSectionAnimation(for: section) else {
+                return TableViewSectionConstants.defaultReloadAnimation
         }
         return reloadAnimation
     }

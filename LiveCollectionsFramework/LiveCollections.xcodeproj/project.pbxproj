@@ -44,6 +44,7 @@
 		F4F2054F21728BC200C211AB /* CustomAnimationStyleTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4F2054E21728BC200C211AB /* CustomAnimationStyleTableView.swift */; };
 		F4F205512172C05B00C211AB /* TableViewSingleSectionAnimationProviding.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4F205502172C05B00C211AB /* TableViewSingleSectionAnimationProviding.swift */; };
 		F4F205532172CB7300C211AB /* DispatchQueue+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4F205522172CB7300C211AB /* DispatchQueue+Extensions.swift */; };
+		F4F205582173302600C211AB /* AllSectionsCustomAnimationStyleTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4F205572173302600C211AB /* AllSectionsCustomAnimationStyleTableView.swift */; };
 		F4F59E6A214C34AA00B4AB19 /* CollectionDataReusableViewVerificationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4F59E69214C34AA00B4AB19 /* CollectionDataReusableViewVerificationDelegate.swift */; };
 /* End PBXBuildFile section */
 
@@ -98,6 +99,7 @@
 		F4F2054E21728BC200C211AB /* CustomAnimationStyleTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAnimationStyleTableView.swift; sourceTree = "<group>"; };
 		F4F205502172C05B00C211AB /* TableViewSingleSectionAnimationProviding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewSingleSectionAnimationProviding.swift; sourceTree = "<group>"; };
 		F4F205522172CB7300C211AB /* DispatchQueue+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DispatchQueue+Extensions.swift"; sourceTree = "<group>"; };
+		F4F205572173302600C211AB /* AllSectionsCustomAnimationStyleTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllSectionsCustomAnimationStyleTableView.swift; sourceTree = "<group>"; };
 		F4F59E69214C34AA00B4AB19 /* CollectionDataReusableViewVerificationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionDataReusableViewVerificationDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -307,6 +309,7 @@
 				F4F2054E21728BC200C211AB /* CustomAnimationStyleTableView.swift */,
 				F4F205422172793200C211AB /* SingleSectionCustomAnimationStyleTableView.swift */,
 				F4F2054C21728AED00C211AB /* MultiSectionCustomAnimationStyleTableView.swift */,
+				F4F205572173302600C211AB /* AllSectionsCustomAnimationStyleTableView.swift */,
 			);
 			path = "Custom TableView Animations";
 			sourceTree = "<group>";
@@ -455,6 +458,7 @@
 				F4F20540217278E800C211AB /* TableViewRowAnimationProviding.swift in Sources */,
 				F4D7731D20FBC4E7002F1C43 /* IndexDelta.swift in Sources */,
 				F4D7732820FBC4E7002F1C43 /* UniquelyIdentifiableDataFactory.swift in Sources */,
+				F4F205582173302600C211AB /* AllSectionsCustomAnimationStyleTableView.swift in Sources */,
 				F4D7731B20FBC4E7002F1C43 /* SectionDataCalculator.swift in Sources */,
 				F48BF27B21694B4B002DAEF7 /* NonUniqueDataFactory.swift in Sources */,
 				F48BF27921694B30002DAEF7 /* NonUniquelyIdentifiableProtocols.swift in Sources */,

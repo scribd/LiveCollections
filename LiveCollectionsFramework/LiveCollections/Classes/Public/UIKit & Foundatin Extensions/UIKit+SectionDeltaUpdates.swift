@@ -31,11 +31,11 @@ extension UITableView: SectionDeltaUpdatableView {
         }
         
         let deleteMoveInsert = {
-            self.deleteSections(sectionDeletedIndexSet as IndexSet, with: .top)
+            self.deleteSections(sectionDeletedIndexSet as IndexSet, with: self.preferredDeleteSectionAnimation)
             sectionDelta.moves.forEach { indexPair in
                 self.moveSection(indexPair.source, toSection: indexPair.target)
             }
-            self.insertSections(sectionInsertedIndexSet as IndexSet, with: .fade)
+            self.insertSections(sectionInsertedIndexSet as IndexSet, with: self.preferredInsertSectionAnimation)
         }
         
         if #available(iOS 11.0, *) {
@@ -80,17 +80,17 @@ extension UITableView: SectionDeltaUpdatableView {
         }
         
         let deleteMoveInsert = {
-            self.deleteRows(at: itemIndexPathDelta.deletions as [IndexPath], with: .bottom)
+            self.deleteRows(at: itemIndexPathDelta.deletions as [IndexPath], with: self.preferredDeleteRowAnimation)
             itemIndexPathDelta.moves.forEach { indexPathPair in
                 self.moveRow(at: indexPathPair.source as IndexPath, to: indexPathPair.target as IndexPath)
             }
-            self.insertRows(at: itemIndexPathDelta.insertions as [IndexPath], with: .fade)
+            self.insertRows(at: itemIndexPathDelta.insertions as [IndexPath], with: self.preferredInsertRowAnimation)
         }
 
         let reload = {
             // Reloads occur on original indexes
             // These need to be performed after the first animation is complete
-            self.reloadRows(at: automaticReloadIndexPaths, with: .fade)
+            self.reloadRows(at: automaticReloadIndexPaths, with: self.preferredReloadRowAnimation)
         }
         
         if #available(iOS 11.0, *) {
@@ -166,7 +166,7 @@ extension UITableView: SectionDeltaUpdatableView {
                     return
                 }
                 let sections = IndexSet(integersIn: 0..<numberOfSections)
-                strongSelf.reloadSections(sections, with: .none)
+                strongSelf.reloadSections(sections, with: strongSelf.preferredReloadSectionAnimation)
             }, completion: { _ in
                 completion?()
             })
@@ -183,7 +183,7 @@ extension UITableView: SectionDeltaUpdatableView {
                 return
             }
             let sections = IndexSet(integersIn: 0..<numberOfSections)
-            reloadSections(sections, with: .none)
+            reloadSections(sections, with: preferredReloadSectionAnimation)
             endUpdates()
             completion?()
         }
@@ -336,6 +336,58 @@ private extension UIView {
             })
         }
         
+    }
+}
+
+// MARK: UITableView + TableViewFixedRowAnimationProviding
+
+extension UITableView {
+    
+    var preferredDeleteRowAnimation: UITableView.RowAnimation {
+        guard let animationProviding = self as? TableViewFixedRowAnimationProviding else {
+            return TableViewRowConstants.defaultDeleteAnimation
+        }
+        return animationProviding.deleteRowAnimation
+    }
+    
+    var preferredInsertRowAnimation: UITableView.RowAnimation {
+        guard let animationProviding = self as? TableViewFixedRowAnimationProviding else {
+            return TableViewRowConstants.defaultInsertAnimation
+        }
+        return animationProviding.insertRowAnimation
+    }
+    
+    var preferredReloadRowAnimation: UITableView.RowAnimation {
+        guard let animationProviding = self as? TableViewFixedRowAnimationProviding else {
+            return TableViewRowConstants.defaultReloadAnimation
+        }
+        return animationProviding.reloadRowAnimation
+    }
+}
+
+// MARK: UITableView + TableViewFixedSectionAnimationProviding
+
+extension UITableView {
+    
+    var preferredDeleteSectionAnimation: UITableView.RowAnimation {
+        guard let animationProviding = self as? TableViewFixedSectionAnimationProviding else {
+            return TableViewSectionConstants.defaultDeleteAnimation
+        }
+        return animationProviding.deleteSectionAnimation
+    }
+    
+    var preferredInsertSectionAnimation: UITableView.RowAnimation {
+        guard let animationProviding = self as? TableViewFixedSectionAnimationProviding else {
+            return TableViewSectionConstants.defaultInsertAnimation
+        }
+        return animationProviding.insertSectionAnimation
+    }
+    
+    var preferredReloadSectionAnimation: UITableView.RowAnimation {
+        guard let animationProviding = self as? TableViewFixedSectionAnimationProviding else {
+            return TableViewSectionConstants.defaultReloadAnimation
+        }
+        return animationProviding.reloadSectionAnimation
     }
 }
 

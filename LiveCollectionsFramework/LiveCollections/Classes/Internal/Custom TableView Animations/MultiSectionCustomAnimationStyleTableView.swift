@@ -43,34 +43,34 @@ final class MultiSectionCustomAnimationStyleTableView: CustomAnimationStyleTable
     
     // MARK: TableViewRowAnimationProviding
     
-    func deleteAnimation(for section: Int) -> UITableView.RowAnimation? {
+    func deleteRowAnimation(for section: Int) -> UITableView.RowAnimation? {
         guard let animationModel = rowAnimationModels[section] else { return nil }
         return animationModel.deleteAnimation
     }
     
-    func insertAnimation(for section: Int) -> UITableView.RowAnimation? {
+    func insertRowAnimation(for section: Int) -> UITableView.RowAnimation? {
         guard let animationModel = rowAnimationModels[section] else { return nil }
         return animationModel.insertAnimation
     }
     
-    func reloadAnimation(for section: Int) -> UITableView.RowAnimation? {
+    func reloadRowAnimation(for section: Int) -> UITableView.RowAnimation? {
         guard let animationModel = rowAnimationModels[section] else { return nil }
         return animationModel.reloadAnimation
     }
     
     // MARK: TableViewSectionAnimationProviding
     
-    func sectionDeleteAnimation(for section: Int) -> UITableView.RowAnimation? {
+    func deleteSectionAnimation(for section: Int) -> UITableView.RowAnimation? {
         guard let animationModel = sectionAnimationModels[section] else { return nil }
         return animationModel.deleteAnimation
     }
     
-    func sectionInsertAnimation(for section: Int) -> UITableView.RowAnimation? {
+    func insertSectionAnimation(for section: Int) -> UITableView.RowAnimation? {
         guard let animationModel = sectionAnimationModels[section] else { return nil }
         return animationModel.insertAnimation
     }
     
-    func sectionReloadAnimation(for section: Int) -> UITableView.RowAnimation? {
+    func reloadSectionAnimation(for section: Int) -> UITableView.RowAnimation? {
         guard let animationModel = sectionAnimationModels[section] else { return nil }
         return animationModel.reloadAnimation
     }

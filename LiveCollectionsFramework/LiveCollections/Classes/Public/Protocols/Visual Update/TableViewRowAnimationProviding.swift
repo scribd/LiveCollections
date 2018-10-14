@@ -9,15 +9,15 @@
 import UIKit
 
 public protocol TableViewRowAnimationProviding {
-    func deleteAnimation(for section: Int) -> UITableView.RowAnimation?
-    func insertAnimation(for section: Int) -> UITableView.RowAnimation?
-    func reloadAnimation(for section: Int) -> UITableView.RowAnimation?
+    func deleteRowAnimation(for section: Int) -> UITableView.RowAnimation?
+    func insertRowAnimation(for section: Int) -> UITableView.RowAnimation?
+    func reloadRowAnimation(for section: Int) -> UITableView.RowAnimation?
 }
 
 public protocol TableViewSectionAnimationProviding: AnyObject {
-    func sectionDeleteAnimation(for section: Int) -> UITableView.RowAnimation?
-    func sectionInsertAnimation(for section: Int) -> UITableView.RowAnimation?
-    func sectionReloadAnimation(for section: Int) -> UITableView.RowAnimation?
+    func deleteSectionAnimation(for section: Int) -> UITableView.RowAnimation?
+    func insertSectionAnimation(for section: Int) -> UITableView.RowAnimation?
+    func reloadSectionAnimation(for section: Int) -> UITableView.RowAnimation?
 }
 
 public struct TableViewAnimationModel {

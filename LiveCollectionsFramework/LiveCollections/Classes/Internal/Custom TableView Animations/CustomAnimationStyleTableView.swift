@@ -74,12 +74,20 @@ class CustomAnimationStyleTableView: UITableView {
         targetTableView?.insertSections(sections, with: animation)
     }
     
+    override func moveSection(_ section: Int, toSection newSection: Int) {
+        targetTableView?.moveSection(section, toSection: newSection)
+    }
+    
     override func reloadSections(_ sections: IndexSet, with animation: UITableView.RowAnimation) {
         targetTableView?.reloadSections(sections, with: animation)
     }
     
     override func reloadData() {
         targetTableView?.reloadData()
+    }
+    
+    override var window: UIWindow? {
+        return targetTableView?.window
     }
     
     // MARK: Override pointer equality

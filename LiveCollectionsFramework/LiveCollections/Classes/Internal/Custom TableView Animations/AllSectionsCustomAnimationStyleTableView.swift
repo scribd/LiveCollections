@@ -1,16 +1,14 @@
 //
-//  SingleSectionCustomAnimationStyleTableView.swift
+//  AllSectionsCustomAnimationStyleTableView.swift
 //  LiveCollections
 //
-//  Created by Stephane Magne on 10/13/18.
+//  Created by Stephane Magne on 10/14/18.
 //  Copyright © 2018 Scribd. All rights reserved.
 //
 
 import UIKit
 
-final class SingleSectionCustomAnimationStyleTableView: CustomAnimationStyleTableView, TableViewSingleSectionProviding, TableViewRowAnimationProviding, TableViewSectionAnimationProviding, TableViewFixedRowAnimationProviding, TableViewFixedSectionAnimationProviding {
-    
-    let section: Int
+final class AllSectionsCustomAnimationStyleTableView: CustomAnimationStyleTableView, TableViewFixedRowAnimationProviding, TableViewFixedSectionAnimationProviding {
     
     let deleteRowAnimation: UITableView.RowAnimation
     let insertRowAnimation: UITableView.RowAnimation
@@ -19,12 +17,10 @@ final class SingleSectionCustomAnimationStyleTableView: CustomAnimationStyleTabl
     let deleteSectionAnimation: UITableView.RowAnimation
     let insertSectionAnimation: UITableView.RowAnimation
     let reloadSectionAnimation: UITableView.RowAnimation
-
+    
     init(tableView: UITableView,
-         section: Int,
          rowAnimations: TableViewAnimationModel,
          sectionAnimations: TableViewAnimationModel) {
-        self.section = section
         self.deleteRowAnimation = rowAnimations.deleteAnimation
         self.insertRowAnimation = rowAnimations.insertAnimation
         self.reloadRowAnimation = rowAnimations.reloadAnimation

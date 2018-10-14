@@ -73,8 +73,7 @@ public final class CollectionSectionData<SectionType: UniquelyIdentifiableSectio
     
     // thread safety
     private let dataQueue = DispatchQueue(label: "\(CollectionSectionData.self) dispatch queue", attributes: .concurrent)
-    private let calculationQueue = DispatchQueue.main
-        //DispatchQueue(label: "\(CollectionSectionData.self) calculation dispatch queue")
+    private let calculationQueue = DispatchQueue(label: "\(CollectionSectionData.self) calculation dispatch queue")
 
     public init(view: SectionDeltaUpdatableView, sectionData: [SectionType] = []) {
         self.view = view
@@ -163,6 +162,17 @@ public extension NonUniqueCollectionSectionData {
         let updatedUniqueData = NonUniqueCollectionSectionData._transformData(sectionData)
         self.init(view: view, sectionData: updatedUniqueData)
     }
+
+    public convenience init<NonUniqueSection>(tableView: UITableView,
+                                              sectionData: [NonUniqueSection] = [],
+                                              rowAnimations: TableViewAnimationModel,
+                                              sectionAnimations: TableViewAnimationModel) where SectionType == NonUniqueSectionDatum<NonUniqueSection> {
+        let updatedUniqueData = NonUniqueCollectionSectionData._transformData(sectionData)
+        self.init(tableView: tableView,
+                  sectionData: updatedUniqueData,
+                  rowAnimations: rowAnimations,
+                  sectionAnimations: sectionAnimations)
+    }
     
     public func update<NonUniqueSection>(_ nonUniqueData: [NonUniqueSection], completion: (() -> Void)? = nil) where SectionType == NonUniqueSectionDatum<NonUniqueSection> {
         let updatedUniqueData = NonUniqueCollectionSectionData._transformData(nonUniqueData)
@@ -177,5 +187,24 @@ public extension NonUniqueCollectionSectionData {
     private static func _transformData<NonUniqueSection>(_ nonUniqueData: [NonUniqueSection]) -> [NonUniqueSectionDatum<NonUniqueSection>] where SectionType == NonUniqueSectionDatum<NonUniqueSection> {
         let dataFactory = NonUniqueDataFactory<NonUniqueSection.DataType>(automaticallyClearsData: false)
         return nonUniqueData.map { NonUniqueSectionDatum<NonUniqueSection>(sectionData: $0, dataFactory: dataFactory) }
+    }
+}
+
+// MARK: - Setting UITableView Animation Style
+
+public extension CollectionSectionData {
+    
+    public convenience init(tableView: UITableView,
+                            sectionData: [SectionType] = [],
+                            rowAnimations: TableViewAnimationModel,
+                            sectionAnimations: TableViewAnimationModel) {
+        
+        let customTableView = DispatchQueue.main.safeSync {
+            return AllSectionsCustomAnimationStyleTableView(tableView: tableView,
+                                                            rowAnimations: rowAnimations,
+                                                            sectionAnimations: sectionAnimations)
+        }
+        
+        self.init(view: customTableView, sectionData: sectionData)
     }
 }

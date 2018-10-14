@@ -12,18 +12,16 @@ protocol TableViewSingleSectionProviding {
     var section: Int { get }
 }
 
-protocol TableViewAllSectionsProviding { }
-
 protocol TableViewFixedRowAnimationProviding {
-    var deleteAnimation: UITableView.RowAnimation { get }
-    var insertAnimation: UITableView.RowAnimation { get }
-    var reloadAnimation: UITableView.RowAnimation { get }
+    var deleteRowAnimation: UITableView.RowAnimation { get }
+    var insertRowAnimation: UITableView.RowAnimation { get }
+    var reloadRowAnimation: UITableView.RowAnimation { get }
 }
 
 protocol TableViewFixedSectionAnimationProviding {
-    var sectionDeleteAnimation: UITableView.RowAnimation { get }
-    var sectionInsertAnimation: UITableView.RowAnimation { get }
-    var sectionReloadAnimation: UITableView.RowAnimation { get }
+    var deleteSectionAnimation: UITableView.RowAnimation { get }
+    var insertSectionAnimation: UITableView.RowAnimation { get }
+    var reloadSectionAnimation: UITableView.RowAnimation { get }
 }
 
 // MARK: Extension TableViewFixedRowAnimationProviding
@@ -31,9 +29,9 @@ protocol TableViewFixedSectionAnimationProviding {
 extension TableViewFixedRowAnimationProviding {
     
     var rowAnimationModel: TableViewAnimationModel {
-        return TableViewAnimationModel(deleteAnimation: deleteAnimation,
-                                       insertAnimation: insertAnimation,
-                                       reloadAnimation: reloadAnimation)
+        return TableViewAnimationModel(deleteAnimation: deleteRowAnimation,
+                                       insertAnimation: insertRowAnimation,
+                                       reloadAnimation: reloadRowAnimation)
     }
 }
 
@@ -42,9 +40,9 @@ extension TableViewFixedRowAnimationProviding {
 extension TableViewFixedSectionAnimationProviding {
     
     var sectionAnimationModel: TableViewAnimationModel {
-        return TableViewAnimationModel(deleteAnimation: sectionDeleteAnimation,
-                                       insertAnimation: sectionInsertAnimation,
-                                       reloadAnimation: sectionReloadAnimation)
+        return TableViewAnimationModel(deleteAnimation: deleteSectionAnimation,
+                                       insertAnimation: insertSectionAnimation,
+                                       reloadAnimation: reloadSectionAnimation)
     }
 }
 
@@ -52,69 +50,37 @@ extension TableViewFixedSectionAnimationProviding {
 
 extension TableViewRowAnimationProviding where Self: TableViewSingleSectionProviding, Self: TableViewFixedRowAnimationProviding {
 
-    func deleteAnimation(for section: Int) -> UITableView.RowAnimation? {
+    func deleteRowAnimation(for section: Int) -> UITableView.RowAnimation? {
         guard self.section == section else { return nil }
-        return deleteAnimation
+        return deleteRowAnimation
     }
     
-    func insertAnimation(for section: Int) -> UITableView.RowAnimation? {
+    func insertRowAnimation(for section: Int) -> UITableView.RowAnimation? {
         guard self.section == section else { return nil }
-        return insertAnimation
+        return insertRowAnimation
     }
     
-    func reloadAnimation(for section: Int) -> UITableView.RowAnimation? {
+    func reloadRowAnimation(for section: Int) -> UITableView.RowAnimation? {
         guard self.section == section else { return nil }
-        return reloadAnimation
+        return reloadRowAnimation
     }
 
 }
 
 extension TableViewRowAnimationProviding where Self: TableViewSingleSectionProviding, Self: TableViewFixedSectionAnimationProviding {
 
-    func sectionDeleteAnimation(for section: Int) -> UITableView.RowAnimation? {
+    func deleteSectionAnimation(for section: Int) -> UITableView.RowAnimation? {
         guard self.section == section else { return nil }
-        return sectionDeleteAnimation
+        return deleteSectionAnimation
     }
     
-    func sectionInsertAnimation(for section: Int) -> UITableView.RowAnimation? {
+    func insertSectionAnimation(for section: Int) -> UITableView.RowAnimation? {
         guard self.section == section else { return nil }
-        return sectionInsertAnimation
+        return insertSectionAnimation
     }
     
-    func sectionReloadAnimation(for section: Int) -> UITableView.RowAnimation? {
+    func reloadSectionAnimation(for section: Int) -> UITableView.RowAnimation? {
         guard self.section == section else { return nil }
-        return sectionReloadAnimation
-    }
-}
-
-// MARK: Extension TableViewAllSectionsProviding + TableViewFixedRowAnimationProviding
-
-extension TableViewRowAnimationProviding where Self: TableViewAllSectionsProviding, Self: TableViewFixedRowAnimationProviding {
-    
-    func deleteAnimation(for section: Int) -> UITableView.RowAnimation? {
-        return deleteAnimation
-    }
-    
-    func insertAnimation(for section: Int) -> UITableView.RowAnimation? {
-        return insertAnimation
-    }
-    
-    func reloadAnimation(for section: Int) -> UITableView.RowAnimation? {
-        return reloadAnimation
-    }
-}
-
-extension TableViewRowAnimationProviding where Self: TableViewAllSectionsProviding, Self: TableViewFixedSectionAnimationProviding {
-    
-    func sectionDeleteAnimation(for section: Int) -> UITableView.RowAnimation? {
-        return sectionDeleteAnimation
-    }
-    
-    func sectionInsertAnimation(for section: Int) -> UITableView.RowAnimation? {
-        return sectionInsertAnimation
-    }
-    
-    func sectionReloadAnimation(for section: Int) -> UITableView.RowAnimation? {
-        return sectionReloadAnimation
+        return reloadSectionAnimation
     }
 }
