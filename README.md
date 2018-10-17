@@ -1,6 +1,10 @@
+<p align="center">
 <img src="https://github.com/scribd/LiveCollections/blob/master/ReadMe/LiveCollections_main_logo.png" alt="LiveCollections logo">
+</p>
 
+<p align="center">
 <img src="https://github.com/scribd/LiveCollections/blob/master/ReadMe/LiveCollections_Animated.png" alt="Single section collection view class graph">
+</p>
 
 <b>LiveCollections</b> is an open source framework that makes using UITableView and UICollectionView animations possible in just a few lines of code. Given two sets of data, the framework will automatically perform all of the calculations, build the line item animation code, and perform it in the view.
 
