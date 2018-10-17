@@ -55,7 +55,8 @@ final class ScenarioThirteenViewController: UIViewController {
                                                     insertAnimation: .right,
                                                     reloadAnimation: .middle)
         collectionData.setTableView(tableView,
-                                    rowAnimations: rowAnimations)
+                                    rowAnimations: rowAnimations,
+                                    sectionReloadAnimation: .top)
     }
 }
 
