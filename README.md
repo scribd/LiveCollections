@@ -106,7 +106,7 @@ let data = collectionData[indexPath.item].rawData
 
 <hr>
 
-Listed below is a summation of the relevant code you'll need in your app for each of the scneario in the sample app. These reflect most of the use cases you will need when managing 
+Listed below is a summation of the relevant code you'll need in your app for each of the scneario in the sample app. These reflect most of the use cases you will encounter.
 <br>
 <h2>Scenario 1: A UICollectionView with one section</h2>
 
