@@ -53,7 +53,7 @@ The requirements for <b>CollectionSectionData</b> will be detailed in scenerios 
 Once you create an instance of CollectionData, animating your table or collection view becomes just a single line of code:
 
 ```swift
-func dataDidUpdate(_ updatedData: [YourDataType]) {
+func yourDataUpdateFunction(_ updatedData: [YourDataType]) {
     collectionData.update(updatedData)
 }
 
