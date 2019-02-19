@@ -47,6 +47,20 @@ To prepare your data to be used in <b>CollectionData</b>, you just need to adopt
 The requirements for <b>CollectionSectionData</b> will be detailed in scenerios 5 and 6 a bit later on.
 
 <BR>
+    
+<b>Updates made easy!</b>
+
+Once you create an instance of CollectionData, animating your table or collection view becomes just a single line of code:
+
+```swift
+func dataDidUpdate(_ updatedData: [YourDataType]) {
+    collectionData.update(updatedData)
+}
+
+``` 
+<BR>
+    
+    
 <h2>Adopting the protocol UniquelyIdentifiable</h2>
 
 The crux of being able to use <b>CollectionData</b> as your data source and get all of the benefits of LiveCollections, is by adopting the protocol <b>UniquelyIdentifiable</b>. It's what allows the private delta calculator in the framework to determine all of the positional moves of your data objects.
