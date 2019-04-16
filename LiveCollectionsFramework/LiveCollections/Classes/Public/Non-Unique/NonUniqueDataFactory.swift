@@ -12,11 +12,9 @@ public struct UniqueKeyFromNonUniqueDatum<DataType: NonUniquelyIdentifiable>: Ha
     let baseValue: DataType
     let occurrence: Int
     
-    public var hashValue: Int {
-        var hasher = Hasher()
+    public func hash(into hasher: inout Hasher) {
         hasher.combine(baseValue.nonUniqueID)
         hasher.combine(occurrence)
-        return hasher.finalize()
     }
 }
 

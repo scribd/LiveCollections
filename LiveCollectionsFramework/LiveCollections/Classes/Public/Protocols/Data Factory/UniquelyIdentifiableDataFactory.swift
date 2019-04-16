@@ -35,8 +35,8 @@ public protocol UniquelyIdentifiableDataFactory {
 
 public extension UniquelyIdentifiableDataFactory {
     var buildQueue: DispatchQueue? { return nil }
-    public func didBeginBuildingData() { }
-    public func didEndBuildingData() { }
+    func didBeginBuildingData() { }
+    func didEndBuildingData() { }
 }
 
 extension UniquelyIdentifiableDataFactory {

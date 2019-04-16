@@ -17,6 +17,11 @@ protocol ItemDataProvider: AnyObject {
     // the view will simply call `reloadSection` which performs sort of
     // a smear of an animation rather than item per item animations
     var dataCountAnimationThreshold: Int { get }
+    
+    // As deltas get large, it can trigger an incrasing number of layout loops.
+    // This can reduce drawing performance and also trip your debugger flags
+    // if 'UIViewLayoutFeedbackLoopDebuggingThreshold' is set
+    var deltaCountAnimationThreshold: Int { get }
 }
 
 protocol ItemCalculatingDataProvider: AnyObject {

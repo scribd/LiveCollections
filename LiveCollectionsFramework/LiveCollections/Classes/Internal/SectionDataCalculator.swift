@@ -111,7 +111,7 @@ private extension SectionDataCalculator {
         let currentCount = sectionProvider.items.count
         let updatedCount = updatedSections.reduce(0) { $0 + $1.items.count }
         
-        let shortCircuitAnimation = currentCount > sectionProvider.dataCountAnimationThreshold ||
+        let dataSetTooLarge = currentCount > sectionProvider.dataCountAnimationThreshold ||
             updatedCount > sectionProvider.dataCountAnimationThreshold
         
         // sanitize data
@@ -157,7 +157,7 @@ private extension SectionDataCalculator {
         let itemDelta: IndexDelta
         let deletedItems: [DataType]
 
-        if shortCircuitAnimation {
+        if dataSetTooLarge {
             itemDelta = .empty
             if reloadDelegate == nil {
                 deletedItems = []
@@ -234,8 +234,9 @@ private extension SectionDataCalculator {
             }
             
             // short circuit if too many changes
+            let deltaChangeTooLarge = itemDelta.changeCount > sectionProvider.deltaCountAnimationThreshold
             
-            guard shortCircuitAnimation == false else {
+            guard dataSetTooLarge == false && deltaChangeTooLarge == false else {
                 
                 let updateData = { [weak weakProvider = sectionProvider] in
                     guard let strongProvider = weakProvider else { return }
@@ -434,7 +435,7 @@ private extension SectionDataCalculator {
         // Remove Inserted Items
         for insertedIndex in appliedDeltas.insertions.reversed() {
             let item = updatedData[insertedIndex]
-            guard let index = updatedSections.index(where: { $0.uniqueID == item.uniqueID }) else { continue }
+            guard let index = updatedSections.firstIndex(where: { $0.uniqueID == item.uniqueID }) else { continue }
             updatedSections.remove(at: index)
         }
         
@@ -647,7 +648,7 @@ private extension Array where Element: UniquelyIdentifiable {
         var orderedItems: [Element] = []
         
         for updatedItem in updatedData {
-            guard let index = index(where: { $0.uniqueID == updatedItem.uniqueID }) else { continue }
+            guard let index = firstIndex(where: { $0.uniqueID == updatedItem.uniqueID }) else { continue }
             let originalItem = self[index]
             orderedItems.append(originalItem)
         }
