@@ -69,8 +69,9 @@ public final class CollectionSectionData<SectionType: UniquelyIdentifiableSectio
     private let dataCalculator = SectionDataCalculator<SectionType>()
     
     // animation threshold
-    public var dataCountAnimationThreshold: Int = 10000
-    
+    public var dataCountAnimationThreshold: Int = 10000 // Lower this number to limit large calculations and improve performance
+    public var deltaCountAnimationThreshold: Int = 10000 // Lower this number to limit animation noise and layout loops
+
     // thread safety
     private let dataQueue = DispatchQueue(label: "\(CollectionSectionData.self) dispatch queue", attributes: .concurrent)
     private let calculationQueue = DispatchQueue(label: "\(CollectionSectionData.self) calculation dispatch queue")

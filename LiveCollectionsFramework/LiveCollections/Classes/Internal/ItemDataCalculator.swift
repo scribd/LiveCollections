@@ -144,7 +144,8 @@ private extension ItemDataCalculator {
         
         itemProvider.calculatingItems = rawData
         let view = viewProvider.view
-        
+        let viewDelegate = AnyDeltaUpdatableViewDelegate(reloadDelegate, viewProvider: viewProvider)
+
         let updateData = { [weak weakItemProvider = itemProvider, weak weakViewProvider = viewProvider] in
             guard let strongItemProvider = weakItemProvider,
                 let strongViewProvider = weakViewProvider else { return }
@@ -160,50 +161,36 @@ private extension ItemDataCalculator {
             }
         }
         
-        let viewDelegate = AnyDeltaUpdatableViewDelegate(reloadDelegate,
-                                                         viewProvider: viewProvider)
-        
         // Short circuit if there are too many items
         
-        guard itemProvider.items.count <= itemProvider.dataCountAnimationThreshold &&
-            updatedItems.count <= itemProvider.dataCountAnimationThreshold else {
-                
-                let deletedItems: [DataType]
-                if deletionDelegate == nil {
-                    deletedItems = []
-                } else {
-                    let deltaCalculator = DeltaCalculator<DataType>(startingData: itemProvider.items, updatedData: updatedItems)
-                    (deletedItems, _) = deltaCalculator.deletedItems()
-                }
-                
-                let calculationCompletion: () -> Void = { [weak self, weak weakDeletionDelegate = deletionDelegate] in
-                    completion?()
-                    if deletedItems.isEmpty == false {
-                        weakDeletionDelegate?.didDeleteItems(deletedItems)
-                    }
-                    self?._performNextCalculation()
-                }
-                
-                let sectionUpdate = SectionUpdate(section: section,
-                                                  delta: .empty,
-                                                  delegate: viewDelegate,
-                                                  update: updateData,
-                                                  completion: calculationCompletion)
-                
-                DispatchQueue.main.async { [weak weakViewProvider = viewProvider] in
-                    guard let targetView = weakViewProvider?.view else {
-                        updateData()
-                        calculationCompletion()
-                        return
-                    }
-                    targetView.reloadSections(for: [sectionUpdate])
-                }
-                return
+        let dataSetTooLarge = itemProvider.items.count > itemProvider.dataCountAnimationThreshold ||
+            updatedItems.count > itemProvider.dataCountAnimationThreshold
+
+        let delta: IndexDelta
+        let deletedItems: [DataType]
+
+        if dataSetTooLarge {
+            delta = .empty
+            deletedItems = []
+        } else {
+            (delta, deletedItems) = _calculateDelta(updatedItems, itemProvider: itemProvider)
         }
         
-        // Otherwise, calculate
+        let deltaChangeTooLarge = delta.changeCount > itemProvider.deltaCountAnimationThreshold
         
-        let (delta, deletedItems) = _calculateDelta(updatedItems, itemProvider: itemProvider)
+        guard deltaChangeTooLarge == false && deltaChangeTooLarge == false else {
+            _updateSections(updatedItems,
+                            itemProvider: itemProvider,
+                            section: section,
+                            viewProvider: viewProvider,
+                            viewDelegate: viewDelegate,
+                            deletionDelegate: deletionDelegate,
+                            updateData: updateData,
+                            completion: completion)
+            return
+        }
+        
+        // Otherwise animate
         
         let calculationCompletion: () -> Void = { [weak self, weak weakDeletionDelegate = deletionDelegate] in
             completion?()
@@ -267,25 +254,13 @@ private extension ItemDataCalculator {
                                          reloadDelegate: CollectionDataManualReloadDelegate?,
                                          completion: (() -> Void)?) where ItemProvider: ItemDataProvider, ItemProvider: ItemCalculatingDataProvider, ItemProvider.DataType == DataType, ItemProvider.CalculatingRawType == DataType.RawType {
         
-        // Note: we don't short circuit for appending, because there is no calculation, it costs nothing to determine the delta
-        
         itemProvider.calculatingItems = rawData
         let view = viewProvider.view
+        let viewDelegate = AnyDeltaUpdatableViewDelegate(viewProvider: viewProvider)
         let delta = _calculateAppendDelta(appendedItems, itemProvider: itemProvider)
-        
-        let calculationCompletion: () -> Void = { [weak self] in
-            completion?()
-            self?._performNextCalculation()
-        }
-        
-        guard delta.hasChanges else {
-            itemProvider.calculatingItems = nil
-            calculationCompletion()
-            return
-        }
-        
+
         let updatedItems = itemProvider.items + appendedItems
-        
+
         let updateData = { [weak weakItemProvider = itemProvider, weak weakViewProvider = viewProvider] in
             guard let strongItemProvider = weakItemProvider,
                 let strongViewProvider = weakViewProvider else { return }
@@ -300,12 +275,37 @@ private extension ItemDataCalculator {
             }
         }
         
+        let calculationCompletion: () -> Void = { [weak self] in
+            completion?()
+            self?._performNextCalculation()
+        }
+
+        // Short circuit if there are too many items
+
+        let deltaChangeTooLarge = delta.changeCount > itemProvider.deltaCountAnimationThreshold
+        
+        guard deltaChangeTooLarge == false && deltaChangeTooLarge == false else {
+            _updateSections(section: section,
+                            viewProvider: viewProvider,
+                            viewDelegate: viewDelegate,
+                            updateData: updateData,
+                            calculationCompletion: calculationCompletion)
+            return
+        }
+
+        // Otherwise animate
+        
+        guard delta.hasChanges else {
+            itemProvider.calculatingItems = nil
+            calculationCompletion()
+            return
+        }
+        
         let itemAnimationStlye: AnimationStyle = {
             guard let reloadDelegate = reloadDelegate else { return .preciseAnimations }
             return reloadDelegate.preferredItemAnimationStyle(for: delta)
         }()
         
-        let viewDelegate = AnyDeltaUpdatableViewDelegate(viewProvider: viewProvider)
         let startingItemCount = itemProvider.items.count
         
         DispatchQueue.main.async { [weak weakItemProvider = itemProvider, weak weakViewProvider = viewProvider] in
@@ -388,6 +388,63 @@ private extension ItemDataCalculator {
                                     delegate: viewDelegate,
                                     updateData: updateAppend,
                                     completion: completion)
+        }
+    }
+    
+    // MARK: Short circuit and update section
+    
+    func _updateSections<DeletionDelegate, ItemProvider>(_ updatedItems: [DataType],
+                                                         itemProvider: ItemProvider,
+                                                         section: Int,
+                                                         viewProvider: CollectionViewProvider,
+                                                         viewDelegate: AnyDeltaUpdatableViewDelegate,
+                                                         deletionDelegate: DeletionDelegate?,
+                                                         updateData: @escaping () -> Void,
+                                                         completion: (() -> Void)?) where DeletionDelegate: CollectionDataDeletionNotificationDelegate, DeletionDelegate.DataType == DataType, ItemProvider: ItemDataProvider, ItemProvider: ItemCalculatingDataProvider, ItemProvider.DataType == DataType, ItemProvider.CalculatingRawType == DataType.RawType {
+
+        let deletedItems: [DataType]
+        if deletionDelegate == nil {
+            deletedItems = []
+        } else {
+            let deltaCalculator = DeltaCalculator<DataType>(startingData: itemProvider.items, updatedData: updatedItems)
+            (deletedItems, _) = deltaCalculator.deletedItems()
+        }
+        
+        let calculationCompletion: () -> Void = { [weak self, weak weakDeletionDelegate = deletionDelegate] in
+            completion?()
+            if deletedItems.isEmpty == false {
+                weakDeletionDelegate?.didDeleteItems(deletedItems)
+            }
+            self?._performNextCalculation()
+        }
+
+        _updateSections(section: section,
+                        viewProvider: viewProvider,
+                        viewDelegate: viewDelegate,
+                        updateData: updateData,
+                        calculationCompletion: calculationCompletion)
+    }
+    
+    func _updateSections(section: Int,
+                         viewProvider: CollectionViewProvider,
+                         viewDelegate: AnyDeltaUpdatableViewDelegate,
+                         updateData: @escaping () -> Void,
+                         calculationCompletion: @escaping () -> Void) {
+
+        let sectionUpdate = SectionUpdate(section: section,
+                                          delta: .empty,
+                                          delegate: viewDelegate,
+                                          update: updateData,
+                                          completion: calculationCompletion)
+
+        
+        DispatchQueue.main.async { [weak weakViewProvider = viewProvider] in
+            guard let targetView = weakViewProvider?.view else {
+                updateData()
+                calculationCompletion()
+                return
+            }
+            targetView.reloadSections(for: [sectionUpdate])
         }
     }
 }

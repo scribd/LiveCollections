@@ -111,7 +111,7 @@ private extension SectionDataCalculator {
         let currentCount = sectionProvider.items.count
         let updatedCount = updatedSections.reduce(0) { $0 + $1.items.count }
         
-        let shortCircuitAnimation = currentCount > sectionProvider.dataCountAnimationThreshold ||
+        let dataSetTooLarge = currentCount > sectionProvider.dataCountAnimationThreshold ||
             updatedCount > sectionProvider.dataCountAnimationThreshold
         
         // sanitize data
@@ -157,7 +157,7 @@ private extension SectionDataCalculator {
         let itemDelta: IndexDelta
         let deletedItems: [DataType]
 
-        if shortCircuitAnimation {
+        if dataSetTooLarge {
             itemDelta = .empty
             if reloadDelegate == nil {
                 deletedItems = []
@@ -234,8 +234,9 @@ private extension SectionDataCalculator {
             }
             
             // short circuit if too many changes
+            let deltaChangeTooLarge = itemDelta.changeCount > sectionProvider.deltaCountAnimationThreshold
             
-            guard shortCircuitAnimation == false else {
+            guard dataSetTooLarge == false && deltaChangeTooLarge == false else {
                 
                 let updateData = { [weak weakProvider = sectionProvider] in
                     guard let strongProvider = weakProvider else { return }

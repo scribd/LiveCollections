@@ -91,7 +91,8 @@ public final class CollectionData<DataType: UniquelyIdentifiable>: CollectionDat
     }
     
     // animation threshold
-    public var dataCountAnimationThreshold: Int = 10000
+    public var dataCountAnimationThreshold: Int = 10000 // Lower this number to limit large calculations and improve performance
+    public var deltaCountAnimationThreshold: Int = 10000 // Lower this number to limit animation noise and layout loops
 
     // thread safety
     private let dataQueue = DispatchQueue(label: "\(CollectionData.self) data dispatch queue", attributes: .concurrent)
