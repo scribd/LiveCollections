@@ -49,7 +49,7 @@ extension Scenario {
     }
     
     var name: String {
-        guard let index = Scenario.allCases.index(of: self) else { return "Unknown" }
+        guard let index = Scenario.allCases.firstIndex(of: self) else { return "Unknown" }
         return "Scenario \(index+1): \(title)"
     }
 

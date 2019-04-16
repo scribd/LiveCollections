@@ -159,12 +159,12 @@ public typealias NonUniqueCollectionSectionData<NonUniqueSection: UniquelyIdenti
 
 public extension NonUniqueCollectionSectionData {
 
-    public convenience init<NonUniqueSection>(view: SectionDeltaUpdatableView, sectionData: [NonUniqueSection] = []) where SectionType == NonUniqueSectionDatum<NonUniqueSection> {
+    convenience init<NonUniqueSection>(view: SectionDeltaUpdatableView, sectionData: [NonUniqueSection] = []) where SectionType == NonUniqueSectionDatum<NonUniqueSection> {
         let updatedUniqueData = NonUniqueCollectionSectionData._transformData(sectionData)
         self.init(view: view, sectionData: updatedUniqueData)
     }
 
-    public convenience init<NonUniqueSection>(tableView: UITableView,
+    convenience init<NonUniqueSection>(tableView: UITableView,
                                               sectionData: [NonUniqueSection] = [],
                                               rowAnimations: TableViewAnimationModel,
                                               sectionAnimations: TableViewAnimationModel) where SectionType == NonUniqueSectionDatum<NonUniqueSection> {
@@ -175,12 +175,12 @@ public extension NonUniqueCollectionSectionData {
                   sectionAnimations: sectionAnimations)
     }
     
-    public func update<NonUniqueSection>(_ nonUniqueData: [NonUniqueSection], completion: (() -> Void)? = nil) where SectionType == NonUniqueSectionDatum<NonUniqueSection> {
+    func update<NonUniqueSection>(_ nonUniqueData: [NonUniqueSection], completion: (() -> Void)? = nil) where SectionType == NonUniqueSectionDatum<NonUniqueSection> {
         let updatedUniqueData = NonUniqueCollectionSectionData._transformData(nonUniqueData)
         self.update(updatedUniqueData, completion: completion)
     }
 
-    public func append<NonUniqueSection>(_ nonUniqueData: [NonUniqueSection], completion: (() -> Void)? = nil) where SectionType == NonUniqueSectionDatum<NonUniqueSection> {
+    func append<NonUniqueSection>(_ nonUniqueData: [NonUniqueSection], completion: (() -> Void)? = nil) where SectionType == NonUniqueSectionDatum<NonUniqueSection> {
             let updatedUniqueData = NonUniqueCollectionSectionData._transformData(nonUniqueData)
             self.append(updatedUniqueData, completion: completion)
     }
@@ -195,7 +195,7 @@ public extension NonUniqueCollectionSectionData {
 
 public extension CollectionSectionData {
     
-    public convenience init(tableView: UITableView,
+    convenience init(tableView: UITableView,
                             sectionData: [SectionType] = [],
                             rowAnimations: TableViewAnimationModel,
                             sectionAnimations: TableViewAnimationModel) {

@@ -435,7 +435,7 @@ private extension SectionDataCalculator {
         // Remove Inserted Items
         for insertedIndex in appliedDeltas.insertions.reversed() {
             let item = updatedData[insertedIndex]
-            guard let index = updatedSections.index(where: { $0.uniqueID == item.uniqueID }) else { continue }
+            guard let index = updatedSections.firstIndex(where: { $0.uniqueID == item.uniqueID }) else { continue }
             updatedSections.remove(at: index)
         }
         
@@ -648,7 +648,7 @@ private extension Array where Element: UniquelyIdentifiable {
         var orderedItems: [Element] = []
         
         for updatedItem in updatedData {
-            guard let index = index(where: { $0.uniqueID == updatedItem.uniqueID }) else { continue }
+            guard let index = firstIndex(where: { $0.uniqueID == updatedItem.uniqueID }) else { continue }
             let originalItem = self[index]
             orderedItems.append(originalItem)
         }

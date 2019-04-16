@@ -89,8 +89,9 @@
       "scale" : "2x"
     },
     {
-      "idiom" : "ios-marketing",
       "size" : "1024x1024",
+      "idiom" : "ios-marketing",
+      "filename" : "LiveCollectionsLogo_AppStore-1.png",
       "scale" : "1x"
     }
   ],

@@ -71,7 +71,7 @@ public struct IndexDelta: Equatable {
 
 public extension IndexDelta {
     
-    public static var empty: IndexDelta {
+    static var empty: IndexDelta {
         return IndexDelta(deletions: [], insertions: [], reloads: [], moves: [])
     }
 }
