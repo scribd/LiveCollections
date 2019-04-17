@@ -12,6 +12,14 @@ Full detail for the use case of each scenario <a href="https://medium.com/p/59ea
 
 <hr>
 
+<h2>Swift Version</h2>
+
+This project has been upgraded to be compatible with Swift 5.0.
+<br>
+
+<hr>
+
+
 <h2>Importing With Carthage</h2>
 
 <br>
@@ -19,7 +27,6 @@ github "scribd/LiveCollections" "beta_0.9.8"
 <br>
 <br>
 
-<hr>
 
 <h2>Importing With CocoaPods</h2>
 
