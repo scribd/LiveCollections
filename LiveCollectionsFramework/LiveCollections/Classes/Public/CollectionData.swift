@@ -45,7 +45,7 @@ public final class CollectionData<ItemType: UniquelyIdentifiable>: CollectionDat
             }
         }
         set {
-            dataQueue.async(flags: .barrier) {
+            dataQueue.async {
                 self._view = newValue
             }
             DispatchQueue.main.safeSync {
@@ -67,14 +67,14 @@ public final class CollectionData<ItemType: UniquelyIdentifiable>: CollectionDat
     private var _items: [DataType]
     internal(set) public var items: [DataType] {
         get { return dataQueue.sync { _items } }
-        set { dataQueue.async(flags: .barrier) { self._items = newValue } }
+        set { dataQueue.async { self._items = newValue } }
     }
     
     private var _calculatingItems: [DataType.RawType]?
     internal(set) public var calculatingItems: [DataType.RawType]? {
         get { return dataQueue.sync { _calculatingItems } }
         set {
-            dataQueue.async(flags: .barrier) {
+            dataQueue.async {
                 guard self._calculatingItems == nil || newValue == nil else { return } // prevent overriding data incorrectly
                 self._calculatingItems = newValue
             }
@@ -97,7 +97,7 @@ public final class CollectionData<ItemType: UniquelyIdentifiable>: CollectionDat
     public var deltaCountAnimationThreshold: Int = 10000 // Lower this number to limit animation noise and layout loops
 
     // thread safety
-    private let dataQueue = DispatchQueue(label: "\(CollectionData.self) data dispatch queue", attributes: .concurrent)
+    private let dataQueue = DispatchQueue(label: "\(CollectionData.self) data dispatch queue")
     private let calculationQueue = DispatchQueue(label: "\(CollectionData.self) calculation dispatch queue")
 
     public convenience init<DataFactory>(dataFactory: DataFactory, rawData: [DataType.RawType] = [], section: Int = 0) where DataFactory: UniquelyIdentifiableDataFactory, DataFactory.RawType == DataFactory.UniquelyIdentifiableType.RawType, DataFactory.UniquelyIdentifiableType == DataType {
@@ -139,7 +139,7 @@ public final class CollectionData<ItemType: UniquelyIdentifiable>: CollectionDat
     private var _section: Int
     public var section: Int {
         get { return dataQueue.sync { _section } }
-        set { dataQueue.async(flags: .barrier) { self._section = newValue } }
+        set { dataQueue.async { self._section = newValue } }
     }
     
     // MARK: CollectionDataActionsInterface

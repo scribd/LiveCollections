@@ -13,7 +13,7 @@ final class ItemDataCalculator<DataType: UniquelyIdentifiable> {
     // MARK: State
     
     private var processingQueue = DispatchQueue(label: "\(ItemDataCalculator.self) ordering queue")
-    private let dataQueue = DispatchQueue(label: "\(ItemDataCalculator.self) dispatch queue", attributes: .concurrent)
+    private let dataQueue = DispatchQueue(label: "\(ItemDataCalculator.self) dispatch queue")
     
     private var _isCalculating: Bool = false
     private var isCalculating: Bool {

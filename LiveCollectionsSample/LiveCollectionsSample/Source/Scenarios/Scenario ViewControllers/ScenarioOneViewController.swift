@@ -26,6 +26,10 @@ final class ScenarioOneViewController: UIViewController {
     private let imageLoader: MovieImageLoaderInterface
     private let collectionData = CollectionData<Movie>()
     
+    deinit {
+        imageLoader.clearAll()
+    }
+    
     init(dataCoordinator: DataCoordinator, imageLoader: MovieImageLoaderInterface) {
         self.dataCoordinator = dataCoordinator
         self.imageLoader = imageLoader

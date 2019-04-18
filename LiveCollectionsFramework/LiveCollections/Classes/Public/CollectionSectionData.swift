@@ -73,7 +73,7 @@ public final class CollectionSectionData<SectionType: UniquelyIdentifiableSectio
     public var deltaCountAnimationThreshold: Int = 10000 // Lower this number to limit animation noise and layout loops
 
     // thread safety
-    private let dataQueue = DispatchQueue(label: "\(CollectionSectionData.self) dispatch queue", attributes: .concurrent)
+    private let dataQueue = DispatchQueue(label: "\(CollectionSectionData.self) dispatch queue")
     private let calculationQueue = DispatchQueue(label: "\(CollectionSectionData.self) calculation dispatch queue")
 
     public init(view: SectionDeltaUpdatableView, sectionData: [SectionType] = []) {

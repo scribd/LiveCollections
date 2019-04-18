@@ -152,21 +152,24 @@ final class DeltaCalculator<Element: UniquelyIdentifiable> {
 
 final class DataCalculatorQueue {
     
-    private var queue: [BlockOperation] = []
-    private let dataQueue = DispatchQueue(label: "\(DataCalculatorQueue.self) dispatch queue", attributes: .concurrent)
+    private var _nextOperation: BlockOperation?
+    private let dataQueue = DispatchQueue(label: "\(DataCalculatorQueue.self) dispatch queue")
     
     func setNext(_ value: BlockOperation) {
-        dataQueue.async(flags: .barrier) {
+        dataQueue.async {
             // there's no need to manage intermediate updates.
             // If the data is streaming in so quickly that an update is queued,
             // just drop it on the ground and animate A->C rather than A->B->C
-            self.queue = [value]
+            self._nextOperation = value
         }
     }
     
     func pop() -> BlockOperation? {
         return dataQueue.sync {
-            return queue.popLast()
+            defer {
+                _nextOperation = nil
+            }
+            return _nextOperation
         }
     }
 }

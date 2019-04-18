@@ -20,7 +20,7 @@ final class SectionDataCalculator<SectionType: UniquelyIdentifiableSection> {
     typealias DataType = SectionType.DataType
     
     private var processingQueue = DispatchQueue(label: "\(SectionDataCalculator.self) ordering queue")
-    private let dataQueue = DispatchQueue(label: "\(SectionDataCalculator.self) dispatch queue", attributes: .concurrent)
+    private let dataQueue = DispatchQueue(label: "\(SectionDataCalculator.self) dispatch queue")
 
     private var _isCalculating: Bool = false
     private var isCalculating: Bool {

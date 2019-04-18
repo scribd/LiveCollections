@@ -10,13 +10,18 @@ import UIKit
 
 protocol MovieImageLoaderInterface {
     func loadPosterImage(_ movie: Movie, completion: @escaping (Result<UIImage, MovieLoaderError>) -> Void)
+    func clearAll()
 }
 
 final class MovieImageLoader: MovieImageLoaderInterface {
     
     private let imageCache = DataCache<UIImage>(encoder: ImageFileEncoder(folderName: "images"))
     private let movieAPI = MovieAPI(urlSession: .shared)
-    
+
+    func clearAll() {
+        imageCache.clearCache()
+    }
+
     func loadPosterImage(_ movie: Movie, completion: @escaping (Result<UIImage, MovieLoaderError>) -> Void) {
         
         let filename = movie.sanitizedPosterPath

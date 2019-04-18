@@ -12,7 +12,7 @@ import UIKit
 
 final class DataCache<DataType> {
     
-    private let dataQueue = DispatchQueue(label: "\(DataCache.self) data queue", attributes: .concurrent)
+    private let dataQueue = DispatchQueue(label: "\(DataCache.self) data queue")
     private var _memoryCache: [String: DataType] = [:]
     private var memoryCache: [String: DataType] { return dataQueue.sync { _memoryCache } }
     private let diskCache: DiskCache<DataType>
@@ -24,6 +24,10 @@ final class DataCache<DataType> {
     subscript(name: String) -> DataType? {
         get { return cachedItem(name) }
         set { writeItem(newValue, name: name) }
+    }
+
+    func clearCache() {
+        dataQueue.async { self._memoryCache = [:] }
     }
     
     // MARK: Private
