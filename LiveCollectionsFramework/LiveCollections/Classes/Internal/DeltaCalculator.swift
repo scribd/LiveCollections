@@ -83,7 +83,7 @@ final class DeltaCalculator<Element: UniquelyIdentifiable> {
      - returns: an array of the index pairs of all moved items
      */
     func reloadedAndMovedItems(deletedIndices: [Int],
-                                      insertedIndices: [Int]) -> (reloaded: [IndexPair], moved: [IndexPair]) {
+                               insertedIndices: [Int]) -> (reloaded: [IndexPair], moved: [IndexPair]) {
         
         var movedIndexPairs = [IndexPair]()
         var reloadedIndexPairs = [IndexPair]()
@@ -109,8 +109,8 @@ final class DeltaCalculator<Element: UniquelyIdentifiable> {
             }
             
             while let insertedIndex = remainingInsertedIndices.popLast() {
-                guard insertedIndex <= index else {
-                    remainingDeletedIndices.append(insertedIndex)
+                guard insertedIndex <= transposedIndex else {
+                    remainingInsertedIndices.append(insertedIndex)
                     break
                 }
                 transposedIndex += 1

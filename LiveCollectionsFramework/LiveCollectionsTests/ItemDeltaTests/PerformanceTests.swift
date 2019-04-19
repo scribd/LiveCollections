@@ -62,16 +62,6 @@ final class PerformanceTests: XCTestCase {
         }
     }
 
-    func test_100000_items_with_100000_items() {
-        startingData = DataBuilder.build(100000, numberToDelete: 0)
-        updatedData = DataBuilder.build(100000, numberToDelete: 0)
-        collectionData = CollectionData<Int>(startingData)
-        
-        measure {
-            _ = collectionData.calculateDeltaSync(updatedData)
-        }
-    }
-    
     func test_600_items_with_1400_items() {
         startingData = DataBuilder.build(1000, numberToDelete: 400)
         updatedData = DataBuilder.build(1400, numberToDelete: 0)
