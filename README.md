@@ -14,7 +14,7 @@ Full detail for the use case of each scenario <a href="https://medium.com/p/59ea
 
 <h2>Swift Version</h2>
 
-This project has been upgraded to be compatible with Swift 5.0.
+This project has been upgraded to be compatible with Swift 5.
 <br>
 
 <hr>
@@ -23,7 +23,7 @@ This project has been upgraded to be compatible with Swift 5.0.
 <h2>Importing With Carthage</h2>
 
 <br>
-github "scribd/LiveCollections" "beta_0.9.9"
+github "scribd/LiveCollections" "beta_0.9.10"
 <br>
 <br>
 
@@ -31,7 +31,7 @@ github "scribd/LiveCollections" "beta_0.9.9"
 <h2>Importing With CocoaPods</h2>
 
 <br>
-pod 'LiveCollections', '~> 0.9.9'
+pod 'LiveCollections', '~> 0.9.10'
 <br>
 or
 <br>
