@@ -150,17 +150,59 @@ final class DeltaCalculator<Element: UniquelyIdentifiable> {
     }
 }
 
-final class DataCalculatorQueue {
+typealias DeltaOperationCalculation<DataType> = ([DataType]) -> Void
+
+enum DeltaOperationAction {
+    case append
+    case update
+}
+
+struct DeltaOperation<DataType> {
     
-    private var _nextOperation: BlockOperation?
+    private let data: [DataType]
+    private let action: DeltaOperationAction
+    private let calculation: DeltaOperationCalculation<DataType>
+    
+    init(data: [DataType], action: DeltaOperationAction, calculation: @escaping DeltaOperationCalculation<DataType>) {
+        self.data = data
+        self.action = action
+        self.calculation = calculation
+    }
+    
+    func buildBlockOperation() -> BlockOperation {
+        return BlockOperation {
+           self.calculation(self.data)
+        }
+    }
+    
+    func merged(with operation: DeltaOperation) -> DeltaOperation {
+        switch (action, operation.action) {
+        case (.append, .append):
+            // append merged contents
+            return DeltaOperation(data: data + operation.data, action: .append, calculation: operation.calculation)
+        case (.update, .append):
+            // update merged contents
+            return DeltaOperation(data: data + operation.data, action: .update, calculation: calculation)
+        case (_, .update):
+            // drop intermediate stages
+            return operation
+        }
+    }
+}
+
+final class DataCalculatorQueue<DataType> {
+    
+    private var _nextOperation: DeltaOperation<DataType>?
     private let dataQueue = DispatchQueue(label: "\(DataCalculatorQueue.self) dispatch queue")
     
-    func setNext(_ value: BlockOperation) {
+    func setNext(_ operation: DeltaOperation<DataType>) {
         dataQueue.async {
-            // there's no need to manage intermediate updates.
-            // If the data is streaming in so quickly that an update is queued,
-            // just drop it on the ground and animate A->C rather than A->B->C
-            self._nextOperation = value
+            // merge intermediate updates
+            if let nextOperation = self._nextOperation {
+                self._nextOperation = nextOperation.merged(with: operation)
+            } else {
+                self._nextOperation = operation
+            }
         }
     }
     
@@ -169,7 +211,7 @@ final class DataCalculatorQueue {
             defer {
                 _nextOperation = nil
             }
-            return _nextOperation
+            return _nextOperation?.buildBlockOperation()
         }
     }
 }

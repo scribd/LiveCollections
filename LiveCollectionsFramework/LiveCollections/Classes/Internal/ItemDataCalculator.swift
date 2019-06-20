@@ -21,8 +21,8 @@ final class ItemDataCalculator<DataType: UniquelyIdentifiable> {
         set { dataQueue.async(flags: .barrier) { self._isCalculating = newValue } }
     }
     
-    private let _orderedQueue = DataCalculatorQueue()
-    private var orderedQueue: DataCalculatorQueue { return dataQueue.sync { return _orderedQueue } }
+    private let _orderedQueue = DataCalculatorQueue<DataType>()
+    private var orderedQueue: DataCalculatorQueue<DataType> { return dataQueue.sync { return _orderedQueue } }
     
     // MARK: API
     
@@ -48,8 +48,8 @@ final class ItemDataCalculator<DataType: UniquelyIdentifiable> {
                                                           deletionDelegate: DeletionDelegate?,
                                                           completion: (() -> Void)?) where DeletionDelegate: CollectionDataDeletionNotificationDelegate, DeletionDelegate.DataType == DataType, ItemProvider: ItemDataProvider, ItemProvider: ItemCalculatingDataProvider, ItemProvider.DataType == DataType, ItemProvider.CalculatingRawType == DataType.RawType {
         
-        _processCalculation { [weak self] in
-            self?._updateAndAnimate(updatedItems,
+        let calculation: DeltaOperationCalculation<DataType> = { [weak self] items in
+            self?._updateAndAnimate(items,
                                     rawData: rawData,
                                     itemProvider: itemProvider,
                                     section: section,
@@ -58,6 +58,8 @@ final class ItemDataCalculator<DataType: UniquelyIdentifiable> {
                                     deletionDelegate: deletionDelegate,
                                     completion: completion)
         }
+        
+        _processCalculation(updatedItems, action: .update, calculation: calculation)
     }
     
     func appendAndAnimate<ItemProvider>(_ appendedItems: [DataType],
@@ -68,8 +70,8 @@ final class ItemDataCalculator<DataType: UniquelyIdentifiable> {
                                         reloadDelegate: CollectionDataManualReloadDelegate?,
                                         completion: (() -> Void)?) where ItemProvider: ItemDataProvider, ItemProvider: ItemCalculatingDataProvider, ItemProvider.DataType == DataType, ItemProvider.CalculatingRawType == DataType.RawType {
         
-        _processCalculation { [weak self] in
-            self?._appendAndAnimate(appendedItems,
+        let calculation: DeltaOperationCalculation<DataType> = { [weak self] items in
+            self?._appendAndAnimate(items,
                                     rawData: rawData,
                                     itemProvider: itemProvider,
                                     section: section,
@@ -77,6 +79,8 @@ final class ItemDataCalculator<DataType: UniquelyIdentifiable> {
                                     reloadDelegate: reloadDelegate,
                                     completion: completion)
         }
+
+        _processCalculation(appendedItems, action: .append, calculation: calculation)
     }
 }
 
@@ -86,14 +90,14 @@ private extension ItemDataCalculator {
     
     // MARK: Calculation Queue Management
     
-    func _processCalculation(_ calculation: @escaping () -> Void) {
+    func _processCalculation(_ items: [DataType], action: DeltaOperationAction, calculation: @escaping DeltaOperationCalculation<DataType>) {
         processingQueue.async {
-            if self.isCalculating == false {
-                self.isCalculating = true
-                calculation()
-            } else {
-                let operation = BlockOperation(block: calculation)
+            if self.isCalculating {
+                let operation = DeltaOperation<DataType>(data: items, action: action, calculation: calculation)
                 self.orderedQueue.setNext(operation)
+            } else {
+                self.isCalculating = true
+                calculation(items)
             }
         }
     }
