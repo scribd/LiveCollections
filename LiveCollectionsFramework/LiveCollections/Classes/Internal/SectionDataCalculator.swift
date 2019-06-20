@@ -28,8 +28,8 @@ final class SectionDataCalculator<SectionType: UniquelyIdentifiableSection> {
         set { dataQueue.async(flags: .barrier) { self._isCalculating = newValue } }
     }
 
-    private let _orderedQueue = DataCalculatorQueue()
-    private var orderedQueue: DataCalculatorQueue { return dataQueue.sync { return _orderedQueue } }
+    private let _orderedQueue = DataCalculatorQueue<SectionType>()
+    private var orderedQueue: DataCalculatorQueue<SectionType> { return dataQueue.sync { return _orderedQueue } }
     
     private var complationCount = 0
     
@@ -42,29 +42,33 @@ final class SectionDataCalculator<SectionType: UniquelyIdentifiableSection> {
                                                              deletionDelegate: DeletionDelegate?,
                                                              completion: (() -> Void)?) where DeletionDelegate: CollectionDataDeletionNotificationDelegate, DeletionDelegate.DataType == DataType, SectionProvider: SectionDataProvider, SectionProvider: SectionCalculatingDataProvider, SectionProvider.SectionType == SectionType, SectionProvider.DataType == DataType, SectionProvider.CalculatingSectionType == SectionType {
         
-        _processCalculation { [weak self] in
-            self?._updateAndAnimate(updatedSections,
+        let calculation: DeltaOperationCalculation<SectionType> = { [weak self] sections in
+            self?._updateAndAnimate(sections,
                                     sectionProvider: sectionProvider,
                                     view: view,
                                     reloadDelegate: reloadDelegate,
                                     deletionDelegate: deletionDelegate,
                                     completion: completion)
         }
+        
+        _processCalculation(updatedSections, action: .update, calculation: calculation)
     }
     
-    func appendAndAnimate<SectionProvider>(_ appendedItems: [SectionType],
+    func appendAndAnimate<SectionProvider>(_ appendedSections: [SectionType],
                                            sectionProvider: SectionProvider,
                                            view: SectionDeltaUpdatableView,
                                            reloadDelegate: CollectionSectionDataManualReloadDelegate?,
                                            completion: (() -> Void)?) where SectionProvider: SectionDataProvider, SectionProvider: SectionCalculatingDataProvider, SectionProvider.SectionType == SectionType, SectionProvider.DataType == DataType, SectionProvider.CalculatingSectionType == SectionType {
         
-        _processCalculation { [weak self] in
-            self?._appendAndAnimate(appendedItems,
+        let calculation: DeltaOperationCalculation<SectionType> = { [weak self] sections in
+            self?._appendAndAnimate(sections,
                                     sectionProvider: sectionProvider,
                                     view: view,
                                     reloadDelegate: reloadDelegate,
                                     completion: completion)
         }
+
+        _processCalculation(appendedSections, action: .append, calculation: calculation)
     }
 }
 
@@ -74,14 +78,14 @@ private extension SectionDataCalculator {
     
     // MARK: Calculation Queue Management
 
-    func _processCalculation(_ calculation: @escaping () -> Void) {
+    func _processCalculation(_ sections: [SectionType], action: DeltaOperationAction, calculation: @escaping DeltaOperationCalculation<SectionType>) {
         processingQueue.async {
             if self.isCalculating {
-                let operation = BlockOperation(block: calculation)
+                let operation = DeltaOperation<SectionType>(data: sections, action: action, calculation: calculation)
                 self.orderedQueue.setNext(operation)
             } else {
                 self.isCalculating = true
-                calculation()
+                calculation(sections)
             }
         }
     }
