@@ -18,6 +18,13 @@ extension UITableView: SectionDeltaUpdatableView {
             return
         }
         
+        guard isVisibleOnScreen else {
+            updateData()
+            reloadData()
+            completion?()
+            return
+        }
+        
         // deleted sections
         let sectionDeletedIndexSet = NSMutableIndexSet()
         sectionDelta.deletions.forEach { deletion in
@@ -42,7 +49,7 @@ extension UITableView: SectionDeltaUpdatableView {
             performBatchUpdates({ [weak self] in
                 updateData()
                 guard let strongSelf = self else { return }
-                guard strongSelf.window != nil else {
+                guard strongSelf.isVisibleOnScreen else {
                     strongSelf.reloadData()
                     return
                 }
@@ -63,6 +70,13 @@ extension UITableView: SectionDeltaUpdatableView {
         
         guard itemIndexPathDelta.hasChanges, dataSource != nil else {
             updateData()
+            completion?()
+            return
+        }
+        
+        guard isVisibleOnScreen else {
+            updateData()
+            reloadData()
             completion?()
             return
         }
@@ -97,7 +111,7 @@ extension UITableView: SectionDeltaUpdatableView {
             performBatchUpdates({ [weak self] in
                 updateData()
                 guard let strongSelf = self else { return }
-                guard strongSelf.window != nil else {
+                guard strongSelf.isVisibleOnScreen else {
                     strongSelf.reloadData()
                     return
                 }
@@ -109,7 +123,7 @@ extension UITableView: SectionDeltaUpdatableView {
                 }
                 strongSelf.performBatchUpdates({ [weak weakSelf = strongSelf] in
                     guard let strongSelf = weakSelf else { return }
-                    guard strongSelf.window != nil else {
+                    guard strongSelf.isVisibleOnScreen else {
                         strongSelf.reloadData()
                         return
                     }
@@ -121,7 +135,7 @@ extension UITableView: SectionDeltaUpdatableView {
         } else {
             beginUpdates()
             updateData()
-            guard window != nil else {
+            guard isVisibleOnScreen else {
                 reloadData()
                 completion?()
                 return
@@ -130,7 +144,7 @@ extension UITableView: SectionDeltaUpdatableView {
             endUpdates()
             
             beginUpdates()
-            guard window != nil else {
+            guard isVisibleOnScreen else {
                 reloadData()
                 completion?()
                 return
@@ -147,7 +161,7 @@ extension UITableView: SectionDeltaUpdatableView {
     public func reloadAllSections(updateData: (() -> Void), completion: (() -> Void)?) {
         
         // UITableViews will crash if you attempt to reload from the empty state
-        guard numberOfSections > 0 else {
+        guard numberOfSections > 0, isVisibleOnScreen else {
             updateData()
             reloadData()
             completion?()
@@ -158,7 +172,7 @@ extension UITableView: SectionDeltaUpdatableView {
             performBatchUpdates({ [weak self] in
                 updateData()
                 guard let strongSelf = self else { return }
-                guard strongSelf.window != nil else {
+                guard strongSelf.isVisibleOnScreen else {
                     strongSelf.reloadData()
                     return
                 }
@@ -174,7 +188,7 @@ extension UITableView: SectionDeltaUpdatableView {
         } else {
             beginUpdates()
             updateData()
-            guard window != nil else {
+            guard isVisibleOnScreen else {
                 reloadData()
                 completion?()
                 return
@@ -202,6 +216,13 @@ extension UICollectionView: SectionDeltaUpdatableView {
             return
         }
         
+        guard isVisibleOnScreen else {
+            updateData()
+            reloadData()
+            completion?()
+            return
+        }
+        
         // deleted sections
         let sectionDeletedIndexSet = NSMutableIndexSet()
         sectionDelta.deletions.forEach { deletion in
@@ -217,7 +238,7 @@ extension UICollectionView: SectionDeltaUpdatableView {
         performBatchUpdates({ [weak self] in
             updateData()
             guard let strongSelf = self else { return }
-            guard strongSelf.window != nil else {
+            guard strongSelf.isVisibleOnScreen else {
                 strongSelf.reloadData()
                 return
             }
@@ -237,6 +258,14 @@ extension UICollectionView: SectionDeltaUpdatableView {
     public func performAnimations(sectionItemDelta itemIndexPathDelta: IndexPathDelta, delegate: CollectionDataManualReloadDelegate?, updateData: (() -> Void), completion: (() -> Void)?) {
         
         guard itemIndexPathDelta.hasChanges, dataSource != nil else {
+            updateData()
+            completion?()
+            return
+        }
+        
+        guard isVisibleOnScreen else {
+            updateData()
+            reloadData()
             completion?()
             return
         }
@@ -256,7 +285,7 @@ extension UICollectionView: SectionDeltaUpdatableView {
         performBatchUpdates({ [weak self] in
             updateData()
             guard let strongSelf = self else { return }
-            guard strongSelf.window != nil else {
+            guard strongSelf.isVisibleOnScreen else {
                 strongSelf.reloadData()
                 return
             }
@@ -272,7 +301,7 @@ extension UICollectionView: SectionDeltaUpdatableView {
             }
             strongSelf.performBatchUpdates({ [weak weakSelf = strongSelf] in
                 guard let strongSelf = weakSelf else { return }
-                guard strongSelf.window != nil else {
+                guard strongSelf.isVisibleOnScreen else {
                     strongSelf.reloadData()
                     return
                 }
@@ -288,7 +317,7 @@ extension UICollectionView: SectionDeltaUpdatableView {
     public func reloadAllSections(updateData: (() -> Void), completion: (() -> Void)?) {
         
         // UICollectionViews will crash if you attempt to reload from the empty state
-        guard numberOfSections > 0 else {
+        guard numberOfSections > 0, isVisibleOnScreen else {
             updateData()
             reloadData()
             completion?()
@@ -298,7 +327,7 @@ extension UICollectionView: SectionDeltaUpdatableView {
         performBatchUpdates({ [weak self] in
             updateData()
             guard let strongSelf = self else { return }
-            guard strongSelf.window != nil else {
+            guard strongSelf.isVisibleOnScreen else {
                 strongSelf.reloadData()
                 return
             }

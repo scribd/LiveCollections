@@ -36,6 +36,13 @@ extension UITableView: DeltaUpdatableView {
             return
         }
         
+        guard isVisibleOnScreen else {
+            tableViewUpdates.forEach { $0.sectionUpdate.update() }
+            reloadData()
+            tableViewUpdates.forEach { $0.sectionUpdate.completion?() }
+            return
+        }
+        
         let deleteMoveInsert = { [weak self] in
             guard let strongSelf = self else { return }
             for update in tableViewUpdates {
@@ -99,7 +106,7 @@ extension UITableView: DeltaUpdatableView {
             deleteMoveInsert()
             endUpdates()
             
-            guard window != nil else {
+            guard isVisibleOnScreen else {
                 reloadData()
                 tableViewUpdates.forEach { $0.sectionUpdate.completion?() }
                 return
@@ -167,6 +174,13 @@ extension UICollectionView: DeltaUpdatableView {
         let hasChanges = collectionViewUpdates.reduce(false) { $0 || $1.indexPathsToAnimate.hasChanges }
         guard hasChanges, dataSource != nil else {
             collectionViewUpdates.forEach { $0.sectionUpdate.update() }
+            collectionViewUpdates.forEach { $0.sectionUpdate.completion?() }
+            return
+        }
+        
+        guard isVisibleOnScreen else {
+            collectionViewUpdates.forEach { $0.sectionUpdate.update() }
+            reloadData()
             collectionViewUpdates.forEach { $0.sectionUpdate.completion?() }
             return
         }
@@ -432,6 +446,14 @@ extension UITableView {
                 return TableViewSectionConstants.defaultReloadAnimation
         }
         return reloadAnimation
+    }
+}
+
+// MARK: UIView + Visibility
+
+extension UIView {
+    var isVisibleOnScreen: Bool {
+        return window != nil
     }
 }
 
