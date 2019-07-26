@@ -41,9 +41,7 @@ extension DataCoordinator: PlayerControlDelegate {
         timer?.invalidate()
         _fetchNext()
         timer = Timer.scheduledTimer(withTimeInterval: playbackRate.delay, repeats: true, block: { [weak self] timer in
-            DispatchQueue.global().async {
-                self?._fetchNext()
-            }
+            self?._fetchNext()
         })
     }
 

@@ -60,3 +60,17 @@ public protocol CollectionDataDeletionNotificationDelegate: AnyObject {
     
     func didDeleteItems(_ items: [DataType])
 }
+
+// MARK: CollectionDataCalculationNotificationDelegate
+
+/**
+ Setting your object as the caclculation delegate will inform you when CollectionData begins and ends
+ its calculation. End calculating will be called once the delta has been dispatched to the view.
+ - Note: If you have a sequence of updates, end calculating will only be called at the end of the entire sequence,
+         not between data sets.
+ */
+public protocol CollectionDataCalculationNotificationDelegate: AnyObject {
+    
+    func collectionDataDidBeginCalculating()
+    func collectionDataDidEndCalculating()
+}

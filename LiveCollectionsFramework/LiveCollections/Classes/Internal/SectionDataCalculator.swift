@@ -22,10 +22,20 @@ final class SectionDataCalculator<SectionType: UniquelyIdentifiableSection> {
     private var processingQueue = DispatchQueue(label: "\(SectionDataCalculator.self) ordering queue")
     private let dataQueue = DispatchQueue(label: "\(SectionDataCalculator.self) dispatch queue")
 
+    weak var calculationDelegate: CollectionDataCalculationNotificationDelegate?
+
     private var _isCalculating: Bool = false
     private var isCalculating: Bool {
         get { return dataQueue.sync { return _isCalculating } }
-        set { dataQueue.async(flags: .barrier) { self._isCalculating = newValue } }
+        set {
+            dataQueue.async(flags: .barrier) {
+                guard newValue != self._isCalculating else { return }
+                self._isCalculating = newValue
+                newValue ?
+                    self.calculationDelegate?.collectionDataDidBeginCalculating() :
+                    self.calculationDelegate?.collectionDataDidEndCalculating()
+            }
+        }
     }
 
     private let _orderedQueue = DataCalculatorQueue<SectionType>()

@@ -60,6 +60,10 @@ public final class CollectionData<ItemType: UniquelyIdentifiable>: CollectionDat
     // delegate
     public weak var validationDelegate: CollectionDataReusableViewVerificationDelegate?
     public weak var reloadDelegate: CollectionDataManualReloadDelegate?
+    public weak var calculationDelegate: CollectionDataCalculationNotificationDelegate? {
+        get { return dataCalculator.calculationDelegate }
+        set { dataCalculator.calculationDelegate = newValue  }
+    }
     private var deletionNotificationDelegate: AnyCollectionDataDeletionNotificationDelegate<DataType>?
     
     // data

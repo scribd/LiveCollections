@@ -30,6 +30,10 @@ public final class CollectionSectionData<SectionType: UniquelyIdentifiableSectio
     
     // delegate
     public weak var reloadDelegate: CollectionSectionDataManualReloadDelegate?
+    public weak var calculationDelegate: CollectionDataCalculationNotificationDelegate? {
+        get { return dataCalculator.calculationDelegate }
+        set { dataCalculator.calculationDelegate = newValue  }
+    }
     private var deletionNotificationDelegate: AnyCollectionDataDeletionNotificationDelegate<DataType>?
     
     // section data
