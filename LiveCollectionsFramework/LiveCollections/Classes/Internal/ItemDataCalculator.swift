@@ -192,7 +192,7 @@ private extension ItemDataCalculator {
         
         let deltaChangeTooLarge = delta.changeCount > itemProvider.deltaCountAnimationThreshold
         
-        guard deltaChangeTooLarge == false && deltaChangeTooLarge == false else {
+        guard dataSetTooLarge == false && deltaChangeTooLarge == false else {
             _updateSections(updatedItems,
                             itemProvider: itemProvider,
                             section: section,
@@ -298,7 +298,7 @@ private extension ItemDataCalculator {
 
         let deltaChangeTooLarge = delta.changeCount > itemProvider.deltaCountAnimationThreshold
         
-        guard deltaChangeTooLarge == false && deltaChangeTooLarge == false else {
+        guard deltaChangeTooLarge == false else {
             _updateSections(section: section,
                             viewProvider: viewProvider,
                             viewDelegate: viewDelegate,
@@ -357,7 +357,7 @@ private extension ItemDataCalculator {
                                                        viewProvider: strongViewProvider,
                                                        calculationCompletion: calculationCompletion)
                 } else {
-                    // appen all and animate
+                    // append all and animate
                     targetView.performAnimations(section: section,
                                                  delta: delta,
                                                  delegate: viewDelegate,
