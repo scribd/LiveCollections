@@ -23,7 +23,7 @@ This project has been upgraded to be compatible with Swift 5.
 <h2>Importing With Carthage</h2>
 
 <br>
-github "scribd/LiveCollections" "beta_0.9.12"
+github "scribd/LiveCollections" "beta_0.9.13"
 <br>
 <br>
 
@@ -31,7 +31,7 @@ github "scribd/LiveCollections" "beta_0.9.12"
 <h2>Importing With CocoaPods</h2>
 
 <br>
-pod 'LiveCollections', '~> 0.9.12'
+pod 'LiveCollections', '~> 0.9.13'
 <br>
 or
 <br>
@@ -66,7 +66,10 @@ func yourDataUpdateFunction(_ updatedData: [YourDataType]) {
 
 ``` 
 <BR>
-    
+
+You'll notice that the data being passed in is a Swift immutable type, and at no point do you ever need to worry about what the difference is between the new data being passed in and the existing data.
+
+<BR>
     
 <h2>Adopting the protocol UniquelyIdentifiable</h2>
 
