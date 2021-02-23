@@ -126,7 +126,7 @@ extension UITableView: DeltaUpdatableView {
         
         if #available(iOS 11.0, *) {
             performBatchUpdates({ [weak self] in
-                sectionUpdates.forEach {sectionUpdate in
+                sectionUpdates.forEach { sectionUpdate in
                     sectionUpdate.update()
                     guard self != nil else { return }
                     let indexSet = IndexSet([sectionUpdate.section])
@@ -360,7 +360,7 @@ private extension Array where Element == EntireViewSectionUpdate {
             guard update.isDataSourceValid(for: view) else { return false }
             guard update.indexPathsToAnimate.manualReloadIndexPaths.isEmpty == false else { return false }
             return true
-            }.flatMap { $0.indexPathsToAnimate.manualReloadIndexPaths }
+        }.flatMap { $0.indexPathsToAnimate.manualReloadIndexPaths }
         
         guard allManualReloadIndexPaths.isEmpty == false else {
             viewCompletion()
