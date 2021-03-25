@@ -12,7 +12,9 @@ public protocol CollectionViewProvider: AnyObject {
     var view: DeltaUpdatableView? { get set }
 }
 
-public protocol DeltaUpdatableViewDelegate: CollectionDataManualReloadDelegate, CollectionViewProvider { }
+public protocol DeltaUpdatableViewDelegate: CollectionDataManualReloadDelegate, CollectionDataAnimationDelegate, CollectionViewProvider { }
+
+public protocol SectionDeltaUpdatableViewDelegate: CollectionDataManualReloadDelegate, CollectionSectionDataAnimationDelegate { }
 
 public protocol DeltaUpdatableView: AnyObject {
     
@@ -43,16 +45,16 @@ public protocol SectionDeltaUpdatableView: AnyObject {
     /**
      It is only safe to call this method if you only have reloads (no insertions or deletions)
      */
-    func reloadAllSections(updateData: (() -> Void), completion: (() -> Void)?)
+    func reloadAllSections(updateData: (() -> Void), delegate: CollectionSectionDataAnimationDelegate?, completion: (() -> Void)?)
 
     /**
      Similar to `DeltaUpdatableView`, but this is the delta for the sections themselves.
      */
-    func performAnimations(sectionDelta: IndexDelta, delegate: CollectionDataManualReloadDelegate?, updateData: (() -> Void), completion: (() -> Void)?)
+    func performAnimations(sectionDelta: IndexDelta, delegate: SectionDeltaUpdatableViewDelegate?, updateData: (() -> Void), completion: (() -> Void)?)
 
     /**
      After the section animations have been performed, you can then call this function which will animate the items, possibly between sections.
      - note: IndexPathDelta is used instead of IndexDelta. Every position is defined by both section and item.
      */
-    func performAnimations(sectionItemDelta itemIndexPathDelta: IndexPathDelta, delegate: CollectionDataManualReloadDelegate?, updateData: (() -> Void), completion: (() -> Void)?)
+    func performAnimations(sectionItemDelta itemIndexPathDelta: IndexPathDelta, delegate: SectionDeltaUpdatableViewDelegate?, updateData: (() -> Void), completion: (() -> Void)?)
 }

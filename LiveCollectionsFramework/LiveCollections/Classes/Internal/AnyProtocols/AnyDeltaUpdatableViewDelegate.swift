@@ -10,37 +10,85 @@ import Foundation
 
 // MARK: - Generic Wrapper
 
-final class AnyDeltaUpdatableViewDelegate {
-    private let _getItemWillHandleReload: ((IndexPathPair) -> Bool)
-    private let _performReloadItems: (([IndexPath], @escaping (IndexPath) -> Void) -> Void)
-    private let _getPreferredItemAnimationStyle: ((IndexDelta) -> AnimationStyle)
-    private let _getView: (() -> DeltaUpdatableView?)
+protocol AnimationDelegateProviding {
+    var animationDelegate: CollectionDataAnimationDelegate? { get }
+}
 
-    init(_ delegate: CollectionDataManualReloadDelegate? = nil, viewProvider: CollectionViewProvider? = nil) {
-        _getItemWillHandleReload = { [weak weakDelegate = delegate] indexPathPair in
-            return weakDelegate?.willHandleReload(at: indexPathPair) ?? false
-        }
-        
-        _performReloadItems = { [weak weakDelegate = delegate] indexPaths, indexPathCompletion in
-            weakDelegate?.reloadItems(at: indexPaths, indexPathCompletion: indexPathCompletion)
-        }
-        
-        _getPreferredItemAnimationStyle = { [weak weakDelegate = delegate] indexDelta in
-            return weakDelegate?.preferredItemAnimationStyle(for: indexDelta) ?? .preciseAnimations
-        }
-    
-        _getView = { [weak weakDeltaVisualUpdateViewAccess = viewProvider] in
-            return weakDeltaVisualUpdateViewAccess?.view
-        }
+final class AnyDeltaUpdatableViewDelegate: AnimationDelegateProviding {
+    private(set) weak var reloadDelegate: CollectionDataManualReloadDelegate?
+    private(set) weak var animationDelegate: CollectionDataAnimationDelegate?
+    private(set) weak var viewProvider: CollectionViewProvider?
+
+    init(reloadDelegate: CollectionDataManualReloadDelegate? = nil,
+         animationDelegate: CollectionDataAnimationDelegate? = nil,
+         viewProvider: CollectionViewProvider? = nil) {
+        self.reloadDelegate = reloadDelegate
+        self.animationDelegate = animationDelegate
+        self.viewProvider = viewProvider
     }
 }
 
 extension AnyDeltaUpdatableViewDelegate: DeltaUpdatableViewDelegate {
-    func willHandleReload(at indexPathPair: IndexPathPair) -> Bool { return _getItemWillHandleReload(indexPathPair) }
-    func reloadItems(at indexPaths: [IndexPath], indexPathCompletion: @escaping (IndexPath) -> Void) { _performReloadItems(indexPaths, indexPathCompletion) }
-    func preferredItemAnimationStyle(for itemDelta: IndexDelta) -> AnimationStyle { return _getPreferredItemAnimationStyle(itemDelta) }
+
+    func willHandleReload(at indexPathPair: IndexPathPair) -> Bool {
+        return reloadDelegate?.willHandleReload(at: indexPathPair) ?? false
+    }
+
+    func reloadItems(at indexPaths: [IndexPath], indexPathCompletion: @escaping (IndexPath) -> Void) {
+        reloadDelegate?.reloadItems(at: indexPaths, indexPathCompletion: indexPathCompletion)
+    }
+
+    func preferredItemAnimationStyle(for itemDelta: IndexDelta) -> AnimationStyle {
+        return animationDelegate?.preferredItemAnimationStyle(for: itemDelta) ?? .preciseAnimations
+    }
+
+    func animateAlongsideUpdate(with duration: TimeInterval) {
+        animationDelegate?.animateAlongsideUpdate(with: duration)
+    }
+
     var view: DeltaUpdatableView? {
-        get { return _getView() }
+        get { return viewProvider?.view }
         set { }
     }
 }
+
+// MARK: - Generic Section Wrapper
+
+final class AnySectionDeltaUpdatableViewDelegate {
+    private(set) weak var reloadDelegate: CollectionDataManualReloadDelegate?
+    private(set) weak var animationDelegate: CollectionSectionDataAnimationDelegate?
+
+    init(reloadDelegate: CollectionDataManualReloadDelegate? = nil,
+         animationDelegate: CollectionSectionDataAnimationDelegate? = nil) {
+        self.reloadDelegate = reloadDelegate
+        self.animationDelegate = animationDelegate
+    }
+}
+
+extension AnySectionDeltaUpdatableViewDelegate: SectionDeltaUpdatableViewDelegate {
+
+    func willHandleReload(at indexPathPair: IndexPathPair) -> Bool {
+        return reloadDelegate?.willHandleReload(at: indexPathPair) ?? false
+    }
+
+    func reloadItems(at indexPaths: [IndexPath], indexPathCompletion: @escaping (IndexPath) -> Void) {
+        reloadDelegate?.reloadItems(at: indexPaths, indexPathCompletion: indexPathCompletion)
+    }
+
+    func preferredItemAnimationStyle(for itemDelta: IndexDelta) -> AnimationStyle {
+        return animationDelegate?.preferredItemAnimationStyle(for: itemDelta) ?? .preciseAnimations
+    }
+
+    func animateAlongsideUpdate(with duration: TimeInterval) {
+        animationDelegate?.animateAlongsideUpdate(with: duration)
+    }
+
+    func preferredSectionAnimationStyle(for sectionDelta: IndexDelta) -> AnimationStyle {
+        return animationDelegate?.preferredSectionAnimationStyle(for: sectionDelta) ?? .preciseAnimations
+    }
+
+    func animateAlongsideSectionUpdate(with duration: TimeInterval) {
+        animationDelegate?.animateAlongsideSectionUpdate(with: duration)
+    }
+}
+

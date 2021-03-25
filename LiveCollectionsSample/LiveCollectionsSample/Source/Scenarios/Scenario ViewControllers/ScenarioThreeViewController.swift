@@ -64,11 +64,10 @@ final class ScenarioThreeViewController: UIViewController {
         dataList.enumerated().forEach { index, collectionData in
             collectionData.view = collectionView
             collectionData.section = index
+            collectionData.synchronizer = synchronizer
+            collectionData.animationDelegate = self
         }
-        
-        dataList[0].synchronizer = synchronizer
-        dataList[1].synchronizer = synchronizer
-        
+
         collectionView.register(MovieCollectionViewCell.self, forCellWithReuseIdentifier: MovieCollectionViewCell.reuseIdentifier)
     }
 }
@@ -121,5 +120,20 @@ extension ScenarioThreeViewController: DataCoordinatorDelegate {
     
     func dataDidUpdate(_ data: [Movie], section: Int) {
         dataList[section].update(data)
+    }
+}
+
+// MARK: CollectionDataAnimationDelegate
+
+extension ScenarioThreeViewController: CollectionDataAnimationDelegate {
+
+    func preferredItemAnimationStyle(for itemDelta: IndexDelta) -> AnimationStyle {
+        return .preciseAnimations
+    }
+
+    func animateAlongsideUpdate(with duration: TimeInterval) {
+        // animate alongside the collection view animation here
+        // use a CollectionDataSynchronizer object if you would like
+        // all animations to map to a single call
     }
 }
