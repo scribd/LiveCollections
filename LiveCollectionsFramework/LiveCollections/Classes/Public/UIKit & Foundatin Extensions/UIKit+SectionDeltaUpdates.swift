@@ -10,7 +10,7 @@ import UIKit
 
 extension UITableView: SectionDeltaUpdatableView {
     
-    public func performAnimations(sectionDelta: IndexDelta, delegate: CollectionDataManualReloadDelegate?, updateData: (() -> Void), completion: (() -> Void)?) {
+    public func performAnimations(sectionDelta: IndexDelta, delegate: SectionDeltaUpdatableViewDelegate?, updateData: (() -> Void), completion: (() -> Void)?) {
         
         guard sectionDelta.hasChanges, dataSource != nil else {
             updateData()
@@ -54,6 +54,7 @@ extension UITableView: SectionDeltaUpdatableView {
                     return
                 }
                 deleteMoveInsert()
+                delegate?.animateAlongsideSectionUpdate(with: TimeInterval.standardCollectionAnimationDuration)
             }, completion: { _ in
                 completion?()
             })
@@ -61,12 +62,13 @@ extension UITableView: SectionDeltaUpdatableView {
             beginUpdates()
             updateData()
             deleteMoveInsert()
+            delegate?.animateAlongsideSectionUpdate(with: TimeInterval.standardCollectionAnimationDuration)
             endUpdates()
             completion?()
         }
     }
     
-    public func performAnimations(sectionItemDelta itemIndexPathDelta: IndexPathDelta, delegate: CollectionDataManualReloadDelegate?, updateData: (() -> Void), completion: (() -> Void)?) {
+    public func performAnimations(sectionItemDelta itemIndexPathDelta: IndexPathDelta, delegate: SectionDeltaUpdatableViewDelegate?, updateData: (() -> Void), completion: (() -> Void)?) {
         
         guard itemIndexPathDelta.hasChanges, dataSource != nil else {
             updateData()
@@ -116,6 +118,7 @@ extension UITableView: SectionDeltaUpdatableView {
                     return
                 }
                 deleteMoveInsert()
+                delegate?.animateAlongsideUpdate(with: TimeInterval.standardCollectionAnimationDuration)
             }, completion: { [weak self] _ in
                 guard let strongSelf = self else {
                     completion?()
@@ -141,6 +144,7 @@ extension UITableView: SectionDeltaUpdatableView {
                 return
             }
             deleteMoveInsert()
+            delegate?.animateAlongsideUpdate(with: TimeInterval.standardCollectionAnimationDuration)
             endUpdates()
             
             beginUpdates()
@@ -158,7 +162,7 @@ extension UITableView: SectionDeltaUpdatableView {
     
     // NOTE: You can only call this method safely if you are only performing reloads
     //       i.e. no insertions or deletions
-    public func reloadAllSections(updateData: (() -> Void), completion: (() -> Void)?) {
+    public func reloadAllSections(updateData: (() -> Void), delegate: CollectionSectionDataAnimationDelegate?, completion: (() -> Void)?) {
         
         // UITableViews will crash if you attempt to reload from the empty state
         guard numberOfSections > 0, isVisibleOnScreen else {
@@ -181,6 +185,7 @@ extension UITableView: SectionDeltaUpdatableView {
                 }
                 let sections = IndexSet(integersIn: 0..<numberOfSections)
                 strongSelf.reloadSections(sections, with: strongSelf.preferredReloadSectionAnimation)
+                delegate?.animateAlongsideSectionUpdate(with: TimeInterval.standardCollectionAnimationDuration)
             }, completion: { _ in
                 completion?()
             })
@@ -198,6 +203,7 @@ extension UITableView: SectionDeltaUpdatableView {
             }
             let sections = IndexSet(integersIn: 0..<numberOfSections)
             reloadSections(sections, with: preferredReloadSectionAnimation)
+            delegate?.animateAlongsideSectionUpdate(with: TimeInterval.standardCollectionAnimationDuration)
             endUpdates()
             completion?()
         }
@@ -208,7 +214,7 @@ extension UITableView: SectionDeltaUpdatableView {
 
 extension UICollectionView: SectionDeltaUpdatableView {
     
-    public func performAnimations(sectionDelta: IndexDelta, delegate: CollectionDataManualReloadDelegate?, updateData: (() -> Void), completion: (() -> Void)?) {
+    public func performAnimations(sectionDelta: IndexDelta, delegate: SectionDeltaUpdatableViewDelegate?, updateData: (() -> Void), completion: (() -> Void)?) {
 
         guard sectionDelta.hasChanges, dataSource != nil else {
             updateData()
@@ -250,12 +256,14 @@ extension UICollectionView: SectionDeltaUpdatableView {
             }
             // insert
             strongSelf.insertSections(sectionInsertedIndexSet as IndexSet)
+            // delegate
+            delegate?.animateAlongsideSectionUpdate(with: TimeInterval.standardCollectionAnimationDuration)
         }, completion: { _ in
             completion?()
         })
     }
     
-    public func performAnimations(sectionItemDelta itemIndexPathDelta: IndexPathDelta, delegate: CollectionDataManualReloadDelegate?, updateData: (() -> Void), completion: (() -> Void)?) {
+    public func performAnimations(sectionItemDelta itemIndexPathDelta: IndexPathDelta, delegate: SectionDeltaUpdatableViewDelegate?, updateData: (() -> Void), completion: (() -> Void)?) {
         
         guard itemIndexPathDelta.hasChanges, dataSource != nil else {
             updateData()
@@ -294,6 +302,7 @@ extension UICollectionView: SectionDeltaUpdatableView {
                 strongSelf.moveItem(at: indexPathPair.source as IndexPath, to: indexPathPair.target as IndexPath)
             }
             strongSelf.insertItems(at: itemIndexPathDelta.insertions as [IndexPath])
+            delegate?.animateAlongsideUpdate(with: TimeInterval.standardCollectionAnimationDuration)
         }, completion: { [weak self] _ in
             guard let strongSelf = self else {
                 completion?()
@@ -314,7 +323,7 @@ extension UICollectionView: SectionDeltaUpdatableView {
     
     // NOTE: You can only call this method safely if you are only performing reloads
     //       i.e. no insertions or deletions
-    public func reloadAllSections(updateData: (() -> Void), completion: (() -> Void)?) {
+    public func reloadAllSections(updateData: (() -> Void), delegate: CollectionSectionDataAnimationDelegate?, completion: (() -> Void)?) {
         
         // UICollectionViews will crash if you attempt to reload from the empty state
         guard numberOfSections > 0, isVisibleOnScreen else {
@@ -336,6 +345,7 @@ extension UICollectionView: SectionDeltaUpdatableView {
             }
             let sections = IndexSet(integersIn: 0..<numberOfSections)
             strongSelf.reloadSections(sections)
+            delegate?.animateAlongsideSectionUpdate(with: TimeInterval.standardCollectionAnimationDuration)
         }, completion: { _ in
             completion?()
         })

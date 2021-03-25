@@ -60,6 +60,7 @@ public final class CollectionData<ItemType: UniquelyIdentifiable>: CollectionDat
     // delegate
     public weak var validationDelegate: CollectionDataReusableViewVerificationDelegate?
     public weak var reloadDelegate: CollectionDataManualReloadDelegate?
+    public weak var animationDelegate: CollectionDataAnimationDelegate?
     public weak var calculationDelegate: CollectionDataCalculationNotificationDelegate? {
         get { return dataCalculator.calculationDelegate }
         set { dataCalculator.calculationDelegate = newValue  }
@@ -236,6 +237,7 @@ public final class CollectionData<ItemType: UniquelyIdentifiable>: CollectionDat
                                                  section: self.section,
                                                  viewProvider: self.viewProvider,
                                                  reloadDelegate: self.reloadDelegate,
+                                                 animationDelegate: self.animationDelegate,
                                                  deletionDelegate: self.deletionNotificationDelegate,
                                                  completion: completion)
         }
@@ -262,6 +264,7 @@ public final class CollectionData<ItemType: UniquelyIdentifiable>: CollectionDat
                                                  section: self.section,
                                                  viewProvider: self.viewProvider,
                                                  reloadDelegate: self.reloadDelegate,
+                                                 animationDelegate: self.animationDelegate,
                                                  completion: completion)
         }
     }

@@ -55,6 +55,7 @@ final class ItemDataCalculator<DataType: UniquelyIdentifiable> {
                                                           section: Int,
                                                           viewProvider: CollectionViewProvider,
                                                           reloadDelegate: CollectionDataManualReloadDelegate?,
+                                                          animationDelegate: CollectionDataAnimationDelegate?,
                                                           deletionDelegate: DeletionDelegate?,
                                                           completion: (() -> Void)?) where DeletionDelegate: CollectionDataDeletionNotificationDelegate, DeletionDelegate.DataType == DataType, ItemProvider: ItemDataProvider, ItemProvider: ItemCalculatingDataProvider, ItemProvider.DataType == DataType, ItemProvider.CalculatingRawType == DataType.RawType {
         
@@ -65,6 +66,7 @@ final class ItemDataCalculator<DataType: UniquelyIdentifiable> {
                                     section: section,
                                     viewProvider: viewProvider,
                                     reloadDelegate: reloadDelegate,
+                                    animationDelegate: animationDelegate,
                                     deletionDelegate: deletionDelegate,
                                     completion: completion)
         }
@@ -78,6 +80,7 @@ final class ItemDataCalculator<DataType: UniquelyIdentifiable> {
                                         section: Int,
                                         viewProvider: CollectionViewProvider,
                                         reloadDelegate: CollectionDataManualReloadDelegate?,
+                                        animationDelegate: CollectionDataAnimationDelegate?,
                                         completion: (() -> Void)?) where ItemProvider: ItemDataProvider, ItemProvider: ItemCalculatingDataProvider, ItemProvider.DataType == DataType, ItemProvider.CalculatingRawType == DataType.RawType {
         
         let calculation: DeltaOperationCalculation<DataType> = { [weak self] items in
@@ -87,6 +90,7 @@ final class ItemDataCalculator<DataType: UniquelyIdentifiable> {
                                     section: section,
                                     viewProvider: viewProvider,
                                     reloadDelegate: reloadDelegate,
+                                    animationDelegate: animationDelegate,
                                     completion: completion)
         }
 
@@ -153,12 +157,13 @@ private extension ItemDataCalculator {
                                                            section: Int,
                                                            viewProvider: CollectionViewProvider,
                                                            reloadDelegate: CollectionDataManualReloadDelegate?,
+                                                           animationDelegate: CollectionDataAnimationDelegate?,
                                                            deletionDelegate: DeletionDelegate?,
                                                            completion: (() -> Void)?) where DeletionDelegate: CollectionDataDeletionNotificationDelegate, DeletionDelegate.DataType == DataType, ItemProvider: ItemDataProvider, ItemProvider: ItemCalculatingDataProvider, ItemProvider.DataType == DataType, ItemProvider.CalculatingRawType == DataType.RawType {
         
         itemProvider.calculatingItems = rawData
         let view = viewProvider.view
-        let viewDelegate = AnyDeltaUpdatableViewDelegate(reloadDelegate, viewProvider: viewProvider)
+        let viewDelegate = AnyDeltaUpdatableViewDelegate(reloadDelegate: reloadDelegate, animationDelegate: animationDelegate, viewProvider: viewProvider)
 
         let updateData = { [weak weakItemProvider = itemProvider, weak weakViewProvider = viewProvider] in
             guard let strongItemProvider = weakItemProvider,
@@ -221,8 +226,8 @@ private extension ItemDataCalculator {
         }
         
         let itemAnimationStlye: AnimationStyle = {
-            guard let reloadDelegate = reloadDelegate else { return .preciseAnimations }
-            return reloadDelegate.preferredItemAnimationStyle(for: delta)
+            guard let animationDelegate = animationDelegate else { return .preciseAnimations }
+            return animationDelegate.preferredItemAnimationStyle(for: delta)
         }()
         
         DispatchQueue.main.async { [weak weakViewProvider = viewProvider] in
@@ -266,11 +271,12 @@ private extension ItemDataCalculator {
                                          section: Int,
                                          viewProvider: CollectionViewProvider,
                                          reloadDelegate: CollectionDataManualReloadDelegate?,
+                                         animationDelegate: CollectionDataAnimationDelegate?,
                                          completion: (() -> Void)?) where ItemProvider: ItemDataProvider, ItemProvider: ItemCalculatingDataProvider, ItemProvider.DataType == DataType, ItemProvider.CalculatingRawType == DataType.RawType {
         
         itemProvider.calculatingItems = rawData
         let view = viewProvider.view
-        let viewDelegate = AnyDeltaUpdatableViewDelegate(viewProvider: viewProvider)
+        let viewDelegate = AnyDeltaUpdatableViewDelegate(animationDelegate: animationDelegate, viewProvider: viewProvider)
         let delta = _calculateAppendDelta(appendedItems, itemProvider: itemProvider)
 
         let updatedItems = itemProvider.items + appendedItems
@@ -316,8 +322,8 @@ private extension ItemDataCalculator {
         }
         
         let itemAnimationStlye: AnimationStyle = {
-            guard let reloadDelegate = reloadDelegate else { return .preciseAnimations }
-            return reloadDelegate.preferredItemAnimationStyle(for: delta)
+            guard let animationDelegate = animationDelegate else { return .preciseAnimations }
+            return animationDelegate.preferredItemAnimationStyle(for: delta)
         }()
         
         let startingItemCount = itemProvider.items.count
@@ -355,6 +361,7 @@ private extension ItemDataCalculator {
                                                        itemProvider: strongItemProvider,
                                                        section: section,
                                                        viewProvider: strongViewProvider,
+                                                       animationDelegate: animationDelegate,
                                                        calculationCompletion: calculationCompletion)
                 } else {
                     // append all and animate
@@ -372,10 +379,11 @@ private extension ItemDataCalculator {
                                                      itemProvider: ItemProvider,
                                                      section: Int,
                                                      viewProvider: CollectionViewProvider,
+                                                     animationDelegate: CollectionDataAnimationDelegate?,
                                                      calculationCompletion: (() -> Void)?) where ItemProvider: ItemDataProvider, ItemProvider: ItemCalculatingDataProvider, ItemProvider.DataType == DataType {
         
         let startingIndex = itemProvider.items.count
-        let viewDelegate = AnyDeltaUpdatableViewDelegate(viewProvider: viewProvider)
+        let viewDelegate = AnyDeltaUpdatableViewDelegate(animationDelegate: animationDelegate, viewProvider: viewProvider)
         let view = viewProvider.view
         
         appendedItems.enumerated().forEach { index, item in

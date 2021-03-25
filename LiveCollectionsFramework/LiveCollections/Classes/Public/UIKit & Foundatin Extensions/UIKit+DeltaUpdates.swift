@@ -71,6 +71,7 @@ extension UITableView: DeltaUpdatableView {
                 tableViewUpdates.forEach { $0.sectionUpdate.update() }
                 guard self != nil else { return }
                 deleteMoveInsert()
+                tableViewUpdates.uniqueAnimationDelegates.forEach { $0.animateAlongsideUpdate(with: TimeInterval.standardCollectionAnimationDuration) }
             }, completion: { [weak self] animationsCompletedSuccessfully in
                 guard let strongSelf = self else {
                     tableViewUpdates.forEach { $0.sectionUpdate.completion?() }
@@ -104,6 +105,7 @@ extension UITableView: DeltaUpdatableView {
             beginUpdates()
             tableViewUpdates.forEach { $0.sectionUpdate.update() }
             deleteMoveInsert()
+            tableViewUpdates.uniqueAnimationDelegates.forEach { $0.animateAlongsideUpdate(with: TimeInterval.standardCollectionAnimationDuration) }
             endUpdates()
             
             guard isVisibleOnScreen else {
@@ -132,6 +134,7 @@ extension UITableView: DeltaUpdatableView {
                     let indexSet = IndexSet([sectionUpdate.section])
                     reloadSections(indexSet, with: preferredReloadSectionAnimation(for: sectionUpdate.section))
                 }
+                sectionUpdates.uniqueAnimationDelegates.forEach { $0.animateAlongsideUpdate(with: TimeInterval.standardCollectionAnimationDuration) }
             }, completion: { _ in
                 sectionUpdates.forEach { $0.completion?() }
             })
@@ -142,6 +145,7 @@ extension UITableView: DeltaUpdatableView {
                 let indexSet = IndexSet([sectionUpdate.section])
                 reloadSections(indexSet, with: preferredReloadSectionAnimation(for: sectionUpdate.section))
             }
+            sectionUpdates.uniqueAnimationDelegates.forEach { $0.animateAlongsideUpdate(with: TimeInterval.standardCollectionAnimationDuration) }
             endUpdates()
             sectionUpdates.forEach { $0.completion?() }
         }
@@ -197,6 +201,7 @@ extension UICollectionView: DeltaUpdatableView {
                 }
                 strongSelf.insertItems(at: delta.insertedIndexPaths)
             }
+            collectionViewUpdates.uniqueAnimationDelegates.forEach { $0.animateAlongsideUpdate(with: TimeInterval.standardCollectionAnimationDuration) }
         }, completion: { [weak self] animationsCompletedSuccessfully in
             guard let strongSelf = self else {
                 collectionViewUpdates.forEach { $0.sectionUpdate.completion?() }
@@ -237,6 +242,7 @@ extension UICollectionView: DeltaUpdatableView {
             sectionUpdates.forEach { $0.update() }
             guard self != nil else { return }
             reloadSections(indexSet)
+            sectionUpdates.uniqueAnimationDelegates.forEach { $0.animateAlongsideUpdate(with: TimeInterval.standardCollectionAnimationDuration) }
         }, completion: { _ in
             sectionUpdates.forEach { $0.completion?() }
         })
@@ -463,4 +469,31 @@ enum TableViewRowConstants {
     static let defaultDeleteAnimation: UITableView.RowAnimation = .bottom
     static let defaultInsertAnimation: UITableView.RowAnimation = .fade
     static let defaultReloadAnimation: UITableView.RowAnimation = .fade
+}
+
+// MARK: Standard Animation Times
+
+extension TimeInterval {
+
+    static var standardCollectionAnimationDuration: TimeInterval {
+        return 0.3
+    }
+}
+
+// MARK: Unique Animation Delegates
+
+private extension Sequence where Element == EntireViewSectionUpdate {
+
+    var uniqueAnimationDelegates: [CollectionDataAnimationDelegate] {
+        return lazy.map { $0.sectionUpdate }.uniqueAnimationDelegates
+    }
+}
+
+private extension Sequence where Element == SectionUpdate {
+
+    var uniqueAnimationDelegates: [CollectionDataAnimationDelegate] {
+        return Array(lazy.compactMap { $0.delegate as? AnimationDelegateProviding }.compactMap { $0.animationDelegate }.reduce(into: [CollectionDataAnimationDelegate]()) {
+            if ($0 as NSArray).contains($1) == false { $0.append($1) }
+        })
+    }
 }

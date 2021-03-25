@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F42115E7214986F2003B57A6 /* AnyDeltaUpdatableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F42115E6214986F2003B57A6 /* AnyDeltaUpdatableView.swift */; };
 		F45256582152D76700F3B2DD /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = F45256572152D76600F3B2DD /* LICENSE */; };
 		F454C235212A545D0018DC6E /* AnyUniquelyIdentifiableDataFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = F454C234212A545D0018DC6E /* AnyUniquelyIdentifiableDataFactory.swift */; };
 		F47AE7292140F4DA00FE7360 /* PerformanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47AE7282140F4DA00FE7360 /* PerformanceTests.swift */; };
@@ -59,7 +58,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		F42115E6214986F2003B57A6 /* AnyDeltaUpdatableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyDeltaUpdatableView.swift; sourceTree = "<group>"; };
 		F45256572152D76600F3B2DD /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		F454C234212A545D0018DC6E /* AnyUniquelyIdentifiableDataFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyUniquelyIdentifiableDataFactory.swift; sourceTree = "<group>"; };
 		F47AE7282140F4DA00FE7360 /* PerformanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformanceTests.swift; sourceTree = "<group>"; };
@@ -145,7 +143,6 @@
 			isa = PBXGroup;
 			children = (
 				F4AF3BC22145B2C500917DF5 /* AnyCollectionDataDeletionNotificationDelegate.swift */,
-				F42115E6214986F2003B57A6 /* AnyDeltaUpdatableView.swift */,
 				F4B9013E2133A2A400E3B51C /* AnyDeltaUpdatableViewDelegate.swift */,
 				F454C234212A545D0018DC6E /* AnyUniquelyIdentifiableDataFactory.swift */,
 			);
@@ -446,7 +443,6 @@
 				F4AF3BC32145B2C500917DF5 /* AnyCollectionDataDeletionNotificationDelegate.swift in Sources */,
 				F4F205432172793200C211AB /* SingleSectionCustomAnimationStyleTableView.swift in Sources */,
 				F47AE72B2140F98100FE7360 /* ItemDataCalculator.swift in Sources */,
-				F42115E7214986F2003B57A6 /* AnyDeltaUpdatableView.swift in Sources */,
 				F47EFA922161638A00E53750 /* BaseTypes+UniquelyIdentifiable.swift in Sources */,
 				F4EC1E30215C88EB00ACCBDB /* CollectionDataSynchronizer.swift in Sources */,
 				F4D7731E20FBC4E7002F1C43 /* CollectionData.swift in Sources */,

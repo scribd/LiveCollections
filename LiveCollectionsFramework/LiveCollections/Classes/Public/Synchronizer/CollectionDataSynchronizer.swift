@@ -36,7 +36,7 @@ public final class CollectionDataSynchronizer: DeltaUpdatableView {
     }
     private var batchDelay: BatchDelay
     
-    public init(delay: BatchDelay) {
+    public init(delay: BatchDelay = .short) {
         self.batchDelay = delay
     }
     

@@ -34,6 +34,7 @@ final class CarouselController: NSObject, CollectionViewDataProvider {
         collectionView.register(MovieCollectionViewCell.self, forCellWithReuseIdentifier: MovieCollectionViewCell.reuseIdentifier)
         collectionData.validationDelegate = self
         collectionData.view = collectionView
+        collectionData.animationDelegate = self
     }
     
     var viewProvider: CollectionViewProvider {
@@ -99,6 +100,20 @@ extension CarouselController: UICollectionViewDelegate {
                 return
             }
         }
+    }
+}
+
+// MARK: CollectionDataAnimationDelegate
+
+extension CarouselController: CollectionDataAnimationDelegate {
+
+    func preferredItemAnimationStyle(for itemDelta: IndexDelta) -> AnimationStyle {
+        // option to suppress deltas that result in undesired animations
+        return .preciseAnimations
+    }
+
+    func animateAlongsideUpdate(with duration: TimeInterval) {
+        // animate alongside the collection view animation here
     }
 }
 

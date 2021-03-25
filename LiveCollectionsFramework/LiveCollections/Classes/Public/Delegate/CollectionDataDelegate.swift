@@ -31,14 +31,6 @@ public protocol CollectionDataManualReloadDelegate: AnyObject {
      */
     func willHandleReload(at indexPathPair: IndexPathPair) -> Bool
     func reloadItems(at indexPaths: [IndexPath], indexPathCompletion: @escaping (IndexPath) -> Void)
-
-    func preferredItemAnimationStyle(for itemDelta: IndexDelta) -> AnimationStyle
-}
-
-public protocol CollectionSectionDataManualReloadDelegate: CollectionDataManualReloadDelegate {
-
-    // Note: reloadSections & preciseAnimations have the same behavior for section animations
-    func preferredSectionAnimationStyle(for sectionDelta: IndexDelta) -> AnimationStyle
 }
 
 // MARK: AnimationStyle
@@ -73,4 +65,45 @@ public protocol CollectionDataCalculationNotificationDelegate: AnyObject {
     
     func collectionDataDidBeginCalculating()
     func collectionDataDidEndCalculating()
+}
+
+// MARK: CollectionDataCalculationNotificationDelegate
+
+/**
+ Use to control the style of animations or to animate alongside a UITableView or UICollectionView animation
+ */
+public protocol CollectionDataAnimationDelegate: AnyObject {
+    func preferredItemAnimationStyle(for itemDelta: IndexDelta) -> AnimationStyle
+    func animateAlongsideUpdate(with duration: TimeInterval)
+}
+
+// MARK: CollectionSectionDataAnimationDelegate
+
+/**
+ Use to control the style of section animations or to animate alongside a UITableView or UICollectionView section animation
+ */
+public protocol CollectionSectionDataAnimationDelegate: CollectionDataAnimationDelegate {
+    // Note: reloadSections & preciseAnimations have the same behavior for section animations
+    func preferredSectionAnimationStyle(for sectionDelta: IndexDelta) -> AnimationStyle
+    func animateAlongsideSectionUpdate(with duration: TimeInterval)
+}
+
+// MARK: Extensions
+
+public extension CollectionDataAnimationDelegate {
+
+    func preferredItemAnimationStyle(for itemDelta: IndexDelta) -> AnimationStyle {
+        return .preciseAnimations
+    }
+
+    func animateAlongsideUpdate(with duration: TimeInterval) { }
+}
+
+public extension CollectionSectionDataAnimationDelegate {
+
+    func preferredSectionAnimationStyle(for sectionDelta: IndexDelta) -> AnimationStyle {
+        return .preciseAnimations
+    }
+
+    func animateAlongsideSectionUpdate(with duration: TimeInterval) { }
 }

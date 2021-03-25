@@ -29,7 +29,8 @@ public final class CollectionSectionData<SectionType: UniquelyIdentifiableSectio
     private let view: SectionDeltaUpdatableView
     
     // delegate
-    public weak var reloadDelegate: CollectionSectionDataManualReloadDelegate?
+    public weak var reloadDelegate: CollectionDataManualReloadDelegate?
+    public weak var animationDelegate: CollectionSectionDataAnimationDelegate?
     public weak var calculationDelegate: CollectionDataCalculationNotificationDelegate? {
         get { return dataCalculator.calculationDelegate }
         set { dataCalculator.calculationDelegate = newValue  }
@@ -140,6 +141,7 @@ public final class CollectionSectionData<SectionType: UniquelyIdentifiableSectio
                                                  sectionProvider: self,
                                                  view: self.view,
                                                  reloadDelegate: self.reloadDelegate,
+                                                 animationDelegate: self.animationDelegate,
                                                  deletionDelegate: self.deletionNotificationDelegate,
                                                  completion: completion)
         }
@@ -152,6 +154,7 @@ public final class CollectionSectionData<SectionType: UniquelyIdentifiableSectio
                                                  sectionProvider: self,
                                                  view: self.view,
                                                  reloadDelegate: self.reloadDelegate,
+                                                 animationDelegate: self.animationDelegate,
                                                  completion: completion)
         }
     }

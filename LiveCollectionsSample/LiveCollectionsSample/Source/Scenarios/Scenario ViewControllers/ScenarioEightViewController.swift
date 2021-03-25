@@ -71,17 +71,7 @@ final class ScenarioEightViewController: UIViewController {
     }
 }
 
-extension ScenarioEightViewController: CollectionSectionDataManualReloadDelegate {
-
-    func preferredItemAnimationStyle(for itemDelta: IndexDelta) -> AnimationStyle {
-        // option to suppress deltas that result in undesired animations
-        return .preciseAnimations
-    }
-
-    func preferredSectionAnimationStyle(for sectionDelta: IndexDelta) -> AnimationStyle {
-        // option to suppress deltas that result in undesired animations
-        return .preciseAnimations
-    }
+extension ScenarioEightViewController: CollectionDataManualReloadDelegate {
 
     func willHandleReload(at indexPathPair: IndexPathPair) -> Bool {
         return true

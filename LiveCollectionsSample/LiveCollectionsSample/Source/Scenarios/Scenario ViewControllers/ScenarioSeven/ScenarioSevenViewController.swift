@@ -53,6 +53,7 @@ final class ScenarioSevenViewController: UIViewController {
         tableView.register(CarouselTableViewCell.self, forCellReuseIdentifier: CarouselTableViewCell.reuseIdentifier)
         collectionData.view = tableView
         collectionData.reloadDelegate = self
+        collectionData.animationDelegate = self
         collectionData.setDeletionNotificationDelegate(self)
     }
     
@@ -88,10 +89,19 @@ extension ScenarioSevenViewController: CollectionDataManualReloadDelegate {
             dataSource.update(with: carouselRow.movies, completion: itemCompletion)
         }
     }
-    
+}
+
+// MARK: CollectionDataAnimationDelegate
+
+extension ScenarioSevenViewController: CollectionDataAnimationDelegate {
+
     func preferredItemAnimationStyle(for itemDelta: IndexDelta) -> AnimationStyle {
         // option to suppress deltas that result in undesired animations
         return .preciseAnimations
+    }
+
+    func animateAlongsideUpdate(with duration: TimeInterval) {
+        // animate alongside the table view animation here
     }
 }
 

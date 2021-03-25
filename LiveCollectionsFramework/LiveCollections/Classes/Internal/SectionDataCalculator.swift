@@ -48,7 +48,8 @@ final class SectionDataCalculator<SectionType: UniquelyIdentifiableSection> {
     func updateAndAnimate<DeletionDelegate, SectionProvider>(_ updatedSections: [SectionType],
                                                              sectionProvider: SectionProvider,
                                                              view: SectionDeltaUpdatableView,
-                                                             reloadDelegate: CollectionSectionDataManualReloadDelegate?,
+                                                             reloadDelegate: CollectionDataManualReloadDelegate?,
+                                                             animationDelegate: CollectionSectionDataAnimationDelegate?,
                                                              deletionDelegate: DeletionDelegate?,
                                                              completion: (() -> Void)?) where DeletionDelegate: CollectionDataDeletionNotificationDelegate, DeletionDelegate.DataType == DataType, SectionProvider: SectionDataProvider, SectionProvider: SectionCalculatingDataProvider, SectionProvider.SectionType == SectionType, SectionProvider.DataType == DataType, SectionProvider.CalculatingSectionType == SectionType {
         
@@ -57,6 +58,7 @@ final class SectionDataCalculator<SectionType: UniquelyIdentifiableSection> {
                                     sectionProvider: sectionProvider,
                                     view: view,
                                     reloadDelegate: reloadDelegate,
+                                    animationDelegate: animationDelegate,
                                     deletionDelegate: deletionDelegate,
                                     completion: completion)
         }
@@ -67,7 +69,8 @@ final class SectionDataCalculator<SectionType: UniquelyIdentifiableSection> {
     func appendAndAnimate<SectionProvider>(_ appendedSections: [SectionType],
                                            sectionProvider: SectionProvider,
                                            view: SectionDeltaUpdatableView,
-                                           reloadDelegate: CollectionSectionDataManualReloadDelegate?,
+                                           reloadDelegate: CollectionDataManualReloadDelegate?,
+                                           animationDelegate: CollectionSectionDataAnimationDelegate?,
                                            completion: (() -> Void)?) where SectionProvider: SectionDataProvider, SectionProvider: SectionCalculatingDataProvider, SectionProvider.SectionType == SectionType, SectionProvider.DataType == DataType, SectionProvider.CalculatingSectionType == SectionType {
         
         let calculation: DeltaOperationCalculation<SectionType> = { [weak self] sections in
@@ -75,6 +78,7 @@ final class SectionDataCalculator<SectionType: UniquelyIdentifiableSection> {
                                     sectionProvider: sectionProvider,
                                     view: view,
                                     reloadDelegate: reloadDelegate,
+                                    animationDelegate: animationDelegate,
                                     completion: completion)
         }
 
@@ -116,7 +120,8 @@ private extension SectionDataCalculator {
     func _updateAndAnimate<DeletionDelegate, SectionProvider>(_ updatedSections: [SectionType],
                                                               sectionProvider: SectionProvider,
                                                               view: SectionDeltaUpdatableView,
-                                                              reloadDelegate: CollectionSectionDataManualReloadDelegate?,
+                                                              reloadDelegate: CollectionDataManualReloadDelegate?,
+                                                              animationDelegate: CollectionSectionDataAnimationDelegate?,
                                                               deletionDelegate: DeletionDelegate?,
                                                               completion: (() -> Void)?) where DeletionDelegate: CollectionDataDeletionNotificationDelegate, DeletionDelegate.DataType == DataType, SectionProvider: SectionDataProvider, SectionProvider: SectionCalculatingDataProvider, SectionProvider.SectionType == SectionType, SectionProvider.DataType == DataType, SectionProvider.CalculatingSectionType == SectionType {
         
@@ -198,8 +203,8 @@ private extension SectionDataCalculator {
         
         let performSectionUpdates: (SectionUpdateCompletion?) -> Void = { sectionUpdateCompletion in
             let sectionAnimationStlye: AnimationStyle = {
-                guard let reloadDelegate = reloadDelegate else { return .preciseAnimations }
-                return reloadDelegate.preferredSectionAnimationStyle(for: sectionDelta)
+                guard let animationDelegate = animationDelegate else { return .preciseAnimations }
+                return animationDelegate.preferredSectionAnimationStyle(for: sectionDelta)
             }()
             
             DispatchQueue.main.async {
@@ -217,9 +222,9 @@ private extension SectionDataCalculator {
 
                 case .reloadSections,
                      .preciseAnimations:
-                    let viewDelegate: DeltaUpdatableViewDelegate? = {
-                        guard let reloadDelegate = reloadDelegate else { return nil }
-                        return AnyDeltaUpdatableViewDelegate(reloadDelegate)
+                    let viewDelegate: SectionDeltaUpdatableViewDelegate? = {
+                        if reloadDelegate == nil, animationDelegate == nil { return nil }
+                        return AnySectionDeltaUpdatableViewDelegate(reloadDelegate: reloadDelegate, animationDelegate: animationDelegate)
                     }()
                     view.performAnimations(sectionDelta: sectionDelta,
                                            delegate: viewDelegate,
@@ -288,8 +293,8 @@ private extension SectionDataCalculator {
             }
             
             let itemAnimationStlye: AnimationStyle = {
-                guard let reloadDelegate = reloadDelegate else { return .preciseAnimations }
-                return reloadDelegate.preferredItemAnimationStyle(for: itemDelta)
+                guard let animationDelegate = animationDelegate else { return .preciseAnimations }
+                return animationDelegate.preferredItemAnimationStyle(for: itemDelta)
             }()
             
             DispatchQueue.main.async { [weak weakView = view] in
@@ -306,12 +311,12 @@ private extension SectionDataCalculator {
                     calculationCompletion()
                     
                 case .reloadSections:
-                    strongView.reloadAllSections(updateData: updateData, completion: calculationCompletion)
+                    strongView.reloadAllSections(updateData: updateData, delegate: animationDelegate, completion: calculationCompletion)
                     
                 case .preciseAnimations:
-                    let viewDelegate: DeltaUpdatableViewDelegate? = {
-                        guard let reloadDelegate = reloadDelegate else { return nil }
-                        return AnyDeltaUpdatableViewDelegate(reloadDelegate)
+                    let viewDelegate: SectionDeltaUpdatableViewDelegate? = {
+                        if reloadDelegate == nil, animationDelegate == nil { return nil }
+                        return AnySectionDeltaUpdatableViewDelegate(reloadDelegate: reloadDelegate, animationDelegate: animationDelegate)
                     }()
                     strongView.performAnimations(sectionItemDelta: itemIndexPathDeltas,
                                                  delegate: viewDelegate,
@@ -325,7 +330,8 @@ private extension SectionDataCalculator {
     func _appendAndAnimate<SectionProvider>(_ appendedItems: [SectionType],
                                             sectionProvider: SectionProvider,
                                             view: SectionDeltaUpdatableView,
-                                            reloadDelegate: CollectionSectionDataManualReloadDelegate?,
+                                            reloadDelegate: CollectionDataManualReloadDelegate?,
+                                            animationDelegate: CollectionSectionDataAnimationDelegate?,
                                             completion: (() -> Void)?) where SectionProvider: SectionDataProvider, SectionProvider: SectionCalculatingDataProvider, SectionProvider.SectionType == SectionType, SectionProvider.DataType == DataType, SectionProvider.CalculatingSectionType == SectionType {
         
         sectionProvider.calculatingSections = appendedItems
@@ -357,8 +363,8 @@ private extension SectionDataCalculator {
         let sectionDelta = IndexDelta(insertions: insertedIndices)
         
         let sectionAnimationStlye: AnimationStyle = {
-            guard let reloadDelegate = reloadDelegate else { return .preciseAnimations }
-            return reloadDelegate.preferredSectionAnimationStyle(for: sectionDelta)
+            guard let animationDelegate = animationDelegate else { return .preciseAnimations }
+            return animationDelegate.preferredSectionAnimationStyle(for: sectionDelta)
         }()
         
         DispatchQueue.main.async { [weak weakSectionProvider = sectionProvider, weak weakView = view] in
@@ -383,9 +389,9 @@ private extension SectionDataCalculator {
                                                        view: strongView,
                                                        calculationCompletion: calculationCompletion)
                 } else {
-                    let viewDelegate: DeltaUpdatableViewDelegate? = {
-                        guard let reloadDelegate = reloadDelegate else { return nil }
-                        return AnyDeltaUpdatableViewDelegate(reloadDelegate)
+                    let viewDelegate: SectionDeltaUpdatableViewDelegate? = {
+                        if reloadDelegate == nil, animationDelegate == nil { return nil }
+                        return AnySectionDeltaUpdatableViewDelegate(reloadDelegate: reloadDelegate, animationDelegate: animationDelegate)
                     }()
                     view.performAnimations(sectionDelta: sectionDelta,
                                            delegate: viewDelegate,
@@ -515,7 +521,6 @@ private extension SectionDataCalculator {
     
     func convertItemIndicesToIndexPaths(_ indexDelta: IndexDelta, sectionDelta: IndexDelta, originalSections: [SectionType], intermediateSections: [SectionType], targetSections: [SectionType]) -> IndexPathDelta {
         
-        let originalStartingOffsets = indexOffsets(for: originalSections)
         let intermediateStartingOffsets = indexOffsets(for: intermediateSections)
         let targetStartingOffsets = indexOffsets(for: targetSections)
         
