@@ -202,12 +202,14 @@ private extension SectionDataCalculator {
         typealias SectionUpdateCompletion = () -> Void
         
         let performSectionUpdates: (SectionUpdateCompletion?) -> Void = { sectionUpdateCompletion in
-            let sectionAnimationStlye: AnimationStyle = {
-                guard let animationDelegate = animationDelegate else { return .preciseAnimations }
-                return animationDelegate.preferredSectionAnimationStyle(for: sectionDelta)
-            }()
-            
+
             DispatchQueue.main.async {
+
+                let sectionAnimationStlye: AnimationStyle = {
+                    if view.frame.isEmpty { return .reloadData }
+                    guard let animationDelegate = animationDelegate else { return .preciseAnimations }
+                    return animationDelegate.preferredSectionAnimationStyle(for: sectionDelta)
+                }()
 
                 let sectionUpdateData = {
                     sectionProvider.sections = sections
@@ -291,19 +293,21 @@ private extension SectionDataCalculator {
                 sectionProvider.items = items
                 sectionProvider.calculatingSections = nil
             }
-            
-            let itemAnimationStlye: AnimationStyle = {
-                guard let animationDelegate = animationDelegate else { return .preciseAnimations }
-                return animationDelegate.preferredItemAnimationStyle(for: itemDelta)
-            }()
-            
+
             DispatchQueue.main.async { [weak weakView = view] in
+
                 guard let strongView = weakView else {
                     updateData()
                     calculationCompletion()
                     return
                 }
-                
+
+                let itemAnimationStlye: AnimationStyle = {
+                    if view.frame.isEmpty { return .reloadData }
+                    guard let animationDelegate = animationDelegate else { return .preciseAnimations }
+                    return animationDelegate.preferredItemAnimationStyle(for: itemDelta)
+                }()
+
                 switch itemAnimationStlye {
                 case .reloadData:
                     updateData()
@@ -362,19 +366,21 @@ private extension SectionDataCalculator {
         let insertedIndices = [Int](startingCount..<(startingCount + appendedItems.count))
         let sectionDelta = IndexDelta(insertions: insertedIndices)
         
-        let sectionAnimationStlye: AnimationStyle = {
-            guard let animationDelegate = animationDelegate else { return .preciseAnimations }
-            return animationDelegate.preferredSectionAnimationStyle(for: sectionDelta)
-        }()
-        
         DispatchQueue.main.async { [weak weakSectionProvider = sectionProvider, weak weakView = view] in
+
             guard let strongSectionProvider = weakSectionProvider,
                 let strongView = weakView else {
                 updateData()
                 calculationCompletion()
                 return
             }
-            
+
+            let sectionAnimationStlye: AnimationStyle = {
+                if view.frame.isEmpty { return .reloadData }
+                guard let animationDelegate = animationDelegate else { return .preciseAnimations }
+                return animationDelegate.preferredSectionAnimationStyle(for: sectionDelta)
+            }()
+
             switch sectionAnimationStlye {
             case .reloadData:
                 updateData()

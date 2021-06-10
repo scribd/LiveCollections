@@ -112,7 +112,11 @@ public final class CollectionDataSynchronizer: DeltaUpdatableView {
     }
     
     // MARK: DeltaUpdatableView
-    
+
+    public var frame: CGRect {
+        return view?.frame ?? .zero
+    }
+
     public func reloadData() {
         view?.reloadData()
     }

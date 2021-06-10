@@ -17,7 +17,10 @@ public protocol DeltaUpdatableViewDelegate: CollectionDataManualReloadDelegate, 
 public protocol SectionDeltaUpdatableViewDelegate: CollectionDataManualReloadDelegate, CollectionSectionDataAnimationDelegate { }
 
 public protocol DeltaUpdatableView: AnyObject {
-    
+
+    /// Basic view frame getter
+    var frame: CGRect { get }
+
     /// Basic reloadData function
     func reloadData()
 
@@ -40,6 +43,10 @@ public protocol DeltaUpdatableView: AnyObject {
 
 public protocol SectionDeltaUpdatableView: AnyObject {
     
+    /// Standard view frame getter
+    var frame: CGRect { get }
+
+    /// Basic reloadData function
     func reloadData()
     
     /**
