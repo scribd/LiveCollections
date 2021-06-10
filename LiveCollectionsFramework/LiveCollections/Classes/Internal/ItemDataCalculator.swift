@@ -233,6 +233,7 @@ private extension ItemDataCalculator {
                 updateData()
                 targetView.reloadData()
                 calculationCompletion()
+                return
 
             case .reloadSections,
                  .preciseAnimations:
@@ -344,6 +345,8 @@ private extension ItemDataCalculator {
                 updateData()
                 targetView.reloadData()
                 calculationCompletion()
+                return
+                
             case .reloadSections,
                  .preciseAnimations:
                 // Short circuit if there are too many items
