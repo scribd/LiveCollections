@@ -23,7 +23,7 @@ This project has been upgraded to be compatible with Swift 5.
 <h2>Importing With Carthage</h2>
 
 <br>
-github "scribd/LiveCollections" "beta_0.9.14"
+github "scribd/LiveCollections" "beta_0.9.15"
 <br>
 <br>
 
@@ -31,7 +31,7 @@ github "scribd/LiveCollections" "beta_0.9.14"
 <h2>Importing With CocoaPods</h2>
 
 <br>
-pod 'LiveCollections', '~> 0.9.14'
+pod 'LiveCollections', '~> 0.9.15'
 <br>
 or
 <br>
