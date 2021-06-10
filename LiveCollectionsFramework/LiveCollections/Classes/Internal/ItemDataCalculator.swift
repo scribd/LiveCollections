@@ -179,9 +179,9 @@ private extension ItemDataCalculator {
                 }
             }
         }
-        
-        // Short circuit if there are too many items
-        
+
+        // calculate data change
+
         let dataSetTooLarge = itemProvider.items.count > itemProvider.dataCountAnimationThreshold ||
             updatedItems.count > itemProvider.dataCountAnimationThreshold
 
@@ -194,23 +194,9 @@ private extension ItemDataCalculator {
         } else {
             (delta, deletedItems) = _calculateDelta(updatedItems, itemProvider: itemProvider)
         }
-        
+
         let deltaChangeTooLarge = delta.changeCount > itemProvider.deltaCountAnimationThreshold
-        
-        guard dataSetTooLarge == false && deltaChangeTooLarge == false else {
-            _updateSections(updatedItems,
-                            itemProvider: itemProvider,
-                            section: section,
-                            viewProvider: viewProvider,
-                            viewDelegate: viewDelegate,
-                            deletionDelegate: deletionDelegate,
-                            updateData: updateData,
-                            completion: completion)
-            return
-        }
-        
-        // Otherwise animate
-        
+
         let calculationCompletion: () -> Void = { [weak self, weak weakDeletionDelegate = deletionDelegate] in
             completion?()
             if deletedItems.isEmpty == false {
@@ -224,12 +210,7 @@ private extension ItemDataCalculator {
             calculationCompletion()
             return
         }
-        
-        let itemAnimationStlye: AnimationStyle = {
-            guard let animationDelegate = animationDelegate else { return .preciseAnimations }
-            return animationDelegate.preferredItemAnimationStyle(for: delta)
-        }()
-        
+
         DispatchQueue.main.async { [weak weakViewProvider = viewProvider] in
             guard let targetView = weakViewProvider?.view else {
                 updateData()
@@ -240,14 +221,40 @@ private extension ItemDataCalculator {
             if targetView !== view {
                 targetView.reloadData()
             }
-            
+
+            let itemAnimationStlye: AnimationStyle = {
+                if view.frame.isEmpty { return .reloadData }
+                guard let animationDelegate = animationDelegate else { return .preciseAnimations }
+                return animationDelegate.preferredItemAnimationStyle(for: delta)
+            }()
+
             switch itemAnimationStlye {
             case .reloadData:
                 updateData()
                 targetView.reloadData()
                 calculationCompletion()
-                
-            case .reloadSections:
+
+            case .reloadSections,
+                 .preciseAnimations:
+                // Short circuit if there are too many items
+                guard dataSetTooLarge == false && deltaChangeTooLarge == false else {
+                    self._updateSections(updatedItems,
+                                         itemProvider: itemProvider,
+                                         section: section,
+                                         viewProvider: viewProvider,
+                                         viewDelegate: viewDelegate,
+                                         deletionDelegate: deletionDelegate,
+                                         updateData: updateData,
+                                         completion: completion)
+                    return
+                }
+            }
+
+            // Otherwise animate
+
+            switch itemAnimationStlye {
+            case .reloadData,
+                 .reloadSections:
                 let sectionUpdate = SectionUpdate(section: section,
                                                   delta: delta,
                                                   delegate: viewDelegate,
@@ -294,41 +301,26 @@ private extension ItemDataCalculator {
                 }
             }
         }
-        
+
+        // calculate data change
+
+        let deltaChangeTooLarge = delta.changeCount > itemProvider.deltaCountAnimationThreshold
+
         let calculationCompletion: () -> Void = { [weak self] in
             completion?()
             self?._performNextCalculation()
         }
 
-        // Short circuit if there are too many items
-
-        let deltaChangeTooLarge = delta.changeCount > itemProvider.deltaCountAnimationThreshold
-        
-        guard deltaChangeTooLarge == false else {
-            _updateSections(section: section,
-                            viewProvider: viewProvider,
-                            viewDelegate: viewDelegate,
-                            updateData: updateData,
-                            calculationCompletion: calculationCompletion)
-            return
-        }
-
-        // Otherwise animate
-        
         guard delta.hasChanges else {
             itemProvider.calculatingItems = nil
             calculationCompletion()
             return
         }
-        
-        let itemAnimationStlye: AnimationStyle = {
-            guard let animationDelegate = animationDelegate else { return .preciseAnimations }
-            return animationDelegate.preferredItemAnimationStyle(for: delta)
-        }()
-        
+
         let startingItemCount = itemProvider.items.count
         
         DispatchQueue.main.async { [weak weakItemProvider = itemProvider, weak weakViewProvider = viewProvider] in
+
             guard let strongItemProvider = weakItemProvider,
                 let strongViewProvider = weakViewProvider,
                 let targetView = weakViewProvider?.view else {
@@ -340,14 +332,36 @@ private extension ItemDataCalculator {
             if targetView !== view {
                 targetView.reloadData()
             }
-            
+
+            let itemAnimationStlye: AnimationStyle = {
+                if view.frame.isEmpty { return .reloadData }
+                guard let animationDelegate = animationDelegate else { return .preciseAnimations }
+                return animationDelegate.preferredItemAnimationStyle(for: delta)
+            }()
+
             switch itemAnimationStlye {
             case .reloadData:
                 updateData()
                 targetView.reloadData()
                 calculationCompletion()
-                
-            case .reloadSections:
+            case .reloadSections,
+                 .preciseAnimations:
+                // Short circuit if there are too many items
+                guard deltaChangeTooLarge == false else {
+                    self._updateSections(section: section,
+                                         viewProvider: viewProvider,
+                                         viewDelegate: viewDelegate,
+                                         updateData: updateData,
+                                         calculationCompletion: calculationCompletion)
+                    return
+                }
+            }
+
+            // Otherwise animate
+
+            switch itemAnimationStlye {
+            case .reloadData,
+                 .reloadSections:
                 let sectionUpdate = SectionUpdate(section: section,
                                                   delta: delta,
                                                   delegate: viewDelegate,
