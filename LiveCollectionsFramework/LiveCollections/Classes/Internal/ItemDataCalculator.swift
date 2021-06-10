@@ -223,7 +223,7 @@ private extension ItemDataCalculator {
             }
 
             let itemAnimationStlye: AnimationStyle = {
-                if view.frame.isEmpty { return .reloadData }
+                if targetView.frame.isEmpty { return .reloadData }
                 guard let animationDelegate = animationDelegate else { return .preciseAnimations }
                 return animationDelegate.preferredItemAnimationStyle(for: delta)
             }()
@@ -334,7 +334,7 @@ private extension ItemDataCalculator {
             }
 
             let itemAnimationStlye: AnimationStyle = {
-                if view.frame.isEmpty { return .reloadData }
+                if targetView.frame.isEmpty { return .reloadData }
                 guard let animationDelegate = animationDelegate else { return .preciseAnimations }
                 return animationDelegate.preferredItemAnimationStyle(for: delta)
             }()
