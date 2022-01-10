@@ -1,5 +1,5 @@
 //
-//  ResuableViewProtocol.swift
+//  ResuableViewHelper.swift
 //  LiveCollectionsSample
 //
 //  Created by Paris Pinkney on 7/7/16.
@@ -8,17 +8,13 @@
 
 import UIKit
 
-protocol ReusableViewProtocol: class {
-    static var reuseIdentifier: String { get }
-}
-
-extension UITableViewCell: ReusableViewProtocol {
+extension UITableViewCell {
     static var reuseIdentifier: String {
         return String(describing: self)
     }
 }
 
-extension UICollectionReusableView: ReusableViewProtocol {
+extension UICollectionReusableView {
     static var reuseIdentifier: String {
         return String(describing: self)
     }

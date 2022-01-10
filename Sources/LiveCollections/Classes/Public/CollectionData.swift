@@ -6,7 +6,7 @@
 //  Copyright © 2017 Scribd. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 /**
  This is a tool for the most common case:

@@ -6,7 +6,7 @@
 //  Copyright © 2018 Scribd. All rights reserved.
 //
 
-import Foundation
+import CoreGraphics
 
 public protocol CollectionViewProvider: AnyObject {
     var view: DeltaUpdatableView? { get set }
