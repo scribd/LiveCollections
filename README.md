@@ -14,16 +14,24 @@ Full detail for the use case of each scenario <a href="https://medium.com/p/59ea
 
 <h2>Swift Version</h2>
 
-This project has been upgraded to be compatible with Swift 5.
+This project has been upgraded to be compatible with Swift 5.5
 <br>
 
 <hr>
 
 
+<h2>Importing With SwiftPM</h2>
+
+<br>
+https://github.com/scribd/LiveCollections 1.0.0
+<br>
+<br>
+
+
 <h2>Importing With Carthage</h2>
 
 <br>
-github "scribd/LiveCollections" "beta_0.9.15"
+github "scribd/LiveCollections" "1.0.0"
 <br>
 <br>
 
@@ -31,7 +39,7 @@ github "scribd/LiveCollections" "beta_0.9.15"
 <h2>Importing With CocoaPods</h2>
 
 <br>
-pod 'LiveCollections', '~> 0.9.15'
+pod 'LiveCollections', '~> 1.0.0'
 <br>
 or
 <br>
