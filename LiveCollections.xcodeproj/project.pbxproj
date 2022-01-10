@@ -72,10 +72,10 @@
 		F4B9013E2133A2A400E3B51C /* AnyDeltaUpdatableViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyDeltaUpdatableViewDelegate.swift; sourceTree = "<group>"; };
 		F4D772DF20FBC4BE002F1C43 /* LiveCollections.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LiveCollections.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F4D772E220FBC4BE002F1C43 /* LiveCollections.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LiveCollections.h; sourceTree = "<group>"; };
-		F4D772E320FBC4BE002F1C43 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F4D772E320FBC4BE002F1C43 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = ../../Info.plist; sourceTree = "<group>"; };
 		F4D772E820FBC4BF002F1C43 /* LiveCollectionsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LiveCollectionsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F4D772ED20FBC4BF002F1C43 /* LiveCollectionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveCollectionsTests.swift; sourceTree = "<group>"; };
-		F4D772EF20FBC4BF002F1C43 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F4D772EF20FBC4BF002F1C43 /* Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Tests-Info.plist"; path = "../../Tests-Info.plist"; sourceTree = "<group>"; };
 		F4D772FB20FBC4E7002F1C43 /* DataProviderProtocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataProviderProtocols.swift; sourceTree = "<group>"; };
 		F4D7730020FBC4E7002F1C43 /* SectionDataCalculator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionDataCalculator.swift; sourceTree = "<group>"; };
 		F4D7730320FBC4E7002F1C43 /* SectionUpdate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionUpdate.swift; sourceTree = "<group>"; };
@@ -175,7 +175,8 @@
 				F4D772E220FBC4BE002F1C43 /* LiveCollections.h */,
 				F4D772F920FBC4E7002F1C43 /* Classes */,
 			);
-			path = LiveCollections;
+			name = LiveCollections;
+			path = Sources/LiveCollections;
 			sourceTree = "<group>";
 		};
 		F4D772EC20FBC4BF002F1C43 /* LiveCollectionsTests */ = {
@@ -183,9 +184,10 @@
 			children = (
 				F4847DF92137C89400859EFF /* ItemDeltaTests */,
 				F4D772ED20FBC4BF002F1C43 /* LiveCollectionsTests.swift */,
-				F4D772EF20FBC4BF002F1C43 /* Info.plist */,
+				F4D772EF20FBC4BF002F1C43 /* Tests-Info.plist */,
 			);
-			path = LiveCollectionsTests;
+			name = LiveCollectionsTests;
+			path = Sources/LiveCollectionsTests;
 			sourceTree = "<group>";
 		};
 		F4D772F920FBC4E7002F1C43 /* Classes */ = {
@@ -618,7 +620,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = LiveCollections/Info.plist;
+				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -646,7 +648,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = LiveCollections/Info.plist;
+				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -669,7 +671,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = E7MUW2QU95;
-				INFOPLIST_FILE = LiveCollectionsTests/Info.plist;
+				INFOPLIST_FILE = "Tests-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -688,7 +690,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = E7MUW2QU95;
-				INFOPLIST_FILE = LiveCollectionsTests/Info.plist;
+				INFOPLIST_FILE = "Tests-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

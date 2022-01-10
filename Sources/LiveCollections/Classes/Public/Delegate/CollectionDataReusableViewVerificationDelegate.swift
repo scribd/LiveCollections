@@ -6,7 +6,7 @@
 //  Copyright © 2018 Scribd. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 /**
  This is a specific protocol for the `Table of Carousels` scenario (A UITableView that has a UICollectionView in

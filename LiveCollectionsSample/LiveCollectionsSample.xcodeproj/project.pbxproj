@@ -373,7 +373,7 @@
 		F4D7737D20FC5D34002F1C43 /* DataCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D7737C20FC5D34002F1C43 /* DataCoordinator.swift */; };
 		F4D7737F20FC5F14002F1C43 /* PresentationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D7737E20FC5F14002F1C43 /* PresentationView.swift */; };
 		F4D7738820FC64FD002F1C43 /* MovieCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D7738720FC64FD002F1C43 /* MovieCollectionViewCell.swift */; };
-		F4D7738A20FD057C002F1C43 /* ResuableViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D7738920FD057C002F1C43 /* ResuableViewProtocol.swift */; };
+		F4D7738A20FD057C002F1C43 /* ResuableViewHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D7738920FD057C002F1C43 /* ResuableViewHelper.swift */; };
 		F4F2054521727B9A00C211AB /* ScenarioThirteenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4F2054421727B9A00C211AB /* ScenarioThirteenViewController.swift */; };
 		F4F205562172D24800C211AB /* ScenarioFourteenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4F205552172D24800C211AB /* ScenarioFourteenViewController.swift */; };
 		F4F2055A2173391B00C211AB /* ScenarioFifteenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4F205592173391B00C211AB /* ScenarioFifteenViewController.swift */; };
@@ -763,7 +763,7 @@
 		F4D7737C20FC5D34002F1C43 /* DataCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataCoordinator.swift; sourceTree = "<group>"; };
 		F4D7737E20FC5F14002F1C43 /* PresentationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationView.swift; sourceTree = "<group>"; };
 		F4D7738720FC64FD002F1C43 /* MovieCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCollectionViewCell.swift; sourceTree = "<group>"; };
-		F4D7738920FD057C002F1C43 /* ResuableViewProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResuableViewProtocol.swift; sourceTree = "<group>"; };
+		F4D7738920FD057C002F1C43 /* ResuableViewHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResuableViewHelper.swift; sourceTree = "<group>"; };
 		F4F2054421727B9A00C211AB /* ScenarioThirteenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenarioThirteenViewController.swift; sourceTree = "<group>"; };
 		F4F205552172D24800C211AB /* ScenarioFourteenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenarioFourteenViewController.swift; sourceTree = "<group>"; };
 		F4F205592173391B00C211AB /* ScenarioFifteenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenarioFifteenViewController.swift; sourceTree = "<group>"; };
@@ -1265,7 +1265,7 @@
 			children = (
 				F4D7737A20FC57B5002F1C43 /* PlayerControl.swift */,
 				F4D7737E20FC5F14002F1C43 /* PresentationView.swift */,
-				F4D7738920FD057C002F1C43 /* ResuableViewProtocol.swift */,
+				F4D7738920FD057C002F1C43 /* ResuableViewHelper.swift */,
 				F4D7738720FC64FD002F1C43 /* MovieCollectionViewCell.swift */,
 				F4B0F796213DA45400179029 /* MovieTableViewCell.swift */,
 				F454C230212A4CFB0018DC6E /* CarouselTableViewCell.swift */,
@@ -1709,7 +1709,7 @@
 				F4D7738820FC64FD002F1C43 /* MovieCollectionViewCell.swift in Sources */,
 				F4B0F794213DA04600179029 /* ScenarioSixViewController.swift in Sources */,
 				F4AE4CEC21063CC2000205E1 /* ScenarioSevenViewController.swift in Sources */,
-				F4D7738A20FD057C002F1C43 /* ResuableViewProtocol.swift in Sources */,
+				F4D7738A20FD057C002F1C43 /* ResuableViewHelper.swift in Sources */,
 				F4AE4CEA2105911E000205E1 /* ScenarioFourViewController.swift in Sources */,
 				F4AE4CEF21063D14000205E1 /* CarouselController.swift in Sources */,
 				F4D7735720FC148E002F1C43 /* APIClient.swift in Sources */,

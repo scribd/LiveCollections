@@ -6,7 +6,7 @@
 //  Copyright © 2018 Scribd. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 public final class CollectionDataSynchronizer: DeltaUpdatableView {
     

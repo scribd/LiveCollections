@@ -37,7 +37,7 @@ public extension UniquelyIdentifiable where RawType == Self {
     var rawData: Self { return self }
 }
 
-public extension UniquelyIdentifiable where Self: Hashable, UniqueIDType == Self {
+public extension UniquelyIdentifiable where UniqueIDType == Self {
     var uniqueID: Self { return self }
 }
 
