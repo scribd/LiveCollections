@@ -416,6 +416,7 @@ private extension SectionDataCalculator {
 
         let startingIndex = sectionProvider.sections.count
 
+        let lastIndex = appendedItems.count - 1
         appendedItems.enumerated().forEach { index, item in
             let isFinalItem = index == (appendedItems.count - 1)
             
@@ -426,7 +427,9 @@ private extension SectionDataCalculator {
                 strongSectionProvider.sections = strongSectionProvider.sections + [item]
                 let updatedItems = sectionProvider.orderedItems(for: [item])
                 strongSectionProvider.items = strongSectionProvider.items + updatedItems
-                strongSectionProvider.calculatingSections = nil
+                if index == lastIndex {
+                    strongSectionProvider.calculatingSections = nil
+                }
             }
             
             let insertedIndex = startingIndex + index
