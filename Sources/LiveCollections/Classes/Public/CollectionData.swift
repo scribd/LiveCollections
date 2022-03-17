@@ -212,16 +212,6 @@ public final class CollectionData<ItemType: UniquelyIdentifiable>: CollectionDat
     }
     
     private func updateAndAnimate(_ rawData: [DataType.RawType], completion: (() -> Void)?) {
-        let shouldAppend: Bool = {
-            guard let calculatingItems = calculatingItems else { return isEmpty }
-            return calculatingItems.isEmpty
-        }()
-        
-        guard shouldAppend == false else {
-            appendAndAnimate(rawData, completion: completion)
-            return
-        }
-
         calculatingItems = rawData
         calculationQueue.async {
             guard self._validView() != nil else {

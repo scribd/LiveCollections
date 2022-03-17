@@ -125,16 +125,6 @@ public final class CollectionSectionData<SectionType: UniquelyIdentifiableSectio
     // MARK: CollectionSectionDataActionsInterface
     
     public func update(_ updatedData: [SectionType], completion: (() -> Void)? = nil) {
-        let shouldAppend: Bool = {
-            guard let calculatingSections = calculatingSections else { return isEmpty }
-            return calculatingSections.isEmpty
-        }()
-        
-        guard shouldAppend == false else {
-            append(updatedData, completion: completion)
-            return
-        }
-
         calculatingSections = updatedData
         calculationQueue.async {
             self.dataCalculator.updateAndAnimate(updatedData,

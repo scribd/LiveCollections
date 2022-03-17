@@ -402,7 +402,8 @@ private extension ItemDataCalculator {
         let startingIndex = itemProvider.items.count
         let viewDelegate = AnyDeltaUpdatableViewDelegate(animationDelegate: animationDelegate, viewProvider: viewProvider)
         let view = viewProvider.view
-        
+
+        let lastIndex = appendedItems.count - 1
         appendedItems.enumerated().forEach { index, item in
             let isFinalItem = index == (appendedItems.count - 1)
             
@@ -413,7 +414,9 @@ private extension ItemDataCalculator {
                     let strongViewProvider = weakViewProvider else { return }
                 
                 strongItemProvider.items = strongItemProvider.items + [item]
-                strongItemProvider.calculatingItems = nil
+                if index == lastIndex {
+                    strongItemProvider.calculatingItems = nil
+                }
                 
                 if view !== strongViewProvider.view {
                     strongViewProvider.view?.reloadData()
