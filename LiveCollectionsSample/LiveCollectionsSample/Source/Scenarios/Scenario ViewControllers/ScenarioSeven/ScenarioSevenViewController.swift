@@ -100,7 +100,7 @@ extension ScenarioSevenViewController: CollectionDataAnimationDelegate {
         return .preciseAnimations
     }
 
-    func animateAlongsideUpdate(with duration: TimeInterval) {
+    func animateAlongsideUpdate(for state: CollectionDataAnimationState) {
         // animate alongside the table view animation here
     }
 }
