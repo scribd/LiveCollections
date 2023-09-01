@@ -112,7 +112,7 @@ extension CarouselController: CollectionDataAnimationDelegate {
         return .preciseAnimations
     }
 
-    func animateAlongsideUpdate(with duration: TimeInterval) {
+    func animateAlongsideUpdate(for state: CollectionDataAnimationState) {
         // animate alongside the collection view animation here
     }
 }

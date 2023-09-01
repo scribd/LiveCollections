@@ -131,7 +131,7 @@ extension ScenarioThreeViewController: CollectionDataAnimationDelegate {
         return .preciseAnimations
     }
 
-    func animateAlongsideUpdate(with duration: TimeInterval) {
+    func animateAlongsideUpdate(for state: CollectionDataAnimationState) {
         // animate alongside the collection view animation here
         // use a CollectionDataSynchronizer object if you would like
         // all animations to map to a single call

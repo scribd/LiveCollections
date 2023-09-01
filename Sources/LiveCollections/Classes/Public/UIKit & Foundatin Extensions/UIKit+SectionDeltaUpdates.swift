@@ -45,27 +45,18 @@ extension UITableView: SectionDeltaUpdatableView {
             self.insertSections(sectionInsertedIndexSet as IndexSet, with: self.preferredInsertSectionAnimation)
         }
         
-        if #available(iOS 11.0, *) {
-            performBatchUpdates({ [weak self] in
-                updateData()
-                guard let strongSelf = self else { return }
-                guard strongSelf.isVisibleOnScreen else {
-                    strongSelf.reloadData()
-                    return
-                }
-                deleteMoveInsert()
-                delegate?.animateAlongsideSectionUpdate(with: TimeInterval.standardCollectionAnimationDuration)
-            }, completion: { _ in
-                completion?()
-            })
-        } else {
-            beginUpdates()
+        performBatchUpdates({ [weak self] in
             updateData()
+            guard let strongSelf = self else { return }
+            guard strongSelf.isVisibleOnScreen else {
+                strongSelf.reloadData()
+                return
+            }
             deleteMoveInsert()
             delegate?.animateAlongsideSectionUpdate(with: TimeInterval.standardCollectionAnimationDuration)
-            endUpdates()
+        }, completion: { _ in
             completion?()
-        }
+        })
     }
     
     public func performAnimations(sectionItemDelta itemIndexPathDelta: IndexPathDelta, delegate: SectionDeltaUpdatableViewDelegate?, updateData: (() -> Void), completion: (() -> Void)?) {
@@ -109,55 +100,31 @@ extension UITableView: SectionDeltaUpdatableView {
             self.reloadRows(at: automaticReloadIndexPaths, with: self.preferredReloadRowAnimation)
         }
         
-        if #available(iOS 11.0, *) {
-            performBatchUpdates({ [weak self] in
-                updateData()
-                guard let strongSelf = self else { return }
-                guard strongSelf.isVisibleOnScreen else {
-                    strongSelf.reloadData()
-                    return
-                }
-                deleteMoveInsert()
-                delegate?.animateAlongsideUpdate(with: TimeInterval.standardCollectionAnimationDuration)
-            }, completion: { [weak self] _ in
-                guard let strongSelf = self else {
-                    completion?()
-                    return
-                }
-                strongSelf.performBatchUpdates({ [weak weakSelf = strongSelf] in
-                    guard let strongSelf = weakSelf else { return }
-                    guard strongSelf.isVisibleOnScreen else {
-                        strongSelf.reloadData()
-                        return
-                    }
-                    reload()
-                }, completion: { _ in
-                    strongSelf.manualReload(indexPaths: manualReloadIndexPaths, delegate: delegate, viewCompletion: completion)
-                })
-            })
-        } else {
-            beginUpdates()
+        performBatchUpdates({ [weak self] in
             updateData()
-            guard isVisibleOnScreen else {
-                reloadData()
-                completion?()
+            guard let strongSelf = self else { return }
+            guard strongSelf.isVisibleOnScreen else {
+                strongSelf.reloadData()
                 return
             }
             deleteMoveInsert()
             delegate?.animateAlongsideUpdate(with: TimeInterval.standardCollectionAnimationDuration)
-            endUpdates()
-            
-            beginUpdates()
-            guard isVisibleOnScreen else {
-                reloadData()
+        }, completion: { [weak self] _ in
+            guard let strongSelf = self else {
                 completion?()
                 return
             }
-            reload()
-            endUpdates()
-            
-            manualReload(indexPaths: manualReloadIndexPaths, delegate: delegate, viewCompletion: completion)
-        }
+            strongSelf.performBatchUpdates({ [weak weakSelf = strongSelf] in
+                guard let strongSelf = weakSelf else { return }
+                guard strongSelf.isVisibleOnScreen else {
+                    strongSelf.reloadData()
+                    return
+                }
+                reload()
+            }, completion: { _ in
+                strongSelf.manualReload(indexPaths: manualReloadIndexPaths, delegate: delegate, viewCompletion: completion)
+            })
+        })
     }
     
     // NOTE: You can only call this method safely if you are only performing reloads
@@ -172,41 +139,22 @@ extension UITableView: SectionDeltaUpdatableView {
             return
         }
         
-        if #available(iOS 11.0, *) {
-            performBatchUpdates({ [weak self] in
-                updateData()
-                guard let strongSelf = self else { return }
-                guard strongSelf.isVisibleOnScreen else {
-                    strongSelf.reloadData()
-                    return
-                }
-                guard let numberOfSections = strongSelf.dataSource?.numberOfSections?(in: strongSelf) else {
-                    return
-                }
-                let sections = IndexSet(integersIn: 0..<numberOfSections)
-                strongSelf.reloadSections(sections, with: strongSelf.preferredReloadSectionAnimation)
-                delegate?.animateAlongsideSectionUpdate(with: TimeInterval.standardCollectionAnimationDuration)
-            }, completion: { _ in
-                completion?()
-            })
-                                
-        } else {
-            beginUpdates()
+        performBatchUpdates({ [weak self] in
             updateData()
-            guard isVisibleOnScreen else {
-                reloadData()
-                completion?()
+            guard let strongSelf = self else { return }
+            guard strongSelf.isVisibleOnScreen else {
+                strongSelf.reloadData()
                 return
             }
-            guard let numberOfSections = dataSource?.numberOfSections?(in: self) else {
+            guard let numberOfSections = strongSelf.dataSource?.numberOfSections?(in: strongSelf) else {
                 return
             }
             let sections = IndexSet(integersIn: 0..<numberOfSections)
-            reloadSections(sections, with: preferredReloadSectionAnimation)
+            strongSelf.reloadSections(sections, with: strongSelf.preferredReloadSectionAnimation)
             delegate?.animateAlongsideSectionUpdate(with: TimeInterval.standardCollectionAnimationDuration)
-            endUpdates()
+        }, completion: { _ in
             completion?()
-        }
+        })
     }
 }
 

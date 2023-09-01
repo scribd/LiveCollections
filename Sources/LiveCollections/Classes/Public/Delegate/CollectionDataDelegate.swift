@@ -67,14 +67,26 @@ public protocol CollectionDataCalculationNotificationDelegate: AnyObject {
     func collectionDataDidEndCalculating()
 }
 
-// MARK: CollectionDataCalculationNotificationDelegate
+// MARK: CollectionDataAnimationDelegate
+
+public enum CollectionDataAnimationGroup {
+    case insertDeleteMove
+    case reload
+}
+
+public enum CollectionDataAnimationState {
+    case immediatelyBefore(group: CollectionDataAnimationGroup, duration: TimeInterval)
+    case immediatelyAfter(group: CollectionDataAnimationGroup, duration: TimeInterval)
+    case during(group: CollectionDataAnimationGroup, duration: TimeInterval)
+    case completed(group: CollectionDataAnimationGroup)
+}
 
 /**
  Use to control the style of animations or to animate alongside a UITableView or UICollectionView animation
  */
 public protocol CollectionDataAnimationDelegate: AnyObject {
     func preferredItemAnimationStyle(for itemDelta: IndexDelta) -> AnimationStyle
-    func animateAlongsideUpdate(with duration: TimeInterval)
+    func animateAlongsideUpdate(for state: CollectionDataAnimationState)
 }
 
 // MARK: CollectionSectionDataAnimationDelegate

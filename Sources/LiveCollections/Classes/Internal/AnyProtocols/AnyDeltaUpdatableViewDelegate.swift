@@ -42,8 +42,8 @@ extension AnyDeltaUpdatableViewDelegate: DeltaUpdatableViewDelegate {
         return animationDelegate?.preferredItemAnimationStyle(for: itemDelta) ?? .preciseAnimations
     }
 
-    func animateAlongsideUpdate(with duration: TimeInterval) {
-        animationDelegate?.animateAlongsideUpdate(with: duration)
+    func animateAlongsideUpdate(for state: CollectionDataAnimationState) {
+        animationDelegate?.animateAlongsideUpdate(for: state)
     }
 
     var view: DeltaUpdatableView? {
@@ -79,8 +79,8 @@ extension AnySectionDeltaUpdatableViewDelegate: SectionDeltaUpdatableViewDelegat
         return animationDelegate?.preferredItemAnimationStyle(for: itemDelta) ?? .preciseAnimations
     }
 
-    func animateAlongsideUpdate(with duration: TimeInterval) {
-        animationDelegate?.animateAlongsideUpdate(with: duration)
+    func animateAlongsideUpdate(for state: CollectionDataAnimationState) {
+        animationDelegate?.animateAlongsideUpdate(for: state)
     }
 
     func preferredSectionAnimationStyle(for sectionDelta: IndexDelta) -> AnimationStyle {
