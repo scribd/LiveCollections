@@ -103,14 +103,13 @@ extension UITableView: DeltaUpdatableView {
     
     public func reloadSections(for sectionUpdates: [SectionUpdate]) {
         
-        performBatchUpdates({ [weak self] in
+        performBatchUpdates(.reload, delegates: sectionUpdates.uniqueAnimationDelegates, { [weak self] in
             sectionUpdates.forEach { sectionUpdate in
                 sectionUpdate.update()
-                guard self != nil else { return }
+                guard let self else { return }
                 let indexSet = IndexSet([sectionUpdate.section])
-                reloadSections(indexSet, with: preferredReloadSectionAnimation(for: sectionUpdate.section))
+                self.reloadSections(indexSet, with: self.preferredReloadSectionAnimation(for: sectionUpdate.section))
             }
-            sectionUpdates.uniqueAnimationDelegates.forEach { $0.animateAlongsideUpdate(with: TimeInterval.standardCollectionAnimationDuration) }
         }, completion: { _ in
             sectionUpdates.forEach { $0.completion?() }
         })
@@ -202,11 +201,10 @@ extension UICollectionView: DeltaUpdatableView {
         let sections = sectionUpdates.map { $0.section }
         let indexSet = IndexSet(sections)
         
-        performBatchUpdates({ [weak self] in
+        performBatchUpdates(.reload, delegates: sectionUpdates.uniqueAnimationDelegates, { [weak self] in
             sectionUpdates.forEach { $0.update() }
-            guard self != nil else { return }
-            reloadSections(indexSet)
-            sectionUpdates.uniqueAnimationDelegates.forEach { $0.animateAlongsideUpdate(with: TimeInterval.standardCollectionAnimationDuration) }
+            guard let self else { return }
+            self.reloadSections(indexSet)
         }, completion: { _ in
             sectionUpdates.forEach { $0.completion?() }
         })
@@ -464,13 +462,13 @@ private extension Sequence where Element == SectionUpdate {
 
 // MARK: AnimationDelegate Helper
 
-private extension UITableView {
+extension UITableView {
 
-    func performBatchUpdates(_ group: CollectionDataAnimationGroup, delegates: [CollectionDataAnimationDelegate], _ updates: (() -> Void)?, completion: ((Bool) -> Void)? = nil) {
+    func performBatchUpdates(_ group: CollectionDataAnimationGroup, delegates: [CollectionDataAnimationDelegate], _ updates: () -> Void, completion: ((Bool) -> Void)? = nil) {
         delegates.forEach { $0.animateAlongsideUpdate(for: .immediatelyBefore(group: group, duration: TimeInterval.standardCollectionAnimationDuration)) }
 
         performBatchUpdates {
-            updates?()
+            updates()
             delegates.forEach { $0.animateAlongsideUpdate(for: .during(group: group, duration: TimeInterval.standardCollectionAnimationDuration)) }
         } completion: { value in
             completion?(value)
@@ -481,13 +479,13 @@ private extension UITableView {
     }
 }
 
-private extension UICollectionView {
+extension UICollectionView {
 
-    func performBatchUpdates(_ group: CollectionDataAnimationGroup, delegates: [CollectionDataAnimationDelegate], _ updates: (() -> Void)?, completion: ((Bool) -> Void)? = nil) {
+    func performBatchUpdates(_ group: CollectionDataAnimationGroup, delegates: [CollectionDataAnimationDelegate], _ updates: () -> Void, completion: ((Bool) -> Void)? = nil) {
         delegates.forEach { $0.animateAlongsideUpdate(for: .immediatelyBefore(group: group, duration: TimeInterval.standardCollectionAnimationDuration)) }
 
         performBatchUpdates {
-            updates?()
+            updates()
             delegates.forEach { $0.animateAlongsideUpdate(for: .during(group: group, duration: TimeInterval.standardCollectionAnimationDuration)) }
         } completion: { value in
             completion?(value)

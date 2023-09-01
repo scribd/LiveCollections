@@ -108,7 +108,7 @@ public extension CollectionDataAnimationDelegate {
         return .preciseAnimations
     }
 
-    func animateAlongsideUpdate(with duration: TimeInterval) { }
+    func animateAlongsideUpdate(for state: CollectionDataAnimationState) { }
 }
 
 public extension CollectionSectionDataAnimationDelegate {
