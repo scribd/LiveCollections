@@ -17,13 +17,18 @@ Full detail for the use case of each scenario <a href="https://medium.com/p/59ea
 This project has been upgraded to be compatible with Swift 5.5
 <br>
 
+<h2>iOS Version</h2>
+
+This minimum supported version is iOS 11.0
+<br>
+
 <hr>
 
 
 <h2>Importing With SwiftPM</h2>
 
 <br>
-https://github.com/scribd/LiveCollections 1.0.1
+https://github.com/scribd/LiveCollections 1.0.2
 <br>
 <br>
 
@@ -31,7 +36,7 @@ https://github.com/scribd/LiveCollections 1.0.1
 <h2>Importing With Carthage</h2>
 
 <br>
-github "scribd/LiveCollections" "1.0.1"
+github "scribd/LiveCollections" "1.0.2"
 <br>
 <br>
 
@@ -39,7 +44,7 @@ github "scribd/LiveCollections" "1.0.1"
 <h2>Importing With CocoaPods</h2>
 
 <br>
-pod 'LiveCollections', '~> 1.0.1'
+pod 'LiveCollections', '~> 1.0.2'
 <br>
 or
 <br>
