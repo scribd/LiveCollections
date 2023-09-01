@@ -100,7 +100,7 @@ extension UITableView: SectionDeltaUpdatableView {
             self.reloadRows(at: automaticReloadIndexPaths, with: self.preferredReloadRowAnimation)
         }
         
-        performBatchUpdates({ [weak self] in
+        performBatchUpdates(.insertDeleteMove, delegates: delegate.flatMap { [$0 as CollectionDataAnimationDelegate] } ?? [], { [weak self] in
             updateData()
             guard let strongSelf = self else { return }
             guard strongSelf.isVisibleOnScreen else {
@@ -108,13 +108,12 @@ extension UITableView: SectionDeltaUpdatableView {
                 return
             }
             deleteMoveInsert()
-            delegate?.animateAlongsideUpdate(with: TimeInterval.standardCollectionAnimationDuration)
         }, completion: { [weak self] _ in
             guard let strongSelf = self else {
                 completion?()
                 return
             }
-            strongSelf.performBatchUpdates({ [weak weakSelf = strongSelf] in
+            strongSelf.performBatchUpdates(.reload, delegates: delegate.flatMap { [$0 as CollectionDataAnimationDelegate] } ?? [], { [weak weakSelf = strongSelf] in
                 guard let strongSelf = weakSelf else { return }
                 guard strongSelf.isVisibleOnScreen else {
                     strongSelf.reloadData()
@@ -238,7 +237,7 @@ extension UICollectionView: SectionDeltaUpdatableView {
             }
         }
         
-        performBatchUpdates({ [weak self] in
+        performBatchUpdates(.insertDeleteMove, delegates: delegate.flatMap { [$0 as CollectionDataAnimationDelegate] } ?? [], { [weak self] in
             updateData()
             guard let strongSelf = self else { return }
             guard strongSelf.isVisibleOnScreen else {
@@ -250,13 +249,12 @@ extension UICollectionView: SectionDeltaUpdatableView {
                 strongSelf.moveItem(at: indexPathPair.source as IndexPath, to: indexPathPair.target as IndexPath)
             }
             strongSelf.insertItems(at: itemIndexPathDelta.insertions as [IndexPath])
-            delegate?.animateAlongsideUpdate(with: TimeInterval.standardCollectionAnimationDuration)
         }, completion: { [weak self] _ in
             guard let strongSelf = self else {
                 completion?()
                 return
             }
-            strongSelf.performBatchUpdates({ [weak weakSelf = strongSelf] in
+            strongSelf.performBatchUpdates(.reload, delegates: delegate.flatMap { [$0 as CollectionDataAnimationDelegate] } ?? [], { [weak weakSelf = strongSelf] in
                 guard let strongSelf = weakSelf else { return }
                 guard strongSelf.isVisibleOnScreen else {
                     strongSelf.reloadData()
