@@ -28,7 +28,7 @@ This minimum supported version is iOS 11.0
 <h2>Importing With SwiftPM</h2>
 
 <br>
-https://github.com/scribd/LiveCollections 1.0.2
+https://github.com/scribd/LiveCollections 1.0.3
 <br>
 <br>
 
@@ -36,7 +36,7 @@ https://github.com/scribd/LiveCollections 1.0.2
 <h2>Importing With Carthage</h2>
 
 <br>
-github "scribd/LiveCollections" "1.0.2"
+github "scribd/LiveCollections" "1.0.3"
 <br>
 <br>
 
@@ -44,7 +44,7 @@ github "scribd/LiveCollections" "1.0.2"
 <h2>Importing With CocoaPods</h2>
 
 <br>
-pod 'LiveCollections', '~> 1.0.2'
+pod 'LiveCollections', '~> 1.0.3'
 <br>
 or
 <br>
