@@ -65,6 +65,7 @@ public protocol CollectionDataCalculationNotificationDelegate: AnyObject {
     
     func collectionDataDidBeginCalculating()
     func collectionDataDidEndCalculating()
+    func inaccurateDeltaDetected(_ delta: IndexDelta)
 }
 
 // MARK: CollectionDataAnimationDelegate

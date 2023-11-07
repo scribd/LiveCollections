@@ -274,8 +274,16 @@ private extension SectionDataCalculator {
                 }
                 return
             }
-            
-            guard sectionDelta.hasChanges || itemDelta.hasChanges else {
+
+            let currentItemCount: Int = sectionProvider.sections.reduce(0) { $0 + $1.items.count }
+            let updatedItemCount: Int = updatedSections.reduce(0) { $0 + $1.items.count }
+            let isDeltaAccurate: Bool = (currentItemCount + itemDelta.insertions.count - itemDelta.deletions.count) == updatedItemCount
+
+            if isDeltaAccurate == false {
+                self.calculationDelegate?.inaccurateDeltaDetected(itemDelta)
+            }
+
+            guard (sectionDelta.hasChanges || itemDelta.hasChanges), isDeltaAccurate else {
                 sectionProvider.calculatingSections = nil
                 calculationCompletion()
                 return // don't need to update with no changes

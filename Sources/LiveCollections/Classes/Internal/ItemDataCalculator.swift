@@ -204,8 +204,14 @@ private extension ItemDataCalculator {
             }
             self?._performNextCalculation()
         }
-        
-        guard delta.hasChanges else {
+
+        let isDeltaAccurate: Bool = (itemProvider.items.count + delta.insertions.count - delta.deletions.count) == updatedItems.count
+
+        if isDeltaAccurate == false {
+            calculationDelegate?.inaccurateDeltaDetected(delta)
+        }
+
+        guard delta.hasChanges, isDeltaAccurate else {
             updateData()
             calculationCompletion()
             return
