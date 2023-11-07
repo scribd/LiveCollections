@@ -277,13 +277,8 @@ private extension SectionDataCalculator {
 
             let currentItemCount: Int = sectionProvider.sections.reduce(0) { $0 + $1.items.count }
             let updatedItemCount: Int = updatedSections.reduce(0) { $0 + $1.items.count }
-            let isDeltaAccurate: Bool = (currentItemCount + itemDelta.insertions.count - itemDelta.deletions.count) == updatedItemCount
 
-            if isDeltaAccurate == false {
-                self.calculationDelegate?.inaccurateDeltaDetected(itemDelta)
-            }
-
-            guard (sectionDelta.hasChanges || itemDelta.hasChanges), isDeltaAccurate else {
+            guard sectionDelta.hasChanges || itemDelta.hasChanges else {
                 sectionProvider.calculatingSections = nil
                 calculationCompletion()
                 return // don't need to update with no changes
@@ -310,8 +305,13 @@ private extension SectionDataCalculator {
                     return
                 }
 
+                let isDeltaInaccurate: Bool = (currentItemCount + itemDelta.insertions.count - itemDelta.deletions.count) != updatedItemCount
+                if isDeltaInaccurate {
+                    self.calculationDelegate?.inaccurateDeltaDetected(itemDelta)
+                }
+
                 let itemAnimationStlye: AnimationStyle = {
-                    if view.frame.isEmpty { return .reloadData }
+                    if view.frame.isEmpty || isDeltaInaccurate { return .reloadData }
                     guard let animationDelegate = animationDelegate else { return .preciseAnimations }
                     return animationDelegate.preferredItemAnimationStyle(for: itemDelta)
                 }()

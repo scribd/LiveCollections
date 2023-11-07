@@ -205,13 +205,7 @@ private extension ItemDataCalculator {
             self?._performNextCalculation()
         }
 
-        let isDeltaAccurate: Bool = (itemProvider.items.count + delta.insertions.count - delta.deletions.count) == updatedItems.count
-
-        if isDeltaAccurate == false {
-            calculationDelegate?.inaccurateDeltaDetected(delta)
-        }
-
-        guard delta.hasChanges, isDeltaAccurate else {
+        guard delta.hasChanges else {
             updateData()
             calculationCompletion()
             return
@@ -228,8 +222,13 @@ private extension ItemDataCalculator {
                 targetView.reloadData()
             }
 
+            let isDeltaInaccurate: Bool = (itemProvider.items.count + delta.insertions.count - delta.deletions.count) != updatedItems.count
+            if isDeltaInaccurate {
+                self.calculationDelegate?.inaccurateDeltaDetected(delta)
+            }
+
             let itemAnimationStlye: AnimationStyle = {
-                if targetView.frame.isEmpty { return .reloadData }
+                if targetView.frame.isEmpty || isDeltaInaccurate { return .reloadData }
                 guard let animationDelegate = animationDelegate else { return .preciseAnimations }
                 return animationDelegate.preferredItemAnimationStyle(for: delta)
             }()
